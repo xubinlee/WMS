@@ -1,0 +1,776 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 48, 50.25" name="DC">
+  <DataContextMoniker Name="/DCDataContext" />
+  <nestedChildShapes>
+    <classShape Id="346cfb58-6a88-43a1-a4d7-03900bbeca3c" absoluteBounds="8.75, 0.75, 2, 3.9396284993489576">
+      <DataClassMoniker Name="/DCDataContext/AccountBook" />
+      <nestedChildShapes>
+        <elementListCompartment Id="6136ddb4-95bc-4a1b-8fb3-09683832ec67" absoluteBounds="8.765, 1.21, 1.9700000000000002, 3.379628499348958" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="853ba8f9-645a-4063-9529-54352f0228cb" absoluteBounds="8.75, 5.75, 2, 2.4612756347656255">
+      <DataClassMoniker Name="/DCDataContext/VWageBillDtl" />
+      <nestedChildShapes>
+        <elementListCompartment Id="38dc927f-82cd-47df-955e-7d9d26194959" absoluteBounds="8.765, 6.21, 1.9700000000000002, 1.901275634765625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="34acc79e-c3a0-4237-876f-d96fd84d7091" absoluteBounds="6.75, 9.75, 2, 2.4612756347656237">
+      <DataClassMoniker Name="/DCDataContext/Alert" />
+      <nestedChildShapes>
+        <elementListCompartment Id="a304b718-e71d-4b79-a32c-e791dc3547b8" absoluteBounds="6.765, 10.21, 1.9700000000000002, 1.901275634765625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="cc6c54f1-139e-4c77-8f3d-3dbf4cc04451" absoluteBounds="9.75, 9.75, 2, 2.4612756347656237">
+      <DataClassMoniker Name="/DCDataContext/AnnualSalesSummaryByCustomerReport" />
+      <nestedChildShapes>
+        <elementListCompartment Id="480fb358-7615-4f0d-bfc7-d0951e660794" absoluteBounds="9.765, 10.21, 1.9700000000000002, 1.901275634765625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="181eaa17-442a-470e-9544-bf395784bad7" absoluteBounds="11.75, 0.75, 2, 1.9068933105468753">
+      <DataClassMoniker Name="/DCDataContext/AnnualSalesSummaryByGoodsReport" />
+      <nestedChildShapes>
+        <elementListCompartment Id="9b84e7d1-b2e9-4563-97f5-52afda571268" absoluteBounds="11.765, 1.21, 1.9700000000000002, 1.346893310546875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="f183ab33-b45c-4a7a-b0a3-90de5d7a3a37" absoluteBounds="0.75, 11.75, 2, 6.1571577962239559">
+      <DataClassMoniker Name="/DCDataContext/Appointments" />
+      <nestedChildShapes>
+        <elementListCompartment Id="8459f788-ad3d-45d4-8fb1-c1acd1017892" absoluteBounds="0.765, 12.21, 1.9700000000000002, 5.597157796223958" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="7ce5f32e-cd94-4e1a-a2e7-33e41fbca057" absoluteBounds="11.75, 3.75, 2, 5.0483931477864576">
+      <DataClassMoniker Name="/DCDataContext/AttAppointments" />
+      <nestedChildShapes>
+        <elementListCompartment Id="258e8d67-756b-4d4f-ae9f-ee7d34358147" absoluteBounds="11.765, 4.21, 1.9700000000000002, 4.488393147786458" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="b67fd815-892e-445a-8e2d-333c46f0b09f" absoluteBounds="12.75, 9.75, 2, 2.6460697428385416">
+      <DataClassMoniker Name="/DCDataContext/AttGeneralLog" />
+      <nestedChildShapes>
+        <elementListCompartment Id="5e5b6a24-0353-460d-a2fe-40dabf3bdac6" absoluteBounds="12.765, 10.21, 1.9700000000000002, 2.0860697428385415" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="03f4fae2-352d-4cf9-bb7e-388e61187b1c" absoluteBounds="3.75, 13.75, 2, 1.7220992024739594">
+      <DataClassMoniker Name="/DCDataContext/AttParameters" />
+      <nestedChildShapes>
+        <elementListCompartment Id="e57ba01d-bc19-44c5-a452-918cb64813d1" absoluteBounds="3.765, 14.21, 1.9700000000000002, 1.1620992024739583" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="a0f85182-e21d-4acb-99a3-4cb79ca1f907" absoluteBounds="6.75, 13.75, 2, 3.9396284993489559">
+      <DataClassMoniker Name="/DCDataContext/AttWageBillDtl" />
+      <nestedChildShapes>
+        <elementListCompartment Id="48724f46-f0f8-4a2e-bb69-2266afa229cd" absoluteBounds="6.765, 14.21, 1.9700000000000002, 3.379628499348958" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="6077e739-b8ed-40a6-a422-351ffc286ca1" absoluteBounds="9.75, 13.75, 2, 2.8308638509114559">
+      <DataClassMoniker Name="/DCDataContext/AttWageBillHd" />
+      <nestedChildShapes>
+        <elementListCompartment Id="77981697-e395-4bfb-8474-8484e3a9aaf2" absoluteBounds="9.765, 14.21, 1.9700000000000002, 2.270863850911458" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="72fe8b74-cd60-444c-a909-3d3ef9f639ba" absoluteBounds="12.75, 13.75, 2, 2.8308638509114559">
+      <DataClassMoniker Name="/DCDataContext/BOM" />
+      <nestedChildShapes>
+        <elementListCompartment Id="c4648f39-1229-40f6-97a0-58f605d2069a" absoluteBounds="12.765, 14.21, 1.9700000000000002, 2.270863850911458" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="153a5d47-5ef4-4960-bdb7-afc0882a52f7" absoluteBounds="14.75, 0.75, 2, 1.7220992024739579">
+      <DataClassMoniker Name="/DCDataContext/ButtonPermission" />
+      <nestedChildShapes>
+        <elementListCompartment Id="0a4f6494-bcd9-43df-a3a0-087a59912fec" absoluteBounds="14.765, 1.21, 1.9700000000000002, 1.1620992024739583" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="ee30a140-5e39-41a6-8749-899cc0592645" absoluteBounds="14.75, 3.75, 2, 5.2331872558593737">
+      <DataClassMoniker Name="/DCDataContext/Company" />
+      <nestedChildShapes>
+        <elementListCompartment Id="fa3a8277-032b-4a35-a14c-e1c2b74df108" absoluteBounds="14.765, 4.21, 1.9700000000000002, 4.673187255859375" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="3f641333-2961-49e3-8254-40c1a308b6c3" absoluteBounds="15.75, 9.75, 2, 4.3092167154947916">
+      <DataClassMoniker Name="/DCDataContext/Department" />
+      <nestedChildShapes>
+        <elementListCompartment Id="435d0c75-cbd5-4e0e-b4a1-c37a576c60bb" absoluteBounds="15.765, 10.21, 1.9700000000000002, 3.749216715494792" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="ab8a9566-ed9b-48bf-9211-a4f4614601bf" absoluteBounds="15.75, 15.75, 2, 2.8308638509114559">
+      <DataClassMoniker Name="/DCDataContext/EMSGoodsTrackingDailyReport" />
+      <nestedChildShapes>
+        <elementListCompartment Id="bb8c1155-6511-4f00-9b91-57803267b3bc" absoluteBounds="15.765, 16.21, 1.9700000000000002, 2.270863850911458" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="08655fef-2b6c-4997-86b5-925438710b8e" absoluteBounds="17.75, 0.75, 2, 3.0156579589843755">
+      <DataClassMoniker Name="/DCDataContext/FSMGoodsTrackingDailyReport" />
+      <nestedChildShapes>
+        <elementListCompartment Id="f4af909f-0a3b-4b8e-9e01-018746745102" absoluteBounds="17.765, 1.21, 1.9700000000000002, 2.455657958984375" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="306710d9-f6cc-4e49-b4e9-3e324894384b" absoluteBounds="3.5, 1.25, 2, 8.74427530924479">
+      <DataClassMoniker Name="/DCDataContext/Goods" />
+      <nestedChildShapes>
+        <elementListCompartment Id="1a90f94b-5f9f-43cc-b884-24e96e0a76ed" absoluteBounds="3.515, 1.71, 1.9700000000000002, 8.1842753092447911" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="8f1e6c9f-3833-4e1f-aed3-b5a49f449344" absoluteBounds="17.75, 4.75, 2, 2.6460697428385416">
+      <DataClassMoniker Name="/DCDataContext/GoodsSalesSummaryByCustomerReport" />
+      <nestedChildShapes>
+        <elementListCompartment Id="47cba839-c18a-4f51-b87f-f420211aff65" absoluteBounds="17.765, 5.21, 1.9700000000000002, 2.0860697428385415" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="ba65e7be-d584-4c5b-a000-7b8f2333b1e1" absoluteBounds="0.75, 5, 2, 1.3525109863281255">
+      <DataClassMoniker Name="/DCDataContext/GoodsType" />
+      <nestedChildShapes>
+        <elementListCompartment Id="9e577bf2-e17b-4af7-9ce7-3019a249facc" absoluteBounds="0.765, 5.46, 1.9700000000000002, 0.792510986328125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="f95e59e3-dbf9-48ae-9974-80c1d90658fa" absoluteBounds="9.75, 17.75, 2, 4.1244226074218773">
+      <DataClassMoniker Name="/DCDataContext/Inventory" />
+      <nestedChildShapes>
+        <elementListCompartment Id="25707f95-1079-45e2-a394-48c29c75f40d" absoluteBounds="9.765, 18.21, 1.9700000000000002, 3.564422607421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="b0e87278-cbcb-4d4b-bc95-42226fb2055f" absoluteBounds="0.75, 18.75, 2, 2.6460697428385416">
+      <DataClassMoniker Name="/DCDataContext/MainMenu" />
+      <nestedChildShapes>
+        <elementListCompartment Id="8e23aeb5-cf6a-4159-b1f2-f92c738d0ac8" absoluteBounds="0.765, 19.21, 1.9700000000000002, 2.0860697428385415" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="075fb6cd-7de2-444a-885c-999ae61c9f33" absoluteBounds="3.75, 18.75, 2, 2.0916874186197916">
+      <DataClassMoniker Name="/DCDataContext/MoldAllot" />
+      <nestedChildShapes>
+        <elementListCompartment Id="d611db9b-520a-4572-821c-40929da80c88" absoluteBounds="3.765, 19.21, 1.9700000000000002, 1.5316874186197915" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="dbbcd1a0-892e-44ab-823d-240a23af4a1f" absoluteBounds="6.25, 3.625, 2, 4.1244226074218755">
+      <DataClassMoniker Name="/DCDataContext/OrderDtl" />
+      <nestedChildShapes>
+        <elementListCompartment Id="1d3a9be8-17ac-45a1-9fda-b60f2f7bb13e" absoluteBounds="6.265, 4.085, 1.9700000000000002, 3.564422607421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="3af20484-f40e-4e3f-aa9b-7c1779e2d169" absoluteBounds="18.75, 8.75, 2, 4.6788049316406237">
+      <DataClassMoniker Name="/DCDataContext/OrderHd" />
+      <nestedChildShapes>
+        <elementListCompartment Id="74c652af-85ac-4960-a441-f35e2bffa312" absoluteBounds="18.765, 9.21, 1.9700000000000002, 4.118804931640625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="ed5c6275-e146-44ea-abc8-ae93e38d3b84" absoluteBounds="18.75, 14.75, 2, 1.1677168782552094">
+      <DataClassMoniker Name="/DCDataContext/Packaging" />
+      <nestedChildShapes>
+        <elementListCompartment Id="dc696b12-3044-4cf7-aac2-d3677f7c5c43" absoluteBounds="18.765, 15.21, 1.9700000000000002, 0.60771687825520826" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="5562cb14-32a7-44da-902c-f5b9d36ae916" absoluteBounds="18.75, 16.75, 2, 2.0916874186197916">
+      <DataClassMoniker Name="/DCDataContext/PaymentBillDtl" />
+      <nestedChildShapes>
+        <elementListCompartment Id="9f1115b5-da0a-4cf2-8649-916389e1f1fc" absoluteBounds="18.765, 17.21, 1.9700000000000002, 1.5316874186197915" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="084e5d6d-07ea-4335-9697-366226dda914" absoluteBounds="12.75, 19.75, 2, 4.1244226074218773">
+      <DataClassMoniker Name="/DCDataContext/PaymentBillHd" />
+      <nestedChildShapes>
+        <elementListCompartment Id="59b379f4-bdf7-4e5d-ac95-b95dc4b71fd3" absoluteBounds="12.765, 20.21, 1.9700000000000002, 3.564422607421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="976bb371-9af5-49cf-a529-21a5ab72b910" absoluteBounds="15.75, 19.75, 2, 1.9068933105468773">
+      <DataClassMoniker Name="/DCDataContext/Permission" />
+      <nestedChildShapes>
+        <elementListCompartment Id="a17abce7-3986-44ed-9afe-41a8d7225819" absoluteBounds="15.765, 20.21, 1.9700000000000002, 1.346893310546875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="f71829dd-b355-4e53-a08a-83811a77d548" absoluteBounds="18.75, 19.75, 2, 7.0811283365885416">
+      <DataClassMoniker Name="/DCDataContext/ProfitAndLoss" />
+      <nestedChildShapes>
+        <elementListCompartment Id="1603fea9-945c-4ddc-967e-5bb5f0133a22" absoluteBounds="18.765, 20.21, 1.9700000000000002, 6.5211283365885411" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="1b05c9da-a3b0-4d6e-a892-ca484cb8760f" absoluteBounds="21.75, 0.75, 2, 7.2659224446614568">
+      <DataClassMoniker Name="/DCDataContext/ProfitAndLossLog" />
+      <nestedChildShapes>
+        <elementListCompartment Id="02431a28-1d06-4c73-b08b-0ca4400a2585" absoluteBounds="21.765, 1.21, 1.9700000000000002, 6.705922444661458" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="9207b858-60d8-4255-a3e9-18f50b25499d" absoluteBounds="3.75, 21.75, 2, 2.0916874186197916">
+      <DataClassMoniker Name="/DCDataContext/ReceiptBillDtl" />
+      <nestedChildShapes>
+        <elementListCompartment Id="b2c01740-b7f8-47cb-9f8d-198a09980a9d" absoluteBounds="3.765, 22.21, 1.9700000000000002, 1.5316874186197915" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="746118a9-77cc-4e5d-8941-0afd4a5fd7a9" absoluteBounds="21.75, 9.75, 2, 4.1244226074218737">
+      <DataClassMoniker Name="/DCDataContext/ReceiptBillHd" />
+      <nestedChildShapes>
+        <elementListCompartment Id="5f38f312-1664-4336-ac0d-9786c9681e4a" absoluteBounds="21.765, 10.21, 1.9700000000000002, 3.564422607421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="6f7e182d-86f6-4047-9ec5-954e28a1659c" absoluteBounds="21.75, 14.75, 2, 1.9068933105468755">
+      <DataClassMoniker Name="/DCDataContext/Resources" />
+      <nestedChildShapes>
+        <elementListCompartment Id="c89a97b5-adad-4e4f-aa79-b1755547c7e1" absoluteBounds="21.765, 15.21, 1.9700000000000002, 1.346893310546875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="0b88ce4f-1f1f-4e35-8f1f-582d3367f8f9" absoluteBounds="21.75, 17.75, 2, 2.4612756347656273">
+      <DataClassMoniker Name="/DCDataContext/SalesSummaryByCustomerReport" />
+      <nestedChildShapes>
+        <elementListCompartment Id="5974e408-90cf-4327-88fe-ea990eddf738" absoluteBounds="21.765, 18.21, 1.9700000000000002, 1.901275634765625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="d1d3e3ad-62a3-486d-9160-ba1dda2f57b0" absoluteBounds="21.75, 21.75, 2, 2.2764815266927059">
+      <DataClassMoniker Name="/DCDataContext/SalesSummaryByGoodsPriceReport" />
+      <nestedChildShapes>
+        <elementListCompartment Id="2720c98b-cc9b-4996-8724-02c189442148" absoluteBounds="21.765, 22.21, 1.9700000000000002, 1.7164815266927085" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="22c5b2dc-36a4-4406-886d-4ef5366ee0a2" absoluteBounds="6.75, 22.75, 2, 2.0916874186197916">
+      <DataClassMoniker Name="/DCDataContext/SalesSummaryByGoodsReport" />
+      <nestedChildShapes>
+        <elementListCompartment Id="8cdb2679-464d-4ea8-b9c3-be3b84bd887e" absoluteBounds="6.765, 23.21, 1.9700000000000002, 1.5316874186197915" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="50659c64-f633-4b05-88b8-11c132960f62" absoluteBounds="24.75, 0.75, 2, 1.9068933105468753">
+      <DataClassMoniker Name="/DCDataContext/SalesSummaryMonthlyReport" />
+      <nestedChildShapes>
+        <elementListCompartment Id="59d46d34-cf0d-4e27-9165-63387160f902" absoluteBounds="24.765, 1.21, 1.9700000000000002, 1.346893310546875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="c6c82a7b-a140-484e-a51e-87d7ad949c8b" absoluteBounds="0.75, 24.75, 2, 3.0156579589843773">
+      <DataClassMoniker Name="/DCDataContext/SchClass" />
+      <nestedChildShapes>
+        <elementListCompartment Id="169f3786-461a-4820-9900-7f91c473ba9b" absoluteBounds="0.765, 25.21, 1.9700000000000002, 2.455657958984375" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="6a36a6fd-8681-44b0-a406-ea13821e69a7" absoluteBounds="24.75, 3.75, 2, 2.276481526692709">
+      <DataClassMoniker Name="/DCDataContext/SLSalePrice" />
+      <nestedChildShapes>
+        <elementListCompartment Id="9c21b54e-9fd8-4e50-84cd-60a89ace9fe4" absoluteBounds="24.765, 4.21, 1.9700000000000002, 1.7164815266927085" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="a8484c41-a296-4689-81e5-fc37c0fff74d" absoluteBounds="24.75, 7.75, 2, 1.5373050944010416">
+      <DataClassMoniker Name="/DCDataContext/StaffSchClass" />
+      <nestedChildShapes>
+        <elementListCompartment Id="d14fe753-5d9d-4a80-83ed-cfe9b6d6507a" absoluteBounds="24.765, 8.21, 1.9700000000000002, 0.97730509440104174" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="04e57c14-0f06-4f57-a5b6-c4a8ea6a7bd6" absoluteBounds="9.75, 24.75, 2, 1.9068933105468773">
+      <DataClassMoniker Name="/DCDataContext/StatementOfAccountBasketToSupplierReport" />
+      <nestedChildShapes>
+        <elementListCompartment Id="b86c3077-f981-44ca-b02b-8c99628d8731" absoluteBounds="9.765, 25.21, 1.9700000000000002, 1.346893310546875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="15aa6b9a-e379-4d90-bd92-f99296f8cd73" absoluteBounds="24.75, 10.75, 2, 2.4612756347656237">
+      <DataClassMoniker Name="/DCDataContext/StatementOfAccountMaterialToSupplierReport" />
+      <nestedChildShapes>
+        <elementListCompartment Id="016d2724-65aa-428d-927a-5bf65b667cfc" absoluteBounds="24.765, 11.21, 1.9700000000000002, 1.901275634765625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="9f746544-c360-47b7-b2dd-4df85580d26a" absoluteBounds="12.75, 24.75, 2, 3.3852461751302059">
+      <DataClassMoniker Name="/DCDataContext/StatementOfAccountSummaryToSupplierReport" />
+      <nestedChildShapes>
+        <elementListCompartment Id="daf67cb6-038a-4d9e-8572-d4e8a598cc15" absoluteBounds="12.765, 25.21, 1.9700000000000002, 2.825246175130208" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="ee292545-71c6-42ed-bad9-6d91ea0abbce" absoluteBounds="24.75, 14.75, 2, 4.4940108235677059">
+      <DataClassMoniker Name="/DCDataContext/StatementOfAccountToBulkSalesReport" />
+      <nestedChildShapes>
+        <elementListCompartment Id="55fd89ef-3dd1-4947-82e2-16aaba7106fb" absoluteBounds="24.765, 15.21, 1.9700000000000002, 3.934010823567708" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="8cc13069-d2d5-4329-acde-b71c30efcefa" absoluteBounds="24.75, 20.75, 2, 5.4179813639322916">
+      <DataClassMoniker Name="/DCDataContext/StatementOfAccountToCustomerReport" />
+      <nestedChildShapes>
+        <elementListCompartment Id="0b941527-e0f6-43be-916d-365b1aca2a52" absoluteBounds="24.765, 21.21, 1.9700000000000002, 4.8579813639322911" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="2734a2a9-b245-4e4b-9f7b-5d9371d37351" absoluteBounds="3.75, 25.75, 2, 4.6788049316406273">
+      <DataClassMoniker Name="/DCDataContext/StatementOfAccountToSupplierReport" />
+      <nestedChildShapes>
+        <elementListCompartment Id="85beaacb-c495-4df4-903e-7aa50b67e610" absoluteBounds="3.765, 26.21, 1.9700000000000002, 4.118804931640625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="704d2aec-249d-47a8-b103-7c7f52779d5c" absoluteBounds="27.75, 0.75, 2, 3.7548343912760416">
+      <DataClassMoniker Name="/DCDataContext/StockInBillDtl" />
+      <nestedChildShapes>
+        <elementListCompartment Id="a8f81477-6ce4-415b-9297-efea8e6e9c3e" absoluteBounds="27.765, 1.21, 1.9700000000000002, 3.1948343912760415" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="a80025fd-03f7-4761-89b4-010b08cd4eb0" absoluteBounds="27.75, 5.75, 2, 4.6788049316406237">
+      <DataClassMoniker Name="/DCDataContext/StockInBillHd" />
+      <nestedChildShapes>
+        <elementListCompartment Id="0c81775c-92c0-4053-b5ce-c9731e445850" absoluteBounds="27.765, 6.21, 1.9700000000000002, 4.118804931640625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="48e69a67-96ca-4579-ad88-209ab4b961b7" absoluteBounds="6.75, 27.75, 2, 4.1244226074218773">
+      <DataClassMoniker Name="/DCDataContext/StockOutBillDtl" />
+      <nestedChildShapes>
+        <elementListCompartment Id="3733b0c8-7034-4cf9-b31c-646a15badae7" absoluteBounds="6.765, 28.21, 1.9700000000000002, 3.564422607421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="ecb733b4-7b1f-45bc-bac4-f92799492298" absoluteBounds="27.75, 11.75, 2, 5.0483931477864559">
+      <DataClassMoniker Name="/DCDataContext/StockOutBillHd" />
+      <nestedChildShapes>
+        <elementListCompartment Id="3f6f6a28-db59-4407-b283-1429feb4034b" absoluteBounds="27.765, 12.21, 1.9700000000000002, 4.488393147786458" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="753e2afe-9825-443a-b633-a05be8dcecb3" absoluteBounds="15.75, 27.75, 2, 4.1244226074218773">
+      <DataClassMoniker Name="/DCDataContext/Stocktaking" />
+      <nestedChildShapes>
+        <elementListCompartment Id="3d72867e-5309-4987-8457-9b75450803ae" absoluteBounds="15.765, 28.21, 1.9700000000000002, 3.564422607421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="dae0fb5a-1f76-4663-9224-ad178c6793b5" absoluteBounds="27.75, 17.75, 2, 4.3092167154947916">
+      <DataClassMoniker Name="/DCDataContext/StocktakingLogDtl" />
+      <nestedChildShapes>
+        <elementListCompartment Id="72f2c06b-0a41-4857-bb4c-0e00b49334c7" absoluteBounds="27.765, 18.21, 1.9700000000000002, 3.749216715494792" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="46e28418-63a4-4397-9a2d-15b3e3cce961" absoluteBounds="18.75, 27.75, 2, 1.9068933105468773">
+      <DataClassMoniker Name="/DCDataContext/StocktakingLogHd" />
+      <nestedChildShapes>
+        <elementListCompartment Id="14da4a92-8bd4-4f51-8ebb-bcb2df3e028f" absoluteBounds="18.765, 28.21, 1.9700000000000002, 1.346893310546875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="7a2d2901-3225-46a7-ab88-0a8dce8e02da" absoluteBounds="21.75, 27.75, 2, 4.6788049316406273">
+      <DataClassMoniker Name="/DCDataContext/Supplier" />
+      <nestedChildShapes>
+        <elementListCompartment Id="a9752c24-0a7b-4da8-919b-fbfad6053402" absoluteBounds="21.765, 28.21, 1.9700000000000002, 4.118804931640625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="f9d69066-d51a-480e-8993-b64ebfab1680" absoluteBounds="27.75, 23.75, 2, 2.2764815266927059">
+      <DataClassMoniker Name="/DCDataContext/SystemInfo" />
+      <nestedChildShapes>
+        <elementListCompartment Id="995fa2a5-ab83-4ea0-ae5c-690782695493" absoluteBounds="27.765, 24.21, 1.9700000000000002, 1.7164815266927085" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="307502fc-ceda-4c19-89ba-31f4c2ac9d32" absoluteBounds="24.75, 27.75, 2, 1.3525109863281273">
+      <DataClassMoniker Name="/DCDataContext/SystemStatus" />
+      <nestedChildShapes>
+        <elementListCompartment Id="4d995265-8dc9-4e20-8137-2e7794bef2a9" absoluteBounds="24.765, 28.21, 1.9700000000000002, 0.792510986328125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="51beb083-a23e-49b0-8f8b-91bb5cf50547" absoluteBounds="27.75, 27.75, 2, 2.0916874186197916">
+      <DataClassMoniker Name="/DCDataContext/TonerLabel" />
+      <nestedChildShapes>
+        <elementListCompartment Id="7553a947-5dbb-48e6-9245-253c1ace34f8" absoluteBounds="27.765, 28.21, 1.9700000000000002, 1.5316874186197915" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="79bc3af7-d616-44e3-9fc0-fdf7ad28416f" absoluteBounds="9.75, 29.75, 2, 1.5373050944010416">
+      <DataClassMoniker Name="/DCDataContext/TypesList" />
+      <nestedChildShapes>
+        <elementListCompartment Id="ca5eec47-dc3e-4b8c-becd-27ba5f61c87c" absoluteBounds="9.765, 30.21, 1.9700000000000002, 0.97730509440104174" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="8e7ed77f-8b4c-40b2-8750-1f2db24e76d2" absoluteBounds="30.75, 0.75, 2, 3.5700402832031242">
+      <DataClassMoniker Name="/DCDataContext/UnlistedGoods" />
+      <nestedChildShapes>
+        <elementListCompartment Id="d2ed0c0f-4dd4-44b0-b2d5-b91aa33fd038" absoluteBounds="30.765, 1.21, 1.9700000000000002, 3.010040283203125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="f07e09e5-f696-4cf0-877f-8dc6520fbab8" absoluteBounds="30.75, 5.75, 2, 3.5700402832031237">
+      <DataClassMoniker Name="/DCDataContext/UnlistedGoodsLog" />
+      <nestedChildShapes>
+        <elementListCompartment Id="67a9b8ce-788e-4f87-9126-5d709b782321" absoluteBounds="30.765, 6.21, 1.9700000000000002, 3.010040283203125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="bcc71ade-ea1b-43f9-a4d3-932e3a85177e" absoluteBounds="30.75, 10.75, 2, 4.6788049316406237">
+      <DataClassMoniker Name="/DCDataContext/UsersInfo" />
+      <nestedChildShapes>
+        <elementListCompartment Id="7a1575d0-ba07-482f-8a79-76a043bec8e5" absoluteBounds="30.765, 11.21, 1.9700000000000002, 4.118804931640625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="ddb6f840-78db-445b-83c6-f137568839a6" absoluteBounds="30.75, 16.75, 2, 4.3092167154947916">
+      <DataClassMoniker Name="/DCDataContext/USPAttWageBillDtl" />
+      <nestedChildShapes>
+        <elementListCompartment Id="58efea57-d596-4360-9688-e1844ab0d388" absoluteBounds="30.765, 17.21, 1.9700000000000002, 3.749216715494792" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="21c04640-5253-4c74-a0c4-8adca602743b" absoluteBounds="30.75, 22.75, 2, 2.4612756347656273">
+      <DataClassMoniker Name="/DCDataContext/WageBillDtl" />
+      <nestedChildShapes>
+        <elementListCompartment Id="0bd3964e-aadc-4bd1-b2bc-35512312b2f0" absoluteBounds="30.765, 23.21, 1.9700000000000002, 1.901275634765625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="78c8897a-17ba-4568-be4f-18b4151fdafa" absoluteBounds="24.75, 30.75, 2, 2.8308638509114559">
+      <DataClassMoniker Name="/DCDataContext/WageBillHd" />
+      <nestedChildShapes>
+        <elementListCompartment Id="ea8f7ef1-4b37-40a4-8c41-58c5c68edf41" absoluteBounds="24.765, 31.21, 1.9700000000000002, 2.270863850911458" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="ba41a851-b80a-436b-9a12-d586321b3324" absoluteBounds="30.75, 26.75, 2, 2.0916874186197916">
+      <DataClassMoniker Name="/DCDataContext/WageDesign" />
+      <nestedChildShapes>
+        <elementListCompartment Id="21ecdbfb-eda3-4665-871b-068655413979" absoluteBounds="30.765, 27.21, 1.9700000000000002, 1.5316874186197915" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="de08659b-e1b8-43a1-b7c7-399614d49b3b" absoluteBounds="27.75, 30.75, 2, 1.3525109863281273">
+      <DataClassMoniker Name="/DCDataContext/Warehouse" />
+      <nestedChildShapes>
+        <elementListCompartment Id="9c892571-17ee-49a1-8d68-d6ccc9dc74bd" absoluteBounds="27.765, 31.21, 1.9700000000000002, 0.792510986328125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="8592cfef-617a-4147-98fa-fded117b743c" absoluteBounds="30.75, 29.75, 2, 5.6027754720052059">
+      <DataClassMoniker Name="/DCDataContext/VAccountBook" />
+      <nestedChildShapes>
+        <elementListCompartment Id="5eda6591-0de4-4230-9094-feb15bbf46ba" absoluteBounds="30.765, 30.21, 1.9700000000000002, 5.042775472005208" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="7a0fa4f5-0d9b-4eae-be2a-bd238dca5c37" absoluteBounds="0.75, 31.75, 2, 2.4612756347656273">
+      <DataClassMoniker Name="/DCDataContext/VAlert" />
+      <nestedChildShapes>
+        <elementListCompartment Id="03fba6d6-614c-4557-b261-33fc965ab9e5" absoluteBounds="0.765, 32.21, 1.9700000000000002, 1.901275634765625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="44b58f81-5a45-491d-9848-3e9fc1ff9a62" absoluteBounds="3.75, 32.75, 2, 4.4940108235677059">
+      <DataClassMoniker Name="/DCDataContext/VAppointments" />
+      <nestedChildShapes>
+        <elementListCompartment Id="962079c9-3867-49d6-9101-7d57901280e4" absoluteBounds="3.765, 33.21, 1.9700000000000002, 3.934010823567708" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="9373919d-dc3c-4253-9f63-91d95b596453" absoluteBounds="6.75, 32.75, 2, 4.3092167154947845">
+      <DataClassMoniker Name="/DCDataContext/VAttAppointments" />
+      <nestedChildShapes>
+        <elementListCompartment Id="e044e5de-d696-4128-93c8-e0f3c05ddbef" absoluteBounds="6.765, 33.21, 1.9700000000000002, 3.749216715494792" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="e1f4fa14-2152-4943-9c82-cc2aae85a85e" absoluteBounds="9.75, 32.75, 2, 2.4612756347656273">
+      <DataClassMoniker Name="/DCDataContext/VAttGeneralLog" />
+      <nestedChildShapes>
+        <elementListCompartment Id="d8488caa-96fe-437d-98e1-0a6b2303ce3c" absoluteBounds="9.765, 33.21, 1.9700000000000002, 1.901275634765625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="029b0112-8580-4936-b9a5-398f1e613605" absoluteBounds="12.75, 32.75, 2, 5.9723636881510345">
+      <DataClassMoniker Name="/DCDataContext/VAttWageBill" />
+      <nestedChildShapes>
+        <elementListCompartment Id="a134a2f3-2207-40be-b898-882344b17327" absoluteBounds="12.765, 33.21, 1.9700000000000002, 5.4123636881510411" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="e5a15fcb-4e73-455d-ae79-d573f1154a49" absoluteBounds="15.75, 32.75, 2, 5.0483931477864559">
+      <DataClassMoniker Name="/DCDataContext/VCompany" />
+      <nestedChildShapes>
+        <elementListCompartment Id="e1ead264-a4ac-46ab-b14c-90da02cb5a94" absoluteBounds="15.765, 33.21, 1.9700000000000002, 4.488393147786458" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="8ea2b565-068b-4a19-bcce-ee665b41c0c0" absoluteBounds="33.75, 0.75, 2, 2.6460697428385416">
+      <DataClassMoniker Name="/DCDataContext/VCustomerSalesReceiptedSummary" />
+      <nestedChildShapes>
+        <elementListCompartment Id="3adfdda1-d642-4778-853f-9d6f7c14d027" absoluteBounds="33.765, 1.21, 1.9700000000000002, 2.0860697428385415" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="2c0a362f-d81b-436e-9513-5128a4c5b77f" absoluteBounds="33.75, 4.75, 2, 2.4612756347656255">
+      <DataClassMoniker Name="/DCDataContext/VCustomerSettlement" />
+      <nestedChildShapes>
+        <elementListCompartment Id="75f4952a-2236-44fa-9288-2febba934c00" absoluteBounds="33.765, 5.21, 1.9700000000000002, 1.901275634765625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="e097beec-a8bd-4162-a849-600671e2f882" absoluteBounds="33.75, 8.75, 2, 4.3092167154947916">
+      <DataClassMoniker Name="/DCDataContext/VEMSInventoryGroupByGoods" />
+      <nestedChildShapes>
+        <elementListCompartment Id="dd8240a7-4aaa-48a6-8e48-dd9d54ada095" absoluteBounds="33.765, 9.21, 1.9700000000000002, 3.749216715494792" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="bfef946d-44e6-4956-9df2-a2a8325378bc" absoluteBounds="33.75, 14.75, 2, 3.9396284993489559">
+      <DataClassMoniker Name="/DCDataContext/VFSMInventoryGroupByGoods" />
+      <nestedChildShapes>
+        <elementListCompartment Id="f261fe5b-bf79-4c85-ad5d-5f3450dfca8b" absoluteBounds="33.765, 15.21, 1.9700000000000002, 3.379628499348958" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="3477bf43-f290-41b9-b615-4f9fc11fb784" absoluteBounds="18.75, 33.75, 2, 6.5267460123697845">
+      <DataClassMoniker Name="/DCDataContext/VFSMOrder" />
+      <nestedChildShapes>
+        <elementListCompartment Id="2d733d57-5b14-40ae-aa3c-b9e43dd62895" absoluteBounds="18.765, 34.21, 1.9700000000000002, 5.9667460123697911" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="2356e695-f839-488e-9995-cfc0e263f26c" absoluteBounds="33.75, 19.75, 2, 3.0156579589843773">
+      <DataClassMoniker Name="/DCDataContext/VFSMOrderDtlByMoldList" />
+      <nestedChildShapes>
+        <elementListCompartment Id="f4985c04-befc-4742-bdc8-1d625a70215a" absoluteBounds="33.765, 20.21, 1.9700000000000002, 2.455657958984375" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="41f2a048-2ddc-43be-b44b-558c19b35baf" absoluteBounds="33.75, 23.75, 2, 3.0156579589843773">
+      <DataClassMoniker Name="/DCDataContext/VFSMOrderDtlByMoldMaterial" />
+      <nestedChildShapes>
+        <elementListCompartment Id="b3e817b6-af85-42f8-9fee-c1860dd74b51" absoluteBounds="33.765, 24.21, 1.9700000000000002, 2.455657958984375" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="b36bad04-e814-48ec-8747-87e842e37162" absoluteBounds="33.75, 27.75, 2, 3.7548343912760416">
+      <DataClassMoniker Name="/DCDataContext/VGoodsByBOM" />
+      <nestedChildShapes>
+        <elementListCompartment Id="fe426b5f-52cd-4fd4-9e9a-f3d4073f0152" absoluteBounds="33.765, 28.21, 1.9700000000000002, 3.1948343912760415" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="f35bd8c3-0caf-46ef-b6ca-b6669092a75e" absoluteBounds="33.75, 32.75, 2, 2.2764815266927059">
+      <DataClassMoniker Name="/DCDataContext/VGoodsByMoldAllot" />
+      <nestedChildShapes>
+        <elementListCompartment Id="43e3979d-2dea-4fd1-843d-1d4ca0efc310" absoluteBounds="33.765, 33.21, 1.9700000000000002, 1.7164815266927085" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="9c7e7094-e4ab-457e-bac0-88d51876000e" absoluteBounds="21.75, 34.75, 2, 2.4612756347656273">
+      <DataClassMoniker Name="/DCDataContext/VGoodsBySLSalePrice" />
+      <nestedChildShapes>
+        <elementListCompartment Id="eb72ff2e-ce7e-4614-806d-4fd86257fdcb" absoluteBounds="21.765, 35.21, 1.9700000000000002, 1.901275634765625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="f31c6b37-4c0d-4115-bd46-5b686580a0c0" absoluteBounds="24.75, 34.75, 2, 4.8635990397135345">
+      <DataClassMoniker Name="/DCDataContext/VGoodsSalesSummaryByCustomer" />
+      <nestedChildShapes>
+        <elementListCompartment Id="2612a6bf-f28c-4121-a09d-8f210bbddf17" absoluteBounds="24.765, 35.21, 1.9700000000000002, 4.3035990397135411" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="b5f950d1-30d3-4ea3-802f-747ecbd2ef8a" absoluteBounds="36.75, 0.75, 2, 1.3525109863281253">
+      <DataClassMoniker Name="/DCDataContext/VGoodsType" />
+      <nestedChildShapes>
+        <elementListCompartment Id="96e1d9c8-4256-4d40-aab8-4a0a23fea8b8" absoluteBounds="36.765, 1.21, 1.9700000000000002, 0.792510986328125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="7395d497-3a8b-470f-a008-b85c1083359b" absoluteBounds="36.75, 3.75, 2, 5.6027754720052068">
+      <DataClassMoniker Name="/DCDataContext/VInventory" />
+      <nestedChildShapes>
+        <elementListCompartment Id="46adee14-ac92-4e40-aef1-22a9c31affe7" absoluteBounds="36.765, 4.21, 1.9700000000000002, 5.042775472005208" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="e57a6e86-5498-43e0-945a-f2d33c43cce5" absoluteBounds="36.75, 10.75, 2, 4.6788049316406237">
+      <DataClassMoniker Name="/DCDataContext/VInventoryGroupByGoods" />
+      <nestedChildShapes>
+        <elementListCompartment Id="a7f63a38-13b9-499d-b8b1-39666d829214" absoluteBounds="36.765, 11.21, 1.9700000000000002, 4.118804931640625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="9a20aa19-17e7-4f62-86c4-8403da87d541" absoluteBounds="36.75, 16.75, 2, 3.9396284993489559">
+      <DataClassMoniker Name="/DCDataContext/VMaterial" />
+      <nestedChildShapes>
+        <elementListCompartment Id="b6f3b4fb-6184-4b50-aa16-ae3f2a208b21" absoluteBounds="36.765, 17.21, 1.9700000000000002, 3.379628499348958" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="19213808-6032-4c00-ac65-e04614d4f57a" absoluteBounds="36.75, 21.75, 2, 4.1244226074218773">
+      <DataClassMoniker Name="/DCDataContext/VMaterialInventory" />
+      <nestedChildShapes>
+        <elementListCompartment Id="2e2144da-c7bc-478f-8332-b6bf08b9e4be" absoluteBounds="36.765, 22.21, 1.9700000000000002, 3.564422607421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="18cd45bd-ddc2-426d-a880-81e8be1d44fd" absoluteBounds="36.75, 26.75, 2, 3.2004520670572916">
+      <DataClassMoniker Name="/DCDataContext/VMaterialInventoryGroupByGoods" />
+      <nestedChildShapes>
+        <elementListCompartment Id="37dc2415-45a1-4612-ada0-4d5a8cd36ddb" absoluteBounds="36.765, 27.21, 1.9700000000000002, 2.6404520670572915" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="bb8b2d63-daaa-4dae-be95-b73d1b6982c0" absoluteBounds="27.75, 36.75, 2, 6.3419519042968773">
+      <DataClassMoniker Name="/DCDataContext/VMaterialStockInBill" />
+      <nestedChildShapes>
+        <elementListCompartment Id="912be61c-d386-4676-8451-5906a7eb9a5b" absoluteBounds="27.765, 37.21, 1.9700000000000002, 5.781951904296875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="a556e4e9-6d75-4639-9946-f75e92eec6d6" absoluteBounds="36.75, 30.75, 2, 6.1571577962239559">
+      <DataClassMoniker Name="/DCDataContext/VMaterialStockOutBill" />
+      <nestedChildShapes>
+        <elementListCompartment Id="7f6f5ff1-ca38-4d5d-97e4-aa88619b92e6" absoluteBounds="36.765, 31.21, 1.9700000000000002, 5.597157796223958" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="c0d3e668-8cb7-4b4c-ad76-c8de0e345168" absoluteBounds="30.75, 36.75, 2, 3.9396284993489559">
+      <DataClassMoniker Name="/DCDataContext/VMO" />
+      <nestedChildShapes>
+        <elementListCompartment Id="8c6c6a90-4942-43cc-85e0-070e26145c9f" absoluteBounds="30.765, 37.21, 1.9700000000000002, 3.379628499348958" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="7fb08f8e-4936-4b19-935b-b81db2ea7c9b" absoluteBounds="33.75, 37.75, 2, 1.5373050944010345">
+      <DataClassMoniker Name="/DCDataContext/VMPS" />
+      <nestedChildShapes>
+        <elementListCompartment Id="ba07f915-9564-43ca-8506-03909a8d58e8" absoluteBounds="33.765, 38.21, 1.9700000000000002, 0.97730509440104174" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="c2fa2c1b-2b76-44c0-939e-e1fc2ede9e16" absoluteBounds="36.75, 37.75, 2, 8.7442753092447845">
+      <DataClassMoniker Name="/DCDataContext/VOrder" />
+      <nestedChildShapes>
+        <elementListCompartment Id="7182b835-6c1b-4379-9d7a-334ec174adee" absoluteBounds="36.765, 38.21, 1.9700000000000002, 8.1842753092447911" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="9d1b4607-8d30-4b03-a87c-a21a389e1fc6" absoluteBounds="0.75, 38.75, 2, 5.4179813639322845">
+      <DataClassMoniker Name="/DCDataContext/VOrderDtlByBOM" />
+      <nestedChildShapes>
+        <elementListCompartment Id="84f0cf8f-dcc9-4ad4-bf69-b3b464b09636" absoluteBounds="0.765, 39.21, 1.9700000000000002, 4.8579813639322911" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="08f13a48-ad21-40b0-82fb-0e9284e53422" absoluteBounds="3.75, 38.75, 2, 1.5373050944010345">
+      <DataClassMoniker Name="/DCDataContext/VOrderDtlByColor" />
+      <nestedChildShapes>
+        <elementListCompartment Id="895ef54b-1586-4f69-8b43-7a16e6d7e04e" absoluteBounds="3.765, 39.21, 1.9700000000000002, 0.97730509440104174" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="ec7d789e-36fa-4ba4-88d6-826d165366b9" absoluteBounds="6.75, 38.75, 2, 1.1677168782552059">
+      <DataClassMoniker Name="/DCDataContext/VPackaging" />
+      <nestedChildShapes>
+        <elementListCompartment Id="dd77018c-b571-4a70-bada-07ecbabe9762" absoluteBounds="6.765, 39.21, 1.9700000000000002, 0.60771687825520826" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="78d212b9-e3ab-4496-a7fa-d74d46b4466f" absoluteBounds="39.75, 0.75, 2, 3.0156579589843755">
+      <DataClassMoniker Name="/DCDataContext/VParentGoodsByBOM" />
+      <nestedChildShapes>
+        <elementListCompartment Id="ca46c469-57b4-4ced-92d1-e3a3a202c847" absoluteBounds="39.765, 1.21, 1.9700000000000002, 2.455657958984375" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="4449fe17-c6fb-49d8-976e-5b385f548e88" absoluteBounds="39.75, 4.75, 2, 6.1571577962239568">
+      <DataClassMoniker Name="/DCDataContext/VPaymentBill" />
+      <nestedChildShapes>
+        <elementListCompartment Id="f78f5a85-9d2b-46d8-b9dc-87090d52f3cd" absoluteBounds="39.765, 5.21, 1.9700000000000002, 5.597157796223958" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="9e1afa5d-422b-4217-8276-f818522cccb8" absoluteBounds="9.75, 39.75, 2, 3.3852461751302059">
+      <DataClassMoniker Name="/DCDataContext/VPaymentBillDtl" />
+      <nestedChildShapes>
+        <elementListCompartment Id="73fb7a54-84eb-4ee0-a7b0-28a74db42da6" absoluteBounds="9.765, 40.21, 1.9700000000000002, 2.825246175130208" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="122f6452-40fe-4d06-9774-5baab5ca18ca" absoluteBounds="39.75, 11.75, 2, 6.3419519042968755">
+      <DataClassMoniker Name="/DCDataContext/VPO" />
+      <nestedChildShapes>
+        <elementListCompartment Id="b9a01675-1a3d-4744-a4ac-5edddf48e882" absoluteBounds="39.765, 12.21, 1.9700000000000002, 5.781951904296875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="b3858917-329f-462a-9434-926bc3489bbb" absoluteBounds="12.75, 39.75, 2, 8.9290694173177059">
+      <DataClassMoniker Name="/DCDataContext/VProductionOrder" />
+      <nestedChildShapes>
+        <elementListCompartment Id="67068095-c0f4-4f29-afd3-83e26c92187d" absoluteBounds="12.765, 40.21, 1.9700000000000002, 8.3690694173177071" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="ac0105d4-3811-4af7-ade7-e89ffd8d4622" absoluteBounds="39.75, 19.75, 2, 2.0916874186197916">
+      <DataClassMoniker Name="/DCDataContext/VProductionOrderDtlForPrint" />
+      <nestedChildShapes>
+        <elementListCompartment Id="d5c31031-644c-450e-94fb-8ec6015e54cc" absoluteBounds="39.765, 20.21, 1.9700000000000002, 1.5316874186197915" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="ce8fd2fc-4ff6-4448-8ec6-dbbb97458413" absoluteBounds="39.75, 22.75, 2, 7.6355106608072916">
+      <DataClassMoniker Name="/DCDataContext/VProfitAndLossLog" />
+      <nestedChildShapes>
+        <elementListCompartment Id="51deb7d9-5c86-4971-beb7-96c001e1ef46" absoluteBounds="39.765, 23.21, 1.9700000000000002, 7.0755106608072911" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="2b647d60-c61d-440a-a681-114162cc2d18" absoluteBounds="39.75, 31.75, 2, 5.972363688151038">
+      <DataClassMoniker Name="/DCDataContext/VReceiptBill" />
+      <nestedChildShapes>
+        <elementListCompartment Id="f98fa65d-703f-4a53-8030-941567eb2413" absoluteBounds="39.765, 32.21, 1.9700000000000002, 5.4123636881510411" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="024a7c62-b064-4ebc-9bc2-a2e16a330694" absoluteBounds="39.75, 38.75, 2, 3.3852461751302059">
+      <DataClassMoniker Name="/DCDataContext/VReceiptBillDtl" />
+      <nestedChildShapes>
+        <elementListCompartment Id="df12bb3d-3c3e-491a-aada-8584e4e50d37" absoluteBounds="39.765, 39.21, 1.9700000000000002, 2.825246175130208" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="41f46ac5-22d5-481e-b7aa-6b6f1d957c4b" absoluteBounds="21.75, 40.75, 2, 3.9396284993489559">
+      <DataClassMoniker Name="/DCDataContext/VSalesBillSummary" />
+      <nestedChildShapes>
+        <elementListCompartment Id="a467309c-88a8-419a-b8dc-79d8404739b2" absoluteBounds="21.765, 41.21, 1.9700000000000002, 3.379628499348958" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="859d12ea-c185-4e1f-91a0-1cf7bebb5465" absoluteBounds="3.75, 41.75, 2, 2.8308638509114559">
+      <DataClassMoniker Name="/DCDataContext/VSalesSummaryByCustomer" />
+      <nestedChildShapes>
+        <elementListCompartment Id="59955f74-9560-4d57-9867-a3b2b46749f5" absoluteBounds="3.765, 42.21, 1.9700000000000002, 2.270863850911458" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="f6d41801-b911-40f9-85b5-5d96b95ac0c9" absoluteBounds="15.75, 41.75, 2, 4.1244226074218773">
+      <DataClassMoniker Name="/DCDataContext/VSalesSummaryByGoods" />
+      <nestedChildShapes>
+        <elementListCompartment Id="225bf670-27c8-4de9-95c2-eb851197a061" absoluteBounds="15.765, 42.21, 1.9700000000000002, 3.564422607421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="fa20164f-abd1-4864-b122-41f6bc573753" absoluteBounds="30.75, 41.75, 2, 5.9723636881510345">
+      <DataClassMoniker Name="/DCDataContext/VSampleStockOut" />
+      <nestedChildShapes>
+        <elementListCompartment Id="7afae1ac-54bc-460a-a7ea-74941d3fbf7b" absoluteBounds="30.765, 42.21, 1.9700000000000002, 5.4123636881510411" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="88c933dc-2f8f-496b-a247-0d9bf4fd04b9" absoluteBounds="42.75, 0.75, 2, 3.3852461751302076">
+      <DataClassMoniker Name="/DCDataContext/VStaffSchClass" />
+      <nestedChildShapes>
+        <elementListCompartment Id="287acb5c-880d-49ff-a133-00867c5b2ef7" absoluteBounds="42.765, 1.21, 1.9700000000000002, 2.825246175130208" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="c545bdca-609a-41bc-b98d-99af0478fb04" absoluteBounds="42.75, 5.75, 2, 5.2331872558593737">
+      <DataClassMoniker Name="/DCDataContext/VStatementOfAccountToCustomer" />
+      <nestedChildShapes>
+        <elementListCompartment Id="38faae35-72ac-4111-9396-36be783c5ab8" absoluteBounds="42.765, 6.21, 1.9700000000000002, 4.673187255859375" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="9ef17c56-799a-46cf-a64d-f38d591d8179" absoluteBounds="42.75, 11.75, 2, 3.3852461751302059">
+      <DataClassMoniker Name="/DCDataContext/VStatementOfAccountToSupplier" />
+      <nestedChildShapes>
+        <elementListCompartment Id="53a5774b-1d75-4032-a1d5-7eb3bc71564d" absoluteBounds="42.765, 12.21, 1.9700000000000002, 2.825246175130208" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="c9d39201-879b-420b-b791-a856ee5cd1bd" absoluteBounds="42.75, 16.75, 2, 7.8203047688802059">
+      <DataClassMoniker Name="/DCDataContext/VStockInBill" />
+      <nestedChildShapes>
+        <elementListCompartment Id="fc9344ab-d125-4ae0-b261-f6a9f4dac752" absoluteBounds="42.765, 17.21, 1.9700000000000002, 7.260304768880208" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="72350f20-7f7f-4909-9f01-9956025bc160" absoluteBounds="42.75, 25.75, 2, 5.4179813639322916">
+      <DataClassMoniker Name="/DCDataContext/VStockInBillDtlByBOM" />
+      <nestedChildShapes>
+        <elementListCompartment Id="c6a342cb-e4e1-4b6d-afa3-79b29027e722" absoluteBounds="42.765, 26.21, 1.9700000000000002, 4.8579813639322911" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="43a4e75d-1dbc-4a78-9a17-0e7123c09686" absoluteBounds="42.75, 32.75, 2, 1.5373050944010345">
+      <DataClassMoniker Name="/DCDataContext/VStockInBillDtlByColor" />
+      <nestedChildShapes>
+        <elementListCompartment Id="3721bdc4-052d-4be8-87af-6662c1342944" absoluteBounds="42.765, 33.21, 1.9700000000000002, 0.97730509440104174" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="bdbfde92-2141-4b8a-9cb2-aa6e09b4350e" absoluteBounds="42.75, 35.75, 2, 9.6682458496093773">
+      <DataClassMoniker Name="/DCDataContext/VStockOutBill" />
+      <nestedChildShapes>
+        <elementListCompartment Id="f2944963-ae4b-4276-94b0-aca22c941007" absoluteBounds="42.765, 36.21, 1.9700000000000002, 9.108245849609375" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="3b040e00-16f9-4272-99e2-5b0a441b6f35" absoluteBounds="6.75, 44.75, 2, 5.2331872558593773">
+      <DataClassMoniker Name="/DCDataContext/VStockOutBillDtlByBOM" />
+      <nestedChildShapes>
+        <elementListCompartment Id="2d0744e0-0b03-4ba7-80d9-dd79cf6dba15" absoluteBounds="6.765, 45.21, 1.9700000000000002, 4.673187255859375" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="7270ddd6-7508-48b9-9f72-d66a1e3536f6" absoluteBounds="24.75, 44.75, 2, 4.6788049316406273">
+      <DataClassMoniker Name="/DCDataContext/VStocktakingLog" />
+      <nestedChildShapes>
+        <elementListCompartment Id="fd82dd37-e52b-40f9-9845-a1b8b90c74dc" absoluteBounds="24.765, 45.21, 1.9700000000000002, 4.118804931640625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="70680198-197c-43d9-a640-da26f22984aa" absoluteBounds="45.75, 0.75, 2, 4.1244226074218737">
+      <DataClassMoniker Name="/DCDataContext/VSupplier" />
+      <nestedChildShapes>
+        <elementListCompartment Id="21cdd682-7eb2-45dc-bc41-a423f5faecbb" absoluteBounds="45.765, 1.21, 1.9700000000000002, 3.564422607421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="8eaf2069-26d1-4794-95b1-f114456b1519" absoluteBounds="0.75, 45.75, 2, 2.4612756347656273">
+      <DataClassMoniker Name="/DCDataContext/VSupplierSettlement" />
+      <nestedChildShapes>
+        <elementListCompartment Id="6da2466a-ee32-4272-a3a6-45d499649599" absoluteBounds="0.765, 46.21, 1.9700000000000002, 1.901275634765625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="acc0b1c3-4d81-4aad-9344-f58a2295cd48" absoluteBounds="45.75, 5.75, 2, 3.9396284993489568">
+      <DataClassMoniker Name="/DCDataContext/VUnlistedGoodsLog" />
+      <nestedChildShapes>
+        <elementListCompartment Id="33476f2d-e8c6-4112-b1a6-b243f237960a" absoluteBounds="45.765, 6.21, 1.9700000000000002, 3.379628499348958" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="74bc8b08-4658-4640-9115-6684371905c3" absoluteBounds="45.75, 10.75, 2, 3.5700402832031237">
+      <DataClassMoniker Name="/DCDataContext/VUsersInfo" />
+      <nestedChildShapes>
+        <elementListCompartment Id="a95dd1fc-b45d-417c-b913-5cc8e179cb65" absoluteBounds="45.765, 11.21, 1.9700000000000002, 3.010040283203125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="713e0c44-1b15-402a-bd68-85db42d63880" absoluteBounds="45.75, 15.75, 2, 4.4940108235677059">
+      <DataClassMoniker Name="/DCDataContext/VWageBill" />
+      <nestedChildShapes>
+        <elementListCompartment Id="a2c8fdfb-684a-41ee-8639-d0ac54cdab09" absoluteBounds="45.765, 16.21, 1.9700000000000002, 3.934010823567708" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(2.75 : 5.67625549316406); (3.5 : 5.67625549316406)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/DCDataContext/GoodsType/GoodsType_Goods" />
+      <nodes>
+        <classShapeMoniker Id="ba65e7be-d584-4c5b-a000-7b8f2333b1e1" />
+        <classShapeMoniker Id="306710d9-f6cc-4e49-b4e9-3e324894384b" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(5.5 : 5.68721130371094); (6.25 : 5.68721130371094)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/DCDataContext/Goods/Goods_OrderDtl" />
+      <nodes>
+        <classShapeMoniker Id="306710d9-f6cc-4e49-b4e9-3e324894384b" />
+        <classShapeMoniker Id="dbbcd1a0-892e-44ab-823d-240a23af4a1f" />
+      </nodes>
+    </associationConnector>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

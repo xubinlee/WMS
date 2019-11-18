@@ -1,0 +1,14 @@
+D:\ERPToys\DAL.dll
+D:\ERPToys\DAL.pdb
+D:\Projects\ERPToys\DAL\obj\Debug\DAL.csprojAssemblyReference.cache
+D:\Projects\ERPToys\DAL\obj\Debug\DAL.csproj.CoreCompileInputs.cache
+D:\Projects\ERPToys\DAL\obj\Debug\DAL.csproj.CopyComplete
+D:\Projects\ERPToys\DAL\obj\Debug\DAL.dll
+D:\Projects\ERPToys\DAL\obj\Debug\DAL.pdb
+D:\Project\WMS\DAL\obj\Debug\DAL.csprojAssemblyReference.cache
+D:\Project\WMS\DAL\obj\Debug\DAL.csproj.CoreCompileInputs.cache
+D:\Project\WMS\DAL\obj\Debug\DAL.csproj.CopyComplete
+D:\Project\WMS\DAL\obj\Debug\DAL.dll
+D:\Project\WMS\DAL\obj\Debug\DAL.pdb
+D:\WMS\DAL.dll
+D:\WMS\DAL.pdb
