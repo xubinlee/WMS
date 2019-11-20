@@ -50,16 +50,16 @@ namespace USL
             BindData(headID);
         }
 
-        public void BindData(Guid hdID)
+        public void BindData(object hdID)
         {
             gridControl.BeginUpdate();
-            if (hdID != Guid.Empty)
+            if (hdID is Guid)
             {
-                headID = hdID;
-                attWageBillHdBindingSource.DataSource = hd = BLLFty.Create<AttWageBillBLL>().GetAttWageBillHd(hdID);
-                dtl = BLLFty.Create<AttWageBillBLL>().GetUSPAttWageBillDtl().FindAll(o =>
-                                    o.YearMonth == Convert.ToDateTime(deYearMonth.EditValue).ToString("yyyy-MM"));
-                List<VAttWageBill> list = ((List<VAttWageBill>)MainForm.dataSourceList[typeof(VAttWageBill)]).FindAll(o => o.HdID == hdID);
+                headID = (Guid)hdID;
+                attWageBillHdBindingSource.DataSource = hd = BLLFty.Create<AttWageBillBLL>().GetAttWageBillHd(headID);
+                //dtl = BLLFty.Create<AttWageBillBLL>().GetUSPAttWageBillDtl().FindAll(o =>
+                                    //o.YearMonth == Convert.ToDateTime(deYearMonth.EditValue).ToString("yyyy-MM"));
+                List<VAttWageBill> list = ((List<VAttWageBill>)MainForm.dataSourceList[typeof(VAttWageBill)]).FindAll(o => o.HdID == headID);
                 for (int i = dtl.Count - 1; i >= 0; i--)
                 {
                     VAttWageBill obj = list.Find(o => o.UserID == dtl[i].UserID);
@@ -249,7 +249,7 @@ namespace USL
                         o.日期.Value.ToString("yyyy-MM").Equals(hd.YearMonth));
                 //DataQueryPageRefresh();
                 //QueryPageRefresh();
-                MainForm.BillSaveRefresh<VAttWageBill>();
+                MainForm.DataPageRefresh<VAttWageBill>();
                 CommonServices.ErrorTrace.SetSuccessfullyInfo(this.FindForm(), "保存成功");
                 return true;
             }
@@ -275,8 +275,8 @@ namespace USL
                 if (hd != null)
                 {
                     AttWageBillHd wage = BLLFty.Create<AttWageBillBLL>().GetAttWageBillHd(hd.ID);
-                    dtl = BLLFty.Create<AttWageBillBLL>().GetUSPAttWageBillDtl().FindAll(o =>
-                                        o.YearMonth == hd.YearMonth);
+                    //dtl = BLLFty.Create<AttWageBillBLL>().GetUSPAttWageBillDtl().FindAll(o =>
+                                        //o.YearMonth == hd.YearMonth);
 
                     hd.Auditor = MainForm.usersInfo.ID;
                     hd.AuditDate = DateTime.Now;
@@ -343,7 +343,7 @@ namespace USL
             }
             finally
             {
-                MainForm.BillSaveRefresh<VAttWageBill>();
+                MainForm.DataPageRefresh<VAttWageBill>();
                 this.Cursor = System.Windows.Forms.Cursors.Default;
             }
         }
@@ -427,8 +427,8 @@ namespace USL
             uSPAttWageBillDtlBindingSource.Clear();
             if (!string.IsNullOrEmpty(deYearMonth.Text.Trim()))
             {
-                uSPAttWageBillDtlBindingSource.DataSource = BLLFty.Create<AttWageBillBLL>().GetUSPAttWageBillDtl().FindAll(o =>
-                                                 o.YearMonth == Convert.ToDateTime(deYearMonth.EditValue).ToString("yyyy-MM") && o.WageStatus == (int)WageStatus.UnClosed);
+                //uSPAttWageBillDtlBindingSource.DataSource = BLLFty.Create<AttWageBillBLL>().GetUSPAttWageBillDtl().FindAll(o =>
+                                                 //o.YearMonth == Convert.ToDateTime(deYearMonth.EditValue).ToString("yyyy-MM") && o.WageStatus == (int)WageStatus.UnClosed);
             }
             else
                 uSPAttWageBillDtlBindingSource.DataSource = null;

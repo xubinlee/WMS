@@ -43,7 +43,7 @@ namespace USL
                 lciSchClassWage.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Never;
                 lciTimeWage.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Never;
             }
-            types =MainForm.ConvertList<TypesList>((IList)MainForm.dataSourceList[typeof(TypesList)]);
+            types =MainForm.GetData<TypesList>();
             typesListBindingSource.DataSource = types.FindAll(o => o.Type == TypesListConstants.PrivilegeType);
             wageTypeBindingSource.DataSource = types.FindAll(o => o.Type == TypesListConstants.WageType);
             if (obj == null)
@@ -61,7 +61,7 @@ namespace USL
 
         public void BindData()
         {
-            departmentBindingSource.DataSource = MainForm.ConvertList<Department>((IList)MainForm.dataSourceList[typeof(Department)]);
+            departmentBindingSource.DataSource = MainForm.GetData<Department>();
         }
 
         public void Add()
@@ -99,16 +99,16 @@ namespace USL
                     //添加功能权限信息
                     List<Permission> pList = new List<Permission>();
                     List<ButtonPermission> btnList = new List<ButtonPermission>();
-                    List<DBML.MainMenu> menuList = MainForm.ConvertList<DBML.MainMenu>((IList)MainForm.dataSourceList[typeof(DBML.MainMenu)]);
-                    int i=0;
+                    List<DBML.MainMenu> menuList = MainForm.GetData<DBML.MainMenu>();                    
                     foreach (DBML.MainMenu menu in menuList)
                     {
                         Permission p = new Permission();
-                        p.ID = ++i;
+                        p.ID = menu.SerialNo;
+                        string no = menu.SerialNo.ToString().Trim();
                         if (menu.ParentID == null)
                             p.ParentID = 0;
-                        else if (menu.SerialNo.ToString().Length > 2)
-                            p.ParentID = int.Parse(menu.SerialNo.ToString().Substring(0, menu.SerialNo.ToString().Length - 2));
+                        else if (no.Length > 2)
+                            p.ParentID = int.Parse(no.Substring(0, no.Length - 2));
                         p.SerialNo = menu.SerialNo;
                         p.UserID = user.ID;
                         p.Caption = menu.Caption;

@@ -961,6 +961,8 @@ namespace Utility
         Pic,
         [MemberDescription("商品编码", "Code")]
         Code,
+        [MemberDescription("商品品类", "Category")]
+        Category,
         [MemberDescription("商品名称", "Name")]
         Name,
         [MemberDescription("售价", "Price")]

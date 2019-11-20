@@ -15,6 +15,7 @@ using CommonLibrary;
 using Factory;
 using BLL;
 using DevExpress.XtraTreeList.Nodes;
+using System.Collections;
 
 namespace USL
 {
@@ -25,12 +26,11 @@ namespace USL
         public PermissionSettingPage()
         {
             InitializeComponent();
-            BindData();
-            
+            BindData(null);
+
             layoutView.ShowFindPanel();
         }
-
-        public void BindData()
+        public void BindData(object list)
         {
             vUsersInfoBindingSource.DataSource = BLLFty.Create<UsersInfoBLL>().GetLoginUsersInfo();// MainForm.dataSourceList[typeof(VUsersInfo)];
             dsPermission = IListDataSet.ToDataSet<Permission>(((List<Permission>)MainForm.dataSourceList[typeof(Permission)]).FindAll(o => o.UserID == MainForm.usersInfo.ID));
@@ -81,6 +81,7 @@ namespace USL
                 BLLFty.Create<PermissionBLL>().Update(IListDataSet.DataSetToIList<Permission>(dsPermission, 0).ToList(), btnPermissionList);
                 //vStockOutBillDtlForPrintBindingSource.DataSource = BLLFty.Create<StockOutBillBLL>().GetStockOutBillDtlForPrint(hd.ID);
                 //gvBillDtlForPrint.BestFitColumns();
+                MainForm.DataPageRefresh<Permission>().OrderBy(o=>o.SerialNo);
                 CommonServices.ErrorTrace.SetSuccessfullyInfo(this.FindForm(), "保存成功");
                 return true;
             }
@@ -120,7 +121,7 @@ namespace USL
             VUsersInfo user = ((DevExpress.XtraGrid.Views.Layout.LayoutView)sender).GetFocusedRow() as VUsersInfo;
             if (user != null)
             {
-                dsPermission = IListDataSet.ToDataSet<Permission>(((List<Permission>)MainForm.dataSourceList[typeof(Permission)]).FindAll(o => o.UserID == user.ID));
+                dsPermission = IListDataSet.ToDataSet<Permission>(MainForm.GetData<Permission>().FindAll(o => o.UserID == user.ID));
                 cuTreeListPermission.DataSource = dsPermission.Tables[0];
                 cuTreeListPermission.ExpandAll();
                 foreach (TreeListNode node in cuTreeListPermission.GetNodeList())
@@ -131,7 +132,7 @@ namespace USL
                         node.Checked = (bool)drv["CheckBoxState"];
                     }
                 }
-                buttonPermissionBindingSource.DataSource = btnPermissionList = ((List<ButtonPermission>)MainForm.dataSourceList[typeof(ButtonPermission)]).FindAll(o => o.UserID == user.ID);
+                buttonPermissionBindingSource.DataSource = btnPermissionList = MainForm.GetData<ButtonPermission>().FindAll(o => o.UserID == user.ID);
             }
         }
 

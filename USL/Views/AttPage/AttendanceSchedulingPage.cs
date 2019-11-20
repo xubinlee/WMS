@@ -40,12 +40,12 @@ namespace USL
         {
             base.OnLoad(e);
             winExplorerView.ShowFindPanel();
-            BindData();
+            BindData(null);
             dateNavigator.DateTime = DateTime.Now;
             schedulerControl1.ActiveViewType = SchedulerViewType.Month;
         }
 
-        public void BindData()
+        public void BindData(object obj)
         {
             schedulerStorage.BeginUpdate();
             vUsersInfoBindingSource.DataSource = ((List<VUsersInfo>)MainForm.dataSourceList[typeof(VUsersInfo)]).FindAll(o =>
@@ -236,13 +236,13 @@ namespace USL
             //MainForm.dataSourceList[typeof(AttGeneralLog)] = BLLFty.Create<AttGeneralLogBLL>().GetAttGeneralLog();
             //MainForm.GetAttAppointments();
             MainForm.dataSourceList[typeof(AttAppointments)] = BLLFty.Create<AttAppointmentsBLL>().GetAttAppointments();
-            BindData();
+            BindData(null);
             if (MainForm.itemDetailList.ContainsKey(MainMenuConstants.AttendanceQuery))
             {
                 DataQueryPage page = MainForm.itemDetailList[MainMenuConstants.AttendanceQuery] as DataQueryPage;
                 //刷新数据
                 MainForm.dataSourceList[typeof(VAttAppointments)] = BLLFty.Create<AttAppointmentsBLL>().GetVAttAppointments();
-                page.InitGrid((IList)MainForm.dataSourceList[typeof(VAttAppointments)]);
+                page.BindData((IList)MainForm.dataSourceList[typeof(VAttAppointments)]);
             }
         }
 

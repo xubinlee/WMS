@@ -40,8 +40,7 @@ namespace USL
 
         private void GetTypeList()
         {
-            List<Department> depts = MainForm.ConvertList<Department>((IList)MainForm.dataSourceList[typeof(Department)]);
-            //List<Department> depts = (List<Department>)MainForm.dataSourceList[typeof(Department)];
+            List<Department> depts = (List<Department>)MainForm.dataSourceList[typeof(Department)];
             //门店类型
             List<string> list = depts.Select(o => o.Type).Distinct().ToList();
             if (list != null)
@@ -72,7 +71,7 @@ namespace USL
                     dept = obj;
                     dept.ID = Guid.NewGuid();
                     dept.AddTime = DateTime.Now;
-                    List<Department> deptList = MainForm.ConvertList<Department>((IList)MainForm.dataSourceList[typeof(Department)]);
+                    List<Department> deptList = (List<Department>)MainForm.dataSourceList[typeof(Department)];
                     if (deptList.Exists(o => o.Name == dept.Code))
                     {
                         XtraMessageBox.Show("该门店已经存在，不能重复添加。", "操作提示", MessageBoxButtons.OK, MessageBoxIcon.Error);

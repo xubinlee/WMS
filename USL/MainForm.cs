@@ -31,12 +31,13 @@ using System.Text.RegularExpressions;
 using static Utility.EnumHelper;
 using System.Reflection;
 using System.Data.Linq;
+using System.Transactions;
 
 namespace USL
 {
     public partial class MainForm : XtraForm,IToolbar,IStatusbar
     {
-        Thread threadGetVDataSource;
+        //Thread threadGetVDataSource;
         Thread threadGetUserInfo;
         //Thread threadInsertAlert;
         public static Dictionary<String, int> alertCount;
@@ -53,12 +54,10 @@ namespace USL
         public static Dictionary<String, IItemDetail> itemDetailList;
         Dictionary<String, int> itemDetailButtonList; //子菜单按钮项
         public static Dictionary<Type, object> dataSourceList;  //数据集
-        //static IList list;
         public static AlertControl alertControl;
         //public static int exportSalesReceiptDate = int.Parse(ConfigurationManager.AppSettings["ExportSalesReceiptDate"]);  //外销账期
         static int goodsBigType = 0;  //Goods大类
         static string goodsBigTypeName = string.Empty;
-        static List<TypesList> types;   //类型列表
         //考勤组件
         //private static zkemkeeper.CZKEMClass axCZKEM1 = new zkemkeeper.CZKEMClass();
 
@@ -73,11 +72,6 @@ namespace USL
         {
             get { return isConnected; }
             set { isConnected = value; }
-        }
-        public static List<TypesList> Types
-        {
-            get { return MainForm.types; }
-            //set { MainForm.types = value; }
         }
 
         public static string GoodsBigTypeName
@@ -212,120 +206,99 @@ namespace USL
             try
             {
                 this.Cursor = System.Windows.Forms.Cursors.WaitCursor;
-                //iSnowSoftVersion = EnumHelper.GetEnumValues<ISnowSoftVersion>(true).FirstOrDefault(o => o.Name == ConfigurationManager.AppSettings["ISnowSoftVersion"].ToString()).Value;
-                this.windowsUIView.Caption = ConfigurationManager.AppSettings["SystemName"];
-                company = ConfigurationManager.AppSettings["Company"];
-                contacts = ConfigurationManager.AppSettings["Contacts"];
-                accounts = ConfigurationManager.AppSettings["Accounts"];
-                this.tileContainer.Properties.IndentBetweenGroups = int.Parse(ConfigurationManager.AppSettings["IndentBetweenGroups"]);
-                this.tileContainer.Properties.ItemSize = int.Parse(ConfigurationManager.AppSettings["ItemSize"]);
-                this.tileContainer.Properties.LargeItemWidth = int.Parse(ConfigurationManager.AppSettings["LargeItemWidth"]);
-                this.tileContainer.Properties.RowCount = int.Parse(ConfigurationManager.AppSettings["RowCount"]);
-                serverUrl = ConfigurationManager.AppSettings["ServerUrl"];
-                serverUserName = ConfigurationManager.AppSettings["ServerUserName"];
-                serverPassword = Security.Decrypt(ConfigurationManager.AppSettings["ServerPassword"].ToString());
-                serverDomain = ConfigurationManager.AppSettings["ServerDomain"];
-                //if (MainForm.Company.Contains("镇阳"))
-                //{
-                //    isLandScape = false;
-                //    printPaperKind = System.Drawing.Printing.PaperKind.A5Rotated;
-                //}
-                if (MainForm.Company.Contains("创萌"))
+                using (TransactionScope ts = new TransactionScope())
                 {
-                    isLandScape = false;
-                    printPaperKind = System.Drawing.Printing.PaperKind.Custom;
-                    PaperSize = new Size((int)(218 / 25.4 * 100), (int)(140 / 25.4 * 100));
-                }
-                else if (MainForm.Company.Contains("谷铭达") || MainForm.Company.Contains("镇阳") || MainForm.Company.Contains("盛兴"))
-                {
-                    isLandScape = false;
-                    printPaperKind = System.Drawing.Printing.PaperKind.Custom;
-                    PaperSize = new Size((int)(215 / 25.4 * 100), (int)(139 / 25.4 * 100));
-                }
-                else
-                {
-                    isLandScape = false;
-                    printPaperKind = System.Drawing.Printing.PaperKind.A5Rotated;
-                }
-
-                this.tools.Visible = false;
-                windowsUIView.AddTileWhenCreatingDocument = DevExpress.Utils.DefaultBoolean.False;
-                //dataSource = new SampleDataSource();
-                //userPermissions.Find(o => o.Caption.Trim() == item.Caption.Trim()).CheckBoxState;
-                menuList = BLLFty.Create<MainMenuBLL>().GetMainMenu();
-                statusList = BLLFty.Create<SystemStatusBLL>().GetSystemStatus();
-                List<Permission> pList = BLLFty.Create<PermissionBLL>().GetPermission().FindAll(o => o.UserID == usersInfo.ID);
-
-                #region 如果MainMenu有变更，更新用户权限列表
-
-                //更新功能权限信息
-                int iCount = 0;
-                foreach (DBML.MainMenu menu in menuList)
-                {
-                    Permission p = pList.FirstOrDefault(o => o.UserID == usersInfo.ID && o.Caption == menu.Caption);
-                    if (p == null)
+                    //iSnowSoftVersion = EnumHelper.GetEnumValues<ISnowSoftVersion>(true).FirstOrDefault(o => o.Name == ConfigurationManager.AppSettings["ISnowSoftVersion"].ToString()).Value;
+                    this.windowsUIView.Caption = ConfigurationManager.AppSettings["SystemName"];
+                    company = ConfigurationManager.AppSettings["Company"];
+                    contacts = ConfigurationManager.AppSettings["Contacts"];
+                    accounts = ConfigurationManager.AppSettings["Accounts"];
+                    this.tileContainer.Properties.IndentBetweenGroups = int.Parse(ConfigurationManager.AppSettings["IndentBetweenGroups"]);
+                    this.tileContainer.Properties.ItemSize = int.Parse(ConfigurationManager.AppSettings["ItemSize"]);
+                    this.tileContainer.Properties.LargeItemWidth = int.Parse(ConfigurationManager.AppSettings["LargeItemWidth"]);
+                    this.tileContainer.Properties.RowCount = int.Parse(ConfigurationManager.AppSettings["RowCount"]);
+                    serverUrl = ConfigurationManager.AppSettings["ServerUrl"];
+                    serverUserName = ConfigurationManager.AppSettings["ServerUserName"];
+                    serverPassword = Security.Decrypt(ConfigurationManager.AppSettings["ServerPassword"].ToString());
+                    serverDomain = ConfigurationManager.AppSettings["ServerDomain"];
+                    //if (MainForm.Company.Contains("镇阳"))
+                    //{
+                    //    isLandScape = false;
+                    //    printPaperKind = System.Drawing.Printing.PaperKind.A5Rotated;
+                    //}
+                    if (MainForm.Company.Contains("创萌"))
                     {
-                        p = new Permission();
-                        p.ID = ++iCount;
-                        if (menu.ParentID == null)
-                            p.ParentID = 0;
-                        else if (menu.SerialNo.ToString().Length > 2)
-                            p.ParentID = int.Parse(menu.SerialNo.ToString().Substring(0, menu.SerialNo.ToString().Length - 2));
-                        p.SerialNo = menu.SerialNo;
-                        p.UserID = usersInfo.ID;
-                        p.Caption = menu.Caption;
-                        p.CheckBoxState = false;
-                        BLLFty.Create<PermissionBLL>().Insert(p);
+                        isLandScape = false;
+                        printPaperKind = System.Drawing.Printing.PaperKind.Custom;
+                        PaperSize = new Size((int)(218 / 25.4 * 100), (int)(140 / 25.4 * 100));
+                    }
+                    else if (MainForm.Company.Contains("谷铭达") || MainForm.Company.Contains("镇阳") || MainForm.Company.Contains("盛兴"))
+                    {
+                        isLandScape = false;
+                        printPaperKind = System.Drawing.Printing.PaperKind.Custom;
+                        PaperSize = new Size((int)(215 / 25.4 * 100), (int)(139 / 25.4 * 100));
                     }
                     else
                     {
-                        p.ID = ++iCount;
-                        if (menu.ParentID == null)
-                            p.ParentID = 0;
-                        else if (menu.SerialNo.ToString().Length > 2)
-                            p.ParentID = int.Parse(menu.SerialNo.ToString().Substring(0, menu.SerialNo.ToString().Length - 2));
-                        //else
-                        //    p.ParentID = int.Parse(menu.SerialNo.ToString().Substring(0, 1));
-                        p.SerialNo = menu.SerialNo;
-                        //p.UserID = usersInfo.ID;
-                        //p.Caption = menu.Caption;
-                        BLLFty.Create<PermissionBLL>().Update(p);
+                        isLandScape = false;
+                        printPaperKind = System.Drawing.Printing.PaperKind.A5Rotated;
                     }
-                }
 
-                #endregion
+                    this.tools.Visible = false;
+                    windowsUIView.AddTileWhenCreatingDocument = DevExpress.Utils.DefaultBoolean.False;
+                    //dataSource = new SampleDataSource();
+                    //userPermissions.Find(o => o.Caption.Trim() == item.Caption.Trim()).CheckBoxState;
+                    menuList = BLLFty.Create<MainMenuBLL>().GetMainMenu();
+                    statusList = BLLFty.Create<SystemInfoBLL>().GetSystemStatus();
+                    List<Permission> pList = BLLFty.Create<PermissionBLL>().GetPermission().FindAll(o => o.UserID == usersInfo.ID);
 
-                pList = BLLFty.Create<PermissionBLL>().GetPermission().FindAll(o => o.UserID == usersInfo.ID);
-                //设置权限
-                for (int i = menuList.Count - 1; i >= 0; i--)
-                {
-                    if (menuList[i].ParentID == null)
-                        continue;
-                    if (pList.FirstOrDefault(o => o.Caption.Trim() == menuList[i].Caption.Trim()).CheckBoxState == false)
+
+                    //如果MainMenu有变更，更新用户权限列表
+                    updatePermission(pList);
+
+                    pList = BLLFty.Create<PermissionBLL>().GetPermission().FindAll(o => o.UserID == usersInfo.ID);
+                    //设置权限
+                    for (int i = menuList.Count - 1; i >= 0; i--)
                     {
-                        menuList.RemoveAt(i);
-                        continue;
+                        if (menuList[i].ParentID == null)
+                            continue;
+                        if (pList.FirstOrDefault(o => o.Caption.Trim() == menuList[i].Caption.Trim()).CheckBoxState == false)
+                        {
+                            menuList.RemoveAt(i);
+                            continue;
+                        }
                     }
-                }
-                alertCount = new Dictionary<string, int>();
-                //groupsItemDetailPage = new Dictionary<SampleDataGroup, PageGroup>();
-                groupsItemDetailPage = new Dictionary<DBML.MainMenu, PageGroup>();
-                groupsItemDetailList = new Dictionary<Guid, PageGroup>();
-                itemDetailList = new Dictionary<String, IItemDetail>();  //ItemDetailPage页面所有加载的Control
-                itemDetailButtonList = new Dictionary<string, int>();
-                dataSourceList = new Dictionary<Type, object>();
-                alertControl = new AlertControl(this.components);
-                alertControl.FormShowingEffect = AlertFormShowingEffect.SlideHorizontal;
+                    alertCount = new Dictionary<string, int>();
+                    //groupsItemDetailPage = new Dictionary<SampleDataGroup, PageGroup>();
+                    groupsItemDetailPage = new Dictionary<DBML.MainMenu, PageGroup>();
+                    groupsItemDetailList = new Dictionary<Guid, PageGroup>();
+                    itemDetailList = new Dictionary<String, IItemDetail>();  //ItemDetailPage页面所有加载的Control
+                    itemDetailButtonList = new Dictionary<string, int>();
+                    dataSourceList = new Dictionary<Type, object>();
+                    alertControl = new AlertControl(this.components);
+                    alertControl.FormShowingEffect = AlertFormShowingEffect.SlideHorizontal;
 
-                SetStateBarInfo();
-                GetDataSource();
-                GetVDataSource();
-                types = MainForm.ConvertList<TypesList>((IList)MainForm.dataSourceList[typeof(TypesList)]);
-                warehouseList = MainForm.ConvertList<Warehouse>((IList)MainForm.dataSourceList[typeof(Warehouse)]);
-                buttonPermissions = MainForm.ConvertList<ButtonPermission>((IList)MainForm.dataSourceList[typeof(ButtonPermission)]).FindAll(o => o.UserID == usersInfo.ID);
-                attParam = MainForm.ConvertList<AttParameters>((IList)MainForm.dataSourceList[typeof(AttParameters)]).FirstOrDefault(o => o.CommMode == "TCP/IP");
-                sysInfo = MainForm.ConvertList<SystemInfo>((IList)MainForm.dataSourceList[typeof(SystemInfo)]).FirstOrDefault(o => o.Company.Contains(MainForm.Company));
-                CreateLayout();
+                    SetStateBarInfo();
+                    //GetDataSource();
+                    //GetVDataSource();
+                    List<Department> depts = BLLFty.Create<DepartmentBLL>().GetDepartment();
+                    dataSourceList.Add(typeof(Department), depts);
+                    List<SystemStatus> ss = BLLFty.Create<SystemInfoBLL>().GetSystemStatus();
+                    dataSourceList.Add(typeof(SystemStatus), ss);
+                    List<TypesList> types = BLLFty.Create<TypesListBLL>().GetTypesList();
+                    dataSourceList.Add(typeof(TypesList), types);
+                    List<Warehouse> warehouseList = BLLFty.Create<WarehouseBLL>().GetWarehouse();
+                    dataSourceList.Add(typeof(Warehouse), warehouseList);
+                    List<Permission> permissionList = BLLFty.Create<PermissionBLL>().GetPermission();
+                    dataSourceList.Add(typeof(Permission), permissionList);
+                    List<ButtonPermission> buttonPermissionList = BLLFty.Create<PermissionBLL>().GetButtonPermission();
+                    dataSourceList.Add(typeof(ButtonPermission), buttonPermissionList);
+                    buttonPermissions = BLLFty.Create<PermissionBLL>().GetButtonPermission().FindAll(o => o.UserID == usersInfo.ID);
+                    attParam = BLLFty.Create<AttAppointmentsBLL>().GetAttParameters().FirstOrDefault(o => o.CommMode == "TCP/IP");
+                    sysInfo = BLLFty.Create<SystemInfoBLL>().GetSystemInfo().FirstOrDefault(o => o.Company.Contains(MainForm.Company));
+                    CreateLayout();
+                    ts.Complete();
+                }
             }
             catch (Exception ex)
             {
@@ -337,6 +310,32 @@ namespace USL
 
                 this.Cursor = System.Windows.Forms.Cursors.Default;
             }
+        }
+
+        private void updatePermission(List<Permission> pList)
+        {
+            List<Permission> insertList = new List<Permission>();
+            menuList.FindAll(o=>o.CheckBoxState).ForEach(menu =>
+            {
+                Permission p = pList.FirstOrDefault(o => o.UserID == usersInfo.ID && o.Caption == menu.Caption);
+                Permission obj = new Permission();
+                if (p == null)
+                    obj.CheckBoxState = false;
+                else
+                    obj.CheckBoxState = p.CheckBoxState;
+                obj.ID = menu.SerialNo;
+                string no = menu.SerialNo.ToString().Trim();
+                if (menu.ParentID == null)
+                    obj.ParentID = 0;
+                else if (no.Length > 2)
+                    obj.ParentID = int.Parse(no.Substring(0, no.Length - 2));
+                obj.SerialNo = menu.SerialNo;
+                obj.UserID = usersInfo.ID;
+                obj.Caption = menu.Caption;
+                insertList.Add(obj);
+            });
+            if (insertList.Count > 0)
+                BLLFty.Create<PermissionBLL>().Update(usersInfo.ID, insertList);
         }
 
         protected override void OnLoad(EventArgs e)
@@ -510,7 +509,7 @@ namespace USL
                     prefix = menu.Prefix;
                 string no = prefix + DateTime.Now.ToString("yyyyMMdd") + "000";
 
-                List <SystemStatus> list = BLLFty.Create<SystemStatusBLL>().GetSystemStatus();
+                List <SystemStatus> list = BLLFty.Create<SystemInfoBLL>().GetSystemStatus();
                 if (list != null)
                 {
                     entity = list.FirstOrDefault(o => o.MainMenuName.Equals(billType));
@@ -530,12 +529,12 @@ namespace USL
                         entity.MainMenuName = billType;
                         entity.MaxBillNo = no;
                         entity.Status = 0;
-                        BLLFty.Create<SystemStatusBLL>().Insert(entity);
+                        BLLFty.Create<SystemInfoBLL>().Insert(entity);
                     }
                     else
                     {
                         entity.MaxBillNo = no;
-                        BLLFty.Create<SystemStatusBLL>().Update(entity);
+                        BLLFty.Create<SystemInfoBLL>().Update(entity);
                     }
                     DataPageRefresh<SystemStatus>();
                 }
@@ -627,7 +626,7 @@ namespace USL
         public static void GetAttAppointments()
         {
             //添加考勤报表
-            List<AttGeneralLog> attGLogs = MainForm.ConvertList<AttGeneralLog>((IList)dataSourceList[typeof(AttGeneralLog)]);
+            List<AttGeneralLog> attGLogs = (List<AttGeneralLog>)dataSourceList[typeof(AttGeneralLog)];
             Hashtable hasAtt = new Hashtable();
             List<AttAppointments> aptList = BLLFty.Create<AttAppointmentsBLL>().GetAttAppointments();
             List<AttAppointments> aptInsertList = new List<AttAppointments>();
@@ -781,34 +780,12 @@ namespace USL
                     attApt.Description = obj.Description;
                     aptUpdateList.Add(attApt);
                 }
-
-                //UsersInfo u = ((List<UsersInfo>)dataSourceList[typeof(UsersInfo)]).FirstOrDefault(o => o.ID == obj.UserID);
-                //VAttAppointments vObj = new VAttAppointments();
-                //vObj.UniqueID = obj.UniqueID;
-                //vObj.GLogStartID = obj.GLogStartID;
-                //vObj.GLogEndID = obj.GLogEndID;
-                //vObj.UserID = obj.UserID;
-                //vObj.工号 = u.Code;
-                //vObj.姓名 = u.Name;
-                //vObj.SchSerialNo = obj.SchSerialNo;
-                //vObj.日期 = obj.CheckInTime;
-                //vObj.上班时间 = obj.SchStartTime;
-                //vObj.下班时间 = obj.SchEndTime;
-                //vObj.签到时间 = obj.CheckInTime;
-                //vObj.签退时间 = obj.CheckOutTime;
-                //vObj.考勤状态 = obj.AttStatus;
-                //vObj.迟到分钟数 = obj.LateMinutes;
-                //vObj.早退分钟数 = obj.EarlyMinutes;
-                //vObj.备注 = obj.Description;
-                //vaptList.Add(vObj);
             }
-            //dataSourceList[typeof(AttAppointments)] = aptList;
-            //dataSourceList[typeof(VAttAppointments)] = vaptList;
-
-            //BLLFty.Create<AttAppointmentsBLL>().Insert(aptList);
             BLLFty.Create<AttAppointmentsBLL>().Save(aptInsertList, aptUpdateList);
         }
 
+
+        #region 注释
         //static AttAppointments SetAttStatus(AttAppointments obj)
         //{
         //    //foreach (AttAppointments obj in apts)
@@ -873,88 +850,87 @@ namespace USL
         //    //dataSourceList[typeof(AttAppointments)] = aptList;
         //    //dataSourceList[typeof(VAttAppointments)] = vaptList;
         //}
-        private void GetViewDataSource()
-        {
-            Dictionary<Type, object> dataSources = BLLFty.Create<DataSourcesBLL>().GetVDataSources();
-            foreach (KeyValuePair<Type, object> kvp in dataSources)
-            {
-                //dataSourceList.Add(kvp.Key, kvp.Value);
-                dataSourceList[kvp.Key] = kvp.Value;
-            }
-        }
+        //private void GetViewDataSource()
+        //{
+        //    Dictionary<Type, object> dataSources = BLLFty.Create<DataSourcesBLL>().GetVDataSources();
+        //    foreach (KeyValuePair<Type, object> kvp in dataSources)
+        //    {
+        //        //dataSourceList.Add(kvp.Key, kvp.Value);
+        //        dataSourceList[kvp.Key] = kvp.Value;
+        //    }
+        //}
 
-        static void GetNewList()
-        {
-            dataSourceList.Add(typeof(VStockInBill), new List<VStockInBill>());
-            dataSourceList.Add(typeof(VStockOutBill), new List<VStockOutBill>());
-            dataSourceList.Add(typeof(VMaterialStockInBill), new List<VMaterialStockInBill>());
-            dataSourceList.Add(typeof(VMaterialStockOutBill), new List<VMaterialStockOutBill>());
-            dataSourceList.Add(typeof(StockInBillHd), new List<StockInBillHd>());
-            dataSourceList.Add(typeof(StockOutBillHd), new List<StockOutBillHd>());
-            dataSourceList.Add(typeof(OrderHd), new List<OrderHd>());
-            dataSourceList.Add(typeof(ReceiptBillHd), new List<ReceiptBillHd>());
-            dataSourceList.Add(typeof(PaymentBillHd), new List<PaymentBillHd>());
-            dataSourceList.Add(typeof(VPO), new List<VPO>());
-            dataSourceList.Add(typeof(VOrder), new List<VOrder>());
-            dataSourceList.Add(typeof(VFSMOrder), new List<VFSMOrder>());
-            dataSourceList.Add(typeof(VProductionOrder), new List<VProductionOrder>());
-            dataSourceList.Add(typeof(VInventory), new List<VInventory>());
-            dataSourceList.Add(typeof(VInventoryGroupByGoods), new List<VInventoryGroupByGoods>());
-            dataSourceList.Add(typeof(VMaterialInventory), new List<VMaterialInventory>());
-            dataSourceList.Add(typeof(VMaterialInventoryGroupByGoods), new List<VMaterialInventoryGroupByGoods>());
-            dataSourceList.Add(typeof(VEMSInventoryGroupByGoods), new List<VEMSInventoryGroupByGoods>());
-            dataSourceList.Add(typeof(VFSMInventoryGroupByGoods), new List<VFSMInventoryGroupByGoods>());
-            dataSourceList.Add(typeof(VAccountBook), new List<VAccountBook>());
-            dataSourceList.Add(typeof(StocktakingLogHd), new List<StocktakingLogHd>());
-            dataSourceList.Add(typeof(VStocktakingLog), new List<VStocktakingLog>());
-            dataSourceList.Add(typeof(VProfitAndLossLog), new List<VProfitAndLossLog>());
-            dataSourceList.Add(typeof(VUnlistedGoodsLog), new List<VUnlistedGoodsLog>());
-            dataSourceList.Add(typeof(SalesSummaryMonthlyReport), new List<SalesSummaryMonthlyReport>());
-            dataSourceList.Add(typeof(AnnualSalesSummaryByCustomerReport), new List<AnnualSalesSummaryByCustomerReport>());
-            dataSourceList.Add(typeof(AnnualSalesSummaryByGoodsReport), new List<AnnualSalesSummaryByGoodsReport>());
-            dataSourceList.Add(typeof(VSalesBillSummary), new List<VSalesBillSummary>());
-            dataSourceList.Add(typeof(VProductionOrderDtlForPrint), new List<VProductionOrderDtlForPrint>());
-            dataSourceList.Add(typeof(VAlert), new List<VAlert>());
-            dataSourceList.Add(typeof(Alert), new List<Alert>());
-            dataSourceList.Add(typeof(VReceiptBillDtl), new List<VReceiptBillDtl>());
-            dataSourceList.Add(typeof(VReceiptBill), new List<VReceiptBill>());
-            dataSourceList.Add(typeof(VPaymentBillDtl), new List<VPaymentBillDtl>());
-            dataSourceList.Add(typeof(VPaymentBill), new List<VPaymentBill>());
-            dataSourceList.Add(typeof(StatementOfAccountToBulkSalesReport), new List<StatementOfAccountToBulkSalesReport>());
-            dataSourceList.Add(typeof(StatementOfAccountToCustomerReport), new List<StatementOfAccountToCustomerReport>());//.OrderBy(o => o.结算类型).OrderBy(o => o.出库日期).ToList());
-            dataSourceList.Add(typeof(StatementOfAccountToSupplierReport), new List<StatementOfAccountToSupplierReport>());//.OrderBy(o => o.结算类型).OrderBy(o => o.结算日期).ToList());
-            dataSourceList.Add(typeof(VCustomerSettlement), new List<VCustomerSettlement>());
-            dataSourceList.Add(typeof(VSupplierSettlement), new List<VSupplierSettlement>());
-            dataSourceList.Add(typeof(VSampleStockOut), new List<VSampleStockOut>());
-            dataSourceList.Add(typeof(Resources), new List<Resources>());
-            dataSourceList.Add(typeof(Appointments), new List<Appointments>());
-            dataSourceList.Add(typeof(VAppointments), new List<VAppointments>());
-            dataSourceList.Add(typeof(WageDesign), new List<WageDesign>());
-            dataSourceList.Add(typeof(WageBillHd), new List<WageBillHd>());
-            dataSourceList.Add(typeof(WageBillDtl), new List<WageBillDtl>());
-            dataSourceList.Add(typeof(VWageBillDtl), new List<VWageBillDtl>());
-            dataSourceList.Add(typeof(VWageBill), new List<VWageBill>());
-            dataSourceList.Add(typeof(SalesSummaryByCustomerReport), new List<SalesSummaryByCustomerReport>());
-            dataSourceList.Add(typeof(SalesSummaryByGoodsReport), new List<SalesSummaryByGoodsReport>());
-            dataSourceList.Add(typeof(SalesSummaryByGoodsPriceReport), new List<SalesSummaryByGoodsPriceReport>());
-            dataSourceList.Add(typeof(GoodsSalesSummaryByCustomerReport), new List<GoodsSalesSummaryByCustomerReport>());
-            dataSourceList.Add(typeof(AttGeneralLog), new List<AttGeneralLog>());
-            dataSourceList.Add(typeof(VAttGeneralLog), new List<VAttGeneralLog>());
-            dataSourceList.Add(typeof(AttAppointments), new List<AttAppointments>());
-            dataSourceList.Add(typeof(VAttAppointments), new List<VAttAppointments>());
-            dataSourceList.Add(typeof(AttWageBillHd), new List<AttWageBillHd>());
-            dataSourceList.Add(typeof(AttWageBillDtl), new List<AttWageBillDtl>());
-            dataSourceList.Add(typeof(USPAttWageBillDtl), new List<USPAttWageBillDtl>());
-            dataSourceList.Add(typeof(VAttWageBill), new List<VAttWageBill>());
-        }
-        public static void GetDataSource()
-        {
-            dataSourceList.Clear();
-            dataSourceList = BLLFty.Create<DataSourcesBLL>().GetDataSources();
-            //GetNewList();
-        }
+        //static void GetNewList()
+        //{
+        //    dataSourceList.Add(typeof(VStockInBill), new List<VStockInBill>());
+        //    dataSourceList.Add(typeof(VStockOutBill), new List<VStockOutBill>());
+        //    dataSourceList.Add(typeof(VMaterialStockInBill), new List<VMaterialStockInBill>());
+        //    dataSourceList.Add(typeof(VMaterialStockOutBill), new List<VMaterialStockOutBill>());
+        //    dataSourceList.Add(typeof(StockInBillHd), new List<StockInBillHd>());
+        //    dataSourceList.Add(typeof(StockOutBillHd), new List<StockOutBillHd>());
+        //    dataSourceList.Add(typeof(OrderHd), new List<OrderHd>());
+        //    dataSourceList.Add(typeof(ReceiptBillHd), new List<ReceiptBillHd>());
+        //    dataSourceList.Add(typeof(PaymentBillHd), new List<PaymentBillHd>());
+        //    dataSourceList.Add(typeof(VPO), new List<VPO>());
+        //    dataSourceList.Add(typeof(VOrder), new List<VOrder>());
+        //    dataSourceList.Add(typeof(VFSMOrder), new List<VFSMOrder>());
+        //    dataSourceList.Add(typeof(VProductionOrder), new List<VProductionOrder>());
+        //    dataSourceList.Add(typeof(VInventory), new List<VInventory>());
+        //    dataSourceList.Add(typeof(VInventoryGroupByGoods), new List<VInventoryGroupByGoods>());
+        //    dataSourceList.Add(typeof(VMaterialInventory), new List<VMaterialInventory>());
+        //    dataSourceList.Add(typeof(VMaterialInventoryGroupByGoods), new List<VMaterialInventoryGroupByGoods>());
+        //    dataSourceList.Add(typeof(VEMSInventoryGroupByGoods), new List<VEMSInventoryGroupByGoods>());
+        //    dataSourceList.Add(typeof(VFSMInventoryGroupByGoods), new List<VFSMInventoryGroupByGoods>());
+        //    dataSourceList.Add(typeof(VAccountBook), new List<VAccountBook>());
+        //    dataSourceList.Add(typeof(StocktakingLogHd), new List<StocktakingLogHd>());
+        //    dataSourceList.Add(typeof(VStocktakingLog), new List<VStocktakingLog>());
+        //    dataSourceList.Add(typeof(VProfitAndLossLog), new List<VProfitAndLossLog>());
+        //    dataSourceList.Add(typeof(VUnlistedGoodsLog), new List<VUnlistedGoodsLog>());
+        //    dataSourceList.Add(typeof(SalesSummaryMonthlyReport), new List<SalesSummaryMonthlyReport>());
+        //    dataSourceList.Add(typeof(AnnualSalesSummaryByCustomerReport), new List<AnnualSalesSummaryByCustomerReport>());
+        //    dataSourceList.Add(typeof(AnnualSalesSummaryByGoodsReport), new List<AnnualSalesSummaryByGoodsReport>());
+        //    dataSourceList.Add(typeof(VSalesBillSummary), new List<VSalesBillSummary>());
+        //    dataSourceList.Add(typeof(VProductionOrderDtlForPrint), new List<VProductionOrderDtlForPrint>());
+        //    dataSourceList.Add(typeof(VAlert), new List<VAlert>());
+        //    dataSourceList.Add(typeof(Alert), new List<Alert>());
+        //    dataSourceList.Add(typeof(VReceiptBillDtl), new List<VReceiptBillDtl>());
+        //    dataSourceList.Add(typeof(VReceiptBill), new List<VReceiptBill>());
+        //    dataSourceList.Add(typeof(VPaymentBillDtl), new List<VPaymentBillDtl>());
+        //    dataSourceList.Add(typeof(VPaymentBill), new List<VPaymentBill>());
+        //    dataSourceList.Add(typeof(StatementOfAccountToBulkSalesReport), new List<StatementOfAccountToBulkSalesReport>());
+        //    dataSourceList.Add(typeof(StatementOfAccountToCustomerReport), new List<StatementOfAccountToCustomerReport>());//.OrderBy(o => o.结算类型).OrderBy(o => o.出库日期).ToList());
+        //    dataSourceList.Add(typeof(StatementOfAccountToSupplierReport), new List<StatementOfAccountToSupplierReport>());//.OrderBy(o => o.结算类型).OrderBy(o => o.结算日期).ToList());
+        //    dataSourceList.Add(typeof(VCustomerSettlement), new List<VCustomerSettlement>());
+        //    dataSourceList.Add(typeof(VSupplierSettlement), new List<VSupplierSettlement>());
+        //    dataSourceList.Add(typeof(VSampleStockOut), new List<VSampleStockOut>());
+        //    dataSourceList.Add(typeof(Resources), new List<Resources>());
+        //    dataSourceList.Add(typeof(Appointments), new List<Appointments>());
+        //    dataSourceList.Add(typeof(VAppointments), new List<VAppointments>());
+        //    dataSourceList.Add(typeof(WageDesign), new List<WageDesign>());
+        //    dataSourceList.Add(typeof(WageBillHd), new List<WageBillHd>());
+        //    dataSourceList.Add(typeof(WageBillDtl), new List<WageBillDtl>());
+        //    dataSourceList.Add(typeof(VWageBillDtl), new List<VWageBillDtl>());
+        //    dataSourceList.Add(typeof(VWageBill), new List<VWageBill>());
+        //    dataSourceList.Add(typeof(SalesSummaryByCustomerReport), new List<SalesSummaryByCustomerReport>());
+        //    dataSourceList.Add(typeof(SalesSummaryByGoodsReport), new List<SalesSummaryByGoodsReport>());
+        //    dataSourceList.Add(typeof(SalesSummaryByGoodsPriceReport), new List<SalesSummaryByGoodsPriceReport>());
+        //    dataSourceList.Add(typeof(GoodsSalesSummaryByCustomerReport), new List<GoodsSalesSummaryByCustomerReport>());
+        //    dataSourceList.Add(typeof(AttGeneralLog), new List<AttGeneralLog>());
+        //    dataSourceList.Add(typeof(VAttGeneralLog), new List<VAttGeneralLog>());
+        //    dataSourceList.Add(typeof(AttAppointments), new List<AttAppointments>());
+        //    dataSourceList.Add(typeof(VAttAppointments), new List<VAttAppointments>());
+        //    dataSourceList.Add(typeof(AttWageBillHd), new List<AttWageBillHd>());
+        //    dataSourceList.Add(typeof(AttWageBillDtl), new List<AttWageBillDtl>());
+        //    dataSourceList.Add(typeof(USPAttWageBillDtl), new List<USPAttWageBillDtl>());
+        //    dataSourceList.Add(typeof(VAttWageBill), new List<VAttWageBill>());
+        //}
+        //public static void GetDataSource()
+        //{
+        //    dataSourceList.Clear();
+        //    dataSourceList = BLLFty.Create<DataSourcesBLL>().GetDataSources();
+        //    //GetNewList();
+        //}
 
-        #region 注释
         //public static IList GetData(String menuName)
         //{
         //    //IList list = null;
@@ -1589,183 +1565,91 @@ namespace USL
         }
         #endregion
 
-        //public static IList GetData<T>() where T : class, new()
-        //{
-        //    IList list = MainForm.dataSourceList[typeof(T)] as IList;
-        //    return list;
-        //}
-
-        public static IList GetDBData<T>(String filter) where T : class, new()
+        public static List<T> GetData<T>() where T : class, new()
         {
-            IList list = null;
-            MainForm.dataSourceList[typeof(T)] = list = BLLFty.Create<ReportBLL>().GetT<T>(filter);            
+            List<T> list = new List<T>();
+            if (dataSourceList.ContainsKey(typeof(T)))
+                list = (List<T>)MainForm.dataSourceList[typeof(T)];
+            else
+            {
+                list = BLLFty.Create<ReportBLL>().GetT<T>(string.Empty);
+                dataSourceList.Add(typeof(T), list);
+            }
             return list;
         }
 
-        public static List<T> ConvertList<T>(IList list)
+        public static List<T> GetDBData<T>(String filter) where T : class, new()
         {
-            IList newlist = new List<T>();
-            foreach (var item in list)
+            List<T> list = BLLFty.Create<ReportBLL>().GetT<T>(filter);
+            if (dataSourceList.ContainsKey(typeof(T)))
             {
-                newlist.Add(item);
+                dataSourceList[typeof(T)] = list;
             }
-            return (List<T>)newlist;
-        }
-        public static void BillSaveRefresh<T>() where T : class, new()
-        {
-            IList list = GetDBData<T>(string.Empty);
-            if (MainForm.itemDetailList.ContainsKey(typeof(T).Name))
+            else
             {
-                DataQueryPage page = MainForm.itemDetailList[typeof(T).Name] as DataQueryPage;
-                page.InitGrid<T>(list);
+                dataSourceList.Add(typeof(T), list);
             }
+            return list;
         }
 
+        /// <summary>
+        /// 刷新类型对应的查询界面
+        /// </summary>
+        /// <typeparam name="T">类型</typeparam>
+        //public static void QueryPageRefresh<T>() where T : class, new()
+        //{
+        //    IList list = GetDBData<T>(string.Empty);
+        //    if (MainForm.itemDetailList.ContainsKey(typeof(T).Name))
+        //    {
+        //        DataQueryPage page = MainForm.itemDetailList[typeof(T).Name] as DataQueryPage;
+        //        page.InitGrid<T>(list);
+        //    }
+        //}
+
+        /// <summary>
+        /// 刷新类型对应的查询界面
+        /// </summary>
+        /// <param name="name">类型名称</param>
+        /// <param name="filter">查询条件</param>
+        /// <returns></returns>
         public static IList DataPageRefresh(String name, String filter)
         {
-            IList list = new List<object>();
+            IList list = null;
             Assembly asm = Assembly.LoadFrom(AppDomain.CurrentDomain.BaseDirectory + "/DBML.dll");
             Type type = asm.GetType("DBML." + name);
             if (type != null)
             {
-                MainForm.dataSourceList[type] = list = BLLFty.Create<ReportBLL>().GetList(type, filter);
+                list = BLLFty.Create<ReportBLL>().GetList(type, filter);
+                if (dataSourceList.ContainsKey(type))
+                {
+                    dataSourceList[type] = list;
+                }
+                else
+                {
+                    dataSourceList.Add(type, list);
+                }
             }
-            if (MainForm.itemDetailList.ContainsKey(name))
-            {
-                DataQueryPage page = MainForm.itemDetailList[type.Name] as DataQueryPage;
-                page.InitGrid(list);
-            }
-            return list;
-        }
-
-        public static IList DataPageRefresh<T>() where T : class, new()
-        {
-            //if (T.GetType())
-            //    GetDataSource();
-            //else
-            IList list = GetDBData<T>(string.Empty);
             foreach (KeyValuePair<String, IItemDetail> kvp in itemDetailList)
             {
-                if (kvp.Value is DataQueryPage)
-                {
-                    DataQueryPage page = ((DataQueryPage)kvp.Value);
-                    //GetData(kvp.Key);
-                    page.InitGrid<T>(list);
-                }
-                else if (kvp.Value is GoodsEditPage)
-                {
-                    GoodsEditPage page = kvp.Value as GoodsEditPage;
-                    if (page != null)
-                        page.BindData();
-                }
-                //单据编辑界面数据更新
-                else if (kvp.Value is OrderEditPage)
-                {
-                    OrderEditPage page = kvp.Value as OrderEditPage;
-                    if (page != null)
-                        page.BindData(Guid.Empty);
-                }
-                else if (kvp.Value is StockInBillPage)
-                {
-                    StockInBillPage page = kvp.Value as StockInBillPage;
-                    if (page != null)
-                        page.BindData(Guid.Empty);
-                }
-                else if (kvp.Value is StockOutBillPage)
-                {
-                    StockOutBillPage page = kvp.Value as StockOutBillPage;
-                    if (page != null)
-                        page.BindData(Guid.Empty);
-                }
-                else if (kvp.Value is ReceiptBillPage)
-                {
-                    ReceiptBillPage page = kvp.Value as ReceiptBillPage;
-                    if (page != null)
-                        page.BindData(Guid.Empty);
-                }
-                else if (kvp.Value is PaymentBillPage)
-                {
-                    PaymentBillPage page = kvp.Value as PaymentBillPage;
-                    if (page != null)
-                        page.BindData(Guid.Empty);
-                }
-                else if (kvp.Value is BOMEditPage)
-                {
-                    BOMEditPage page = kvp.Value as BOMEditPage;
-                    if (page != null)
-                        page.BindData();
-                }
-                else if (kvp.Value is MoldAllotPage)
-                {
-                    MoldAllotPage page = kvp.Value as MoldAllotPage;
-                    if (page != null)
-                        page.BindData();
-                }
-                else if (kvp.Value is SLSalePricePage)
-                {
-                    SLSalePricePage page = kvp.Value as SLSalePricePage;
-                    if (page != null)
-                        page.BindData();
-                }
-                else if (kvp.Value is PermissionSettingPage)
-                {
-                    PermissionSettingPage page = kvp.Value as PermissionSettingPage;
-                    if (page != null)
-                        page.BindData();
-                }
-                else if (kvp.Value is ProductionSchedulingPage)
-                {
-                    ProductionSchedulingPage page = kvp.Value as ProductionSchedulingPage;
-                    if (page != null)
-                        page.BindData();
-                }
-                else if (kvp.Value is WageBillPage)
-                {
-                    WageBillPage page = kvp.Value as WageBillPage;
-                    if (page != null)
-                        page.BindData(Guid.Empty);
-                }
-                else if (kvp.Value is AttendanceSchedulingPage)
-                {
-                    AttendanceSchedulingPage page = kvp.Value as AttendanceSchedulingPage;
-                    if (page != null)
-                        page.BindData();
-                }
-                else if (kvp.Value is StaffSchClassPage)
-                {
-                    StaffSchClassPage page = kvp.Value as StaffSchClassPage;
-                    if (page != null)
-                        page.BindData();
-                }
-                else if (kvp.Value is AttWageBillPage)
-                {
-                    AttWageBillPage page = kvp.Value as AttWageBillPage;
-                    if (page != null)
-                        page.BindData(Guid.Empty);
-                }
+                kvp.Value.BindData(list);
             }
             return list;
         }
 
-        //public static void DataQueryPageRefresh()
-        //{
-        //    GetDataSource();
-        //    foreach (KeyValuePair<String, IItemDetail> kvp in itemDetailList)
-        //    {
-        //        if (kvp.Value is DataQueryPage)
-        //        {
-        //            DataQueryPage page = ((DataQueryPage)kvp.Value);
-        //            GetData(kvp.Key);
-        //            page.InitGrid(list);
-        //        }
-        //        else if (kvp.Value is GoodsEditPage)
-        //        {
-        //            GoodsEditPage page = kvp.Value as GoodsEditPage;
-        //            if (page != null)
-        //                page.BindData();
-        //        }
-        //    }
-        //}
+        /// <summary>
+        /// 刷新所有界面
+        /// </summary>
+        /// <typeparam name="T">类型</typeparam>
+        /// <returns></returns>
+        public static List<T> DataPageRefresh<T>() where T : class, new()
+        {
+            List<T> list = GetDBData<T>(string.Empty);
+            foreach (KeyValuePair<String, IItemDetail> kvp in itemDetailList)
+            {
+                kvp.Value.BindData(list);
+            }
+            return list;
+        }
 
         public static void SetQueryPageGridColumn(DevExpress.XtraGrid.Views.Grid.GridView gv, DBML.MainMenu menu)
         {
@@ -2170,7 +2054,7 @@ namespace USL
                 gv.GroupSummary.AddRange(new DevExpress.XtraGrid.GridSummaryItem[] {
                     new DevExpress.XtraGrid.GridGroupSummaryItem(DevExpress.Data.SummaryItemType.Min, "客户名称", null, "客户名称:{0}")});
                 gv.GroupSummary.AddRange(new DevExpress.XtraGrid.GridSummaryItem[] {
-                    new DevExpress.XtraGrid.GridGroupSummaryItem(DevExpress.Data.SummaryItemType.Min, "客户类型", null, "客户类型:"+types.Find(o => o.Type == TypesListConstants.CustomerType && o.No == Convert.ToInt32(DevExpress.Data.SummaryItemType.Min)).Name.Trim())});
+                    new DevExpress.XtraGrid.GridGroupSummaryItem(DevExpress.Data.SummaryItemType.Min, "客户类型", null, "客户类型:"+MainForm.GetData<TypesList>().FirstOrDefault(o => o.Type == TypesListConstants.CustomerType && o.No == Convert.ToInt32(DevExpress.Data.SummaryItemType.Min)).Name.Trim())});
                 gv.GroupSummary.AddRange(new DevExpress.XtraGrid.GridSummaryItem[] {
                     new DevExpress.XtraGrid.GridGroupSummaryItem(DevExpress.Data.SummaryItemType.Min, "出库日期", null, "开始日期:{0:d}")});
                 gv.GroupSummary.AddRange(new DevExpress.XtraGrid.GridSummaryItem[] {
@@ -2298,14 +2182,14 @@ namespace USL
         /// <summary>
         /// 
         /// </summary>
-        private void GetVDataSource()
-        {
-            threadGetVDataSource = new Thread(GetViewDataSource);
-            threadGetVDataSource.Start();
+        //private void GetVDataSource()
+        //{
+        //    threadGetVDataSource = new Thread(GetViewDataSource);
+        //    threadGetVDataSource.Start();
 
-            ////threadInsertAlert = new Thread(InsertAlert);
-            ////threadInsertAlert.Start();
-        }
+        //    ////threadInsertAlert = new Thread(InsertAlert);
+        //    ////threadInsertAlert.Start();
+        //}
 
         /// <summary>
         /// 状态栏信息设置
@@ -2392,21 +2276,6 @@ namespace USL
             {
                 return this.errorInfoControl1;
             }
-        }
-        
-        static List<Warehouse> warehouseList;
-
-        public static List<Warehouse> WarehouseList
-        {
-            get
-            {
-                return warehouseList;
-            }
-
-            //set
-            //{
-            //    warehouseList = value;
-            //}
         }
 
         public static Dictionary<String, DBML.MainMenu> mainMenuList = new Dictionary<String, DBML.MainMenu>();
@@ -2749,7 +2618,7 @@ namespace USL
                     if (page.btnImportCheck != null)
                     {
                         int status = 0;
-                        SystemStatus systemStatus = MainForm.ConvertList<SystemStatus>((IList)MainForm.dataSourceList[typeof(SystemStatus)]).FirstOrDefault(o => o.MainMenuName.Equals(MainMenuConstants.Stocktaking));
+                        SystemStatus systemStatus = MainForm.GetData<SystemStatus>().FirstOrDefault(o => o.MainMenuName.Equals(MainMenuConstants.Stocktaking));
                         if (systemStatus != null)
                             status = systemStatus.Status;
                         page.btnImportCheck.Caption = string.Format("盘点导入【{0}】", EnumHelper.GetDescription<StocktakingStatusEnum>((StocktakingStatusEnum)status, false));
@@ -2774,7 +2643,7 @@ namespace USL
         /// </summary>
         public static List<ProfitAndLoss> calcFinalDiff()
         {
-            List<ProfitAndLoss> plList = MainForm.ConvertList<ProfitAndLoss>((IList)MainForm.dataSourceList[typeof(ProfitAndLoss)]);
+            List<ProfitAndLoss> plList = (List<ProfitAndLoss>)dataSourceList[typeof(ProfitAndLoss)];
             if (plList != null && plList.Count > 0)
             {
                 plList.ForEach(entity => {

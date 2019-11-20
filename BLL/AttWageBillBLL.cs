@@ -44,13 +44,13 @@ namespace BLL
             }
         }
 
-        public List<USPAttWageBillDtl> GetUSPAttWageBillDtl()
-        {
-            using (DCC dcc = DBMLFty.Dcc)
-            {
-                return DALFty.Create<AttWageBillDAL>().GetUSPAttWageBillDtl(dcc);
-            }
-        }
+        //public List<USPAttWageBillDtl> GetUSPAttWageBillDtl()
+        //{
+        //    using (DCC dcc = DBMLFty.Dcc)
+        //    {
+        //        return DALFty.Create<AttWageBillDAL>().GetUSPAttWageBillDtl(dcc);
+        //    }
+        //}
 
         public List<VAttWageBill> GetAttWageBill()
         {

@@ -12,6 +12,14 @@ namespace BLL
 {
     public class AttAppointmentsBLL : IBLLBase
     {
+        public List<AttParameters> GetAttParameters()
+        {
+            using (DCC dcc = DBMLFty.Dcc)
+            {
+                return DALFty.Create<AttAppointmentsDAL>().GetAttParameters(dcc);
+            }
+        }
+
         public List<AttAppointments> GetAttAppointments()
         {
             using (DCC dcc = DBMLFty.Dcc)

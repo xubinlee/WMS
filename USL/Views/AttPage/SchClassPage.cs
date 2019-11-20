@@ -126,5 +126,10 @@ namespace USL
             Save();
             MainForm.DataPageRefresh<SchClass>();
         }
+
+        public void BindData(object obj)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

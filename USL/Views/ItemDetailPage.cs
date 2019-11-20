@@ -124,9 +124,9 @@ namespace USL
         public void BindData()
         {
             // 绑定门店
-            deptBindingSource.DataSource = MainForm.ConvertList<Department>((IList)MainForm.dataSourceList[typeof(Department)]).FindAll(o => o.IsDel == false);
+            deptBindingSource.DataSource = MainForm.GetData<Department>().FindAll(o => o.IsDel == false).OrderBy(o => o.Code);
             // 绑定仓位
-            warehouseBindingSource.DataSource = MainForm.ConvertList<Warehouse>((IList)MainForm.dataSourceList[typeof(Warehouse)]);
+            warehouseBindingSource.DataSource = MainForm.GetData<Warehouse>();
         }
 
         //public void InitPage(MainMenu item)
@@ -162,7 +162,7 @@ namespace USL
         /// <returns></returns>
         int GetStocktakingStatus()
         {
-            SystemStatus systemStatus = MainForm.ConvertList<SystemStatus>((IList)MainForm.dataSourceList[typeof(SystemStatus)]).FirstOrDefault(o => o.MainMenuName.Equals(MainMenuConstants.Stocktaking));
+            SystemStatus systemStatus = ((List<SystemStatus>)MainForm.dataSourceList[typeof(SystemStatus)]).FirstOrDefault(o => o.MainMenuName.Equals(MainMenuConstants.Stocktaking));
             int status = 0;
             if (systemStatus != null)
                 status = systemStatus.Status;
@@ -471,7 +471,7 @@ namespace USL
                 this.Cursor = System.Windows.Forms.Cursors.WaitCursor;
                 using (TransactionScope ts = new TransactionScope())
                 {
-                    List<UnlistedGoods> ugList = MainForm.ConvertList<UnlistedGoods>((IList)MainForm.dataSourceList[typeof(UnlistedGoods)]);
+                    List<UnlistedGoods> ugList = (List<UnlistedGoods>)MainForm.dataSourceList[typeof(UnlistedGoods)];
                     if (ugList == null || ugList.Count == 0)
                     {
                         CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "没有未上架数据。");
@@ -499,8 +499,8 @@ namespace USL
                             dtlList.Add(dtl);
                         });
                         BLLFty.Create<InventoryBLL>().FinishUnlistedGoods(dtlList);
-                        MainForm.BillSaveRefresh<UnlistedGoods>();
-                        MainForm.BillSaveRefresh<VUnlistedGoodsLog>();
+                        MainForm.DataPageRefresh<UnlistedGoods>();
+                        MainForm.DataPageRefresh<VUnlistedGoodsLog>();
                         CommonServices.ErrorTrace.SetSuccessfullyInfo(this.FindForm(), "已完成盘点");
                     }
                     ts.Complete();
@@ -531,7 +531,7 @@ namespace USL
             try
             {
                 this.Cursor = System.Windows.Forms.Cursors.WaitCursor;
-                List<ProfitAndLoss> plList = MainForm.ConvertList<ProfitAndLoss>((IList)MainForm.dataSourceList[typeof(ProfitAndLoss)]);
+                List<ProfitAndLoss> plList = (List<ProfitAndLoss>)MainForm.dataSourceList[typeof(ProfitAndLoss)];
                 if (plList == null || plList.Count == 0)
                 {
                     CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "没有盘点差异数据。");
@@ -605,7 +605,7 @@ namespace USL
                 this.Cursor = System.Windows.Forms.Cursors.WaitCursor;
                 using (TransactionScope ts = new TransactionScope())
                 {
-                    List<ProfitAndLoss> plList = MainForm.ConvertList<ProfitAndLoss>((IList)MainForm.dataSourceList[typeof(ProfitAndLoss)]);
+                    List<ProfitAndLoss> plList = (List<ProfitAndLoss>)MainForm.dataSourceList[typeof(ProfitAndLoss)];
                     if (plList == null || plList.Count == 0)
                     {
                         CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "没有盘点差异数据。");
@@ -619,6 +619,7 @@ namespace USL
                             waitDialogForm = new WaitDialogForm("请稍候...", "正在保存数据", new Size(300, 60), this.FindForm());
                             System.Windows.Forms.Application.Run(waitDialogForm);
                         }).Start();
+                        List<Goods> goodsList = MainForm.GetData<Goods>().FindAll(o => o.Type == 0);
                         SystemStatus systemStatus = MainForm.GetMaxBillNo(MainMenuConstants.Stocktaking, false);
                         // 保存盘点日志表头
                         StocktakingLogHd hd = new StocktakingLogHd();
@@ -671,6 +672,9 @@ namespace USL
                                     }
                                 entity.ID = Guid.NewGuid();
                                 entity.HdID = hd.ID;
+                                Goods val = goodsList.FirstOrDefault(o => o.Code.Equals(item.GoodsCode));
+                                if (val != null)
+                                    entity.Category = val.Category;
                                 entity.StockAMT = Math.Round((decimal)item.StockQty * entity.Price, 2);
                                 entity.UnlistedQty = item.CheckQty;
                                 entity.UnlistedAMT = Math.Round((decimal)item.CheckQty * entity.Price, 2);
@@ -683,10 +687,10 @@ namespace USL
                             }
                         });
                         BLLFty.Create<InventoryBLL>().FinishCheck(systemStatus, hd, dtlList, insertUGList);
-                        MainForm.BillSaveRefresh<StocktakingLogHd>();
-                        MainForm.BillSaveRefresh<ProfitAndLoss>();
-                        MainForm.BillSaveRefresh<VProfitAndLossLog>();
-                        MainForm.BillSaveRefresh<UnlistedGoods>();
+                        MainForm.DataPageRefresh<StocktakingLogHd>();
+                        MainForm.DataPageRefresh<ProfitAndLoss>();
+                        MainForm.DataPageRefresh<VProfitAndLossLog>();
+                        MainForm.DataPageRefresh<UnlistedGoods>();
                         CommonServices.ErrorTrace.SetSuccessfullyInfo(this.FindForm(), "已完成盘点");
                     }
                     ts.Complete();
@@ -718,7 +722,7 @@ namespace USL
                 this.Cursor = System.Windows.Forms.Cursors.WaitCursor;
                 using (TransactionScope ts = new TransactionScope())
                 {
-                    List<Stocktaking> list =MainForm.ConvertList<Stocktaking>((IList)MainForm.dataSourceList[typeof(Stocktaking)]);
+                    List<Stocktaking> list =(List<Stocktaking>)MainForm.dataSourceList[typeof(Stocktaking)];
                     if (list == null || list.Count == 0)
                     {
                         CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "没有盘点数据，请先导入。");
@@ -734,7 +738,7 @@ namespace USL
                         }).Start();
                         
                         StocktakingStatusEnum status = StocktakingStatusEnum.First;
-                        SystemStatus systemStatus = MainForm.ConvertList<SystemStatus>((IList)MainForm.dataSourceList[typeof(SystemStatus)]).FirstOrDefault(o => o.MainMenuName.Equals(MainMenuConstants.Stocktaking));
+                        SystemStatus systemStatus = ((List<SystemStatus>)MainForm.dataSourceList[typeof(SystemStatus)]).FirstOrDefault(o => o.MainMenuName.Equals(MainMenuConstants.Stocktaking));
                         if (systemStatus != null)
                             status = (StocktakingStatusEnum)systemStatus.Status;
                         // 初盘创建新单，复盘单号和初盘一致
@@ -769,7 +773,7 @@ namespace USL
                             dtlList.Add(dtl);
                         });
                         // 保存差异表
-                        List<Goods> goodsList = MainForm.ConvertList<Goods>(((IList)MainForm.dataSourceList[typeof(Goods)])).FindAll(o => o.Type == 0);
+                        List<Goods> goodsList = MainForm.GetData<Goods>().FindAll(o => o.Type == 0);
                         #region 注释
                         //var diffList = list.GroupBy(p => new { p.DeptID, p.GoodsCode }).Select(s => (new
                         //{
@@ -826,7 +830,7 @@ namespace USL
                             }).ToList();
                         List<ProfitAndLoss> insertList = new List<ProfitAndLoss>();
                         List<ProfitAndLoss> updateList = new List<ProfitAndLoss>();
-                        List<ProfitAndLoss> plList = MainForm.ConvertList<ProfitAndLoss>((IList)MainForm.dataSourceList[typeof(ProfitAndLoss)]);
+                        List<ProfitAndLoss> plList = MainForm.GetData<ProfitAndLoss>();
                         diffList.ForEach(o =>
                         {
                             ProfitAndLoss item = plList.FirstOrDefault(p => p.DeptID.Equals(o.DeptID) && p.GoodsCode.Equals(o.GoodsCode));
@@ -851,7 +855,7 @@ namespace USL
                         //定位
                         MainForm.SetSelected(pageGroupCore, MainForm.mainMenuList[MainMenuConstants.ProfitAndLoss]);
                         DataQueryPage page = MainForm.itemDetailPageList[MainMenuConstants.ProfitAndLoss].itemDetail as DataQueryPage;
-                        page.InitGrid(refresh);
+                        page.BindData(refresh);
                     }
                     ts.Complete();
                 }
@@ -883,7 +887,7 @@ namespace USL
         }
         private void btnOK_Click(object sender, EventArgs e)
         {
-            List<UnlistedGoods> ugList = MainForm.ConvertList<UnlistedGoods>((IList)MainForm.dataSourceList[typeof(UnlistedGoods)]);
+            List<UnlistedGoods> ugList = MainForm.GetData<UnlistedGoods>();
             if (ugList.Count > 0)
             {
                 CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "有未上架商品确认单尚未处理，请先处理完再执行盘点导入。");
@@ -893,8 +897,8 @@ namespace USL
             {
                 //实现导入功能
                 Dictionary<string, object> dict = new Dictionary<string, object>();
-                List<Department> deptList =MainForm.ConvertList<Department>((IList)MainForm.dataSourceList[typeof(Department)]);
-                List<Warehouse> warehouseList = MainForm.ConvertList<Warehouse>((IList)MainForm.dataSourceList[typeof(Warehouse)]);
+                List<Department> deptList =MainForm.GetData<Department>();
+                List<Warehouse> warehouseList = MainForm.GetData<Warehouse>();
                 dict.Add(MainMenuConstants.Department, deptList.FirstOrDefault(o => o.ID.Equals(new Guid(lueDept.EditValue.ToString()))));
                 dict.Add(MainMenuConstants.Warehouse, warehouseList.FirstOrDefault(o => o.ID.Equals(new Guid(lueWarehouse.EditValue.ToString()))));
                 iExtensions.SendData(dict);
@@ -936,7 +940,7 @@ namespace USL
                 {
                     VProductionOrder order = currentObj as VProductionOrder;
                     OrderHd hd = BLLFty.Create<OrderBLL>().GetOrderHd(order.HdID);
-                    List<VProductionOrder> dtl = MainForm.ConvertList<VProductionOrder>((IList)MainForm.dataSourceList[typeof(VProductionOrder)]).FindAll(o => o.HdID == order.HdID);
+                    List<VProductionOrder> dtl = MainForm.GetData<VProductionOrder>().FindAll(o => o.HdID == order.HdID);
                     //外加工回收单表头数据
                     StockInBillHd inHd = new StockInBillHd();
                     inHd.ID = Guid.NewGuid();
@@ -994,7 +998,7 @@ namespace USL
                     StockInBillHd inHd = new StockInBillHd();
                     inHd.ID = Guid.NewGuid();
                     inHd.BillNo = MainForm.GetBillMaxBillNo(MainMenuConstants.StockInBillType, "RK");
-                    inHd.WarehouseID = MainForm.WarehouseList.FirstOrDefault(o => o.Code == WarehouseConstants.SFG).ID;  //半成品
+                    inHd.WarehouseID = MainForm.GetData<Warehouse>().FirstOrDefault(o => o.Code == WarehouseConstants.SFG).ID;  //半成品
                     inHd.WarehouseType = hd.WarehouseType;
                     inHd.OrderID = hd.ID;
                     inHd.OrderDate = hd.OrderDate;
@@ -1064,7 +1068,7 @@ namespace USL
                         if (!System.IO.Directory.Exists(MainForm.DownloadFilePath))
                             System.IO.Directory.CreateDirectory(MainForm.DownloadFilePath);
                         string[] files = Directory.GetFiles(_path);//, "*.png", SearchOption.AllDirectories);
-                        List<Goods> goodsList = MainForm.ConvertList<Goods>((IList)MainForm.dataSourceList[typeof(Goods)]);
+                        List<Goods> goodsList = MainForm.GetData<Goods>();
                         //bool result = true;
                         foreach (Goods item in goodsList)
                         {
@@ -1144,7 +1148,7 @@ namespace USL
                             CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), string.Format("第{0}行的编码不能为空。", iError));
                             return;
                         }
-                        Department entity = MainForm.ConvertList<Department>((IList)MainForm.dataSourceList[typeof(Department)]).Find(o => o.Code == code);
+                        Department entity = MainForm.GetData<Department>().FirstOrDefault(o => o.Code == code);
                         bool isNew = false;
                         if (entity == null)
                         {
@@ -1224,7 +1228,7 @@ namespace USL
                     }).Start();
 
                     DataSet ds = ExcelHelper.ImportExcel(openFileDialog.FileName);
-                    List<Goods> preList = MainForm.ConvertList<Goods>((IList)MainForm.dataSourceList[typeof(Goods)]);
+                    List<Goods> preList = MainForm.GetData<Goods>();
                     // 先将原有商品的库存全部改为0
                     if (preList.Count > 0)
                     {
@@ -1320,7 +1324,7 @@ namespace USL
                 if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
                     DataSet ds = ExcelHelper.ImportExcel(openFileDialog.FileName);
-                    List<Goods> hasGoodsList = MainForm.ConvertList<Goods>((IList)MainForm.dataSourceList[typeof(Goods)]);
+                    List<Goods> hasGoodsList = MainForm.GetData<Goods>();
                     List<Goods> InsertGoodsList = new List<Goods>();
                     List<Goods> UpdateGoodsList = new List<Goods>();
                     Hashtable htGoods = new Hashtable();
@@ -1551,7 +1555,7 @@ namespace USL
                             //添加
                             Goods goods = null;
                             Goods jj = null;
-                            goods = MainForm.ConvertList<Goods>((IList)MainForm.dataSourceList[typeof(Goods)]).FirstOrDefault(o => o.Code == row["用料"].ToString().Trim());
+                            goods = MainForm.GetData<Goods>().FirstOrDefault(o => o.Code == row["用料"].ToString().Trim());
                             if (goods == null)
                                 jj = InsertGoodsList.Find(o => o.Code == row["用料"].ToString().Trim());
                             else
@@ -2137,7 +2141,6 @@ namespace USL
             switch (menuName)
             {
                 case MainMenuConstants.ProductionStockInBill:
-                //case MainMenuConstants.MakeupStockInBill:
                 case MainMenuConstants.SalesReturnBill:
                 case MainMenuConstants.FGStockInBill:
                 case MainMenuConstants.EMSReturnBill:

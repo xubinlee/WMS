@@ -47,10 +47,10 @@ namespace USL
         {
             base.OnLoad(e);
             winExplorerView.ShowFindPanel();
-            BindData();
+            BindData(null);
         }
 
-        public void BindData()
+        public void BindData(object obj)
         {
             vGoodsBindingSource.DataSource = ((List<Goods>)MainForm.dataSourceList[typeof(Goods)]);
             GetYearMonthList();

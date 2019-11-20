@@ -32,7 +32,7 @@ namespace USL
             pageGroupCore = child;
             queryPageList = new Dictionary<String, DataQueryPage>();
             DataQueryPage queryPage = null;
-            types = MainForm.ConvertList<TypesList>((IList)MainForm.dataSourceList[typeof(TypesList)]);
+            types = MainForm.GetData<TypesList>();
             //单据类型
             int i = 0;
             List<DockPanel> dpList;
@@ -62,7 +62,7 @@ namespace USL
         {
             int i = types.Find(o => o.Type == TypesListConstants.GoodsType && o.Name == MainForm.GoodsBigTypeName).No;
             list = ((List<VMaterial>)MainForm.dataSourceList[typeof(VMaterial)]).FindAll(o => o.Type == i);
-            queryPageList[MainForm.GoodsBigTypeName].InitGrid(list);
+            queryPageList[MainForm.GoodsBigTypeName].BindData(list);
         }
 
         public void Add()
@@ -135,6 +135,11 @@ namespace USL
         }
 
         public object ReceiveData()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void BindData(object obj)
         {
             throw new NotImplementedException();
         }

@@ -43,7 +43,7 @@ namespace USL
             if (obj != null && obj is VSupplier)
             {
                 dpMoldAllot.Enabled = true;
-                vGoodsByMoldAllotBindingSource.DataSource = MainForm.ConvertList<VGoodsByMoldAllot>((IList)MainForm.dataSourceList[typeof(VGoodsByMoldAllot)]).FindAll(o => o.SupplierID == ((VSupplier)obj).ID);
+                vGoodsByMoldAllotBindingSource.DataSource = MainForm.GetData<VGoodsByMoldAllot>().FindAll(o => o.SupplierID == ((VSupplier)obj).ID);
                 gridView.BestFitColumns();
                 foreach (GridColumn col in gridView.Columns)
                 {
@@ -87,14 +87,14 @@ namespace USL
                     break;
                 case MainMenuConstants.Company:
                     if (obj != null)
-                        obj = MainForm.ConvertList<Company>((IList)MainForm.dataSourceList[typeof(Company)]).FirstOrDefault(o => o.ID == ((VCompany)obj).ID);
+                        obj = MainForm.GetData<Company>().FirstOrDefault(o => o.ID == ((VCompany)obj).ID);
                     de = new CompanyEditPage(obj);
                     ((CompanyEditPage)de).Dock = DockStyle.Fill;
                     panelControl.Controls.Add((CompanyEditPage)de);
                     break;
                 case MainMenuConstants.Supplier:
                     if (obj != null)
-                        obj = MainForm.ConvertList<Supplier>((IList)MainForm.dataSourceList[typeof(Supplier)]).Find(o => o.ID == ((VSupplier)obj).ID);
+                        obj = MainForm.GetData<Supplier>().FirstOrDefault(o => o.ID == ((VSupplier)obj).ID);
                     de = new SupplierEditPage(obj);
                     ((SupplierEditPage)de).Dock = DockStyle.Fill;
                     panelControl.Controls.Add((SupplierEditPage)de);
@@ -112,14 +112,14 @@ namespace USL
                     break;
                 case MainMenuConstants.GoodsType:
                     if (obj != null)
-                        obj = MainForm.ConvertList<GoodsType>((IList)MainForm.dataSourceList[typeof(GoodsType)]).Find(o => o.ID == ((VGoodsType)obj).ID);
+                        obj = MainForm.GetData<GoodsType>().FirstOrDefault(o => o.ID == ((VGoodsType)obj).ID);
                     de = new GoodsTypeEditPage(obj);
                     ((GoodsTypeEditPage)de).Dock = DockStyle.Fill;
                     panelControl.Controls.Add((GoodsTypeEditPage)de);
                     break;
                 case MainMenuConstants.Packaging:
                     if (obj != null)
-                        obj = MainForm.ConvertList<Packaging>((IList)MainForm.dataSourceList[typeof(Packaging)]).Find(o => o.ID == ((VPackaging)obj).ID);
+                        obj = MainForm.GetData<Packaging>().FirstOrDefault(o => o.ID == ((VPackaging)obj).ID);
                     de = new PackagingEditPage(obj);
                     ((PackagingEditPage)de).Dock = DockStyle.Fill;
                     panelControl.Controls.Add((PackagingEditPage)de);

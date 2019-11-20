@@ -72,14 +72,14 @@ namespace USL
             }
         }
 
-        public void BindData(Guid hdID)
+        public void BindData(object hdID)
         {
             gridControl.BeginUpdate();
             types = MainForm.dataSourceList[typeof(TypesList)] as List<TypesList>;
-            if (hdID != Guid.Empty)
+            if (hdID is Guid)
             {
-                headID = hdID;
-                paymentBillHdBindingSource.DataSource = hd = BLLFty.Create<PaymentBillBLL>().GetPaymentBillHd(hdID);
+                headID = (Guid)hdID;
+                paymentBillHdBindingSource.DataSource = hd = BLLFty.Create<PaymentBillBLL>().GetPaymentBillHd(headID);
                 if (!string.IsNullOrEmpty(lueBillType.Text))
                     type = types.Find(o => o.Type == TypesListConstants.PaymentBillType && o.No == int.Parse(lueBillType.EditValue.ToString())).SubType;
                 switch (type)
@@ -101,7 +101,7 @@ namespace USL
                                     o.SupplierID == new Guid(lueBusinessContact.EditValue.ToString()) && ((o.Type == 5 && o.BillNo.Contains("RK")) || (o.Type == 4 && o.BillNo.Contains("CK"))));
                         break;
                 }
-                List<VPaymentBill> list = ((List<VPaymentBill>)MainForm.dataSourceList[typeof(VPaymentBill)]).FindAll(o => o.HdID == hdID);
+                List<VPaymentBill> list = ((List<VPaymentBill>)MainForm.dataSourceList[typeof(VPaymentBill)]).FindAll(o => o.HdID == headID);
                 if (dtl != null)
                 {
                     for (int i = dtl.Count - 1; i >= 0; i--)
@@ -125,16 +125,15 @@ namespace USL
                 {
                     if (type == TypesListConstants.FSMPayment)
                     {
-                        soas = BLLFty.Create<ReportBLL>().GetStatementOfAccountSummaryToSupplierReport(string.Format("付款单号='{0}'", hd.BillNo));
-                        soam = BLLFty.Create<ReportBLL>().GetStatementOfAccountMaterialToSupplierReport(hd.BillNo, hd.SupplierID.Value, dtl.Min(o => o.BillDate), dtl.Max(o => o.BillDate), "FSM");
-                        soab = BLLFty.Create<ReportBLL>().GetStatementOfAccountBasketToSupplierReport(hd.BillNo, hd.SupplierID.Value, dtl.Min(o => o.BillDate), dtl.Max(o => o.BillDate), "FSM");
+                        //soas = BLLFty.Create<ReportBLL>().GetStatementOfAccountSummaryToSupplierReport(string.Format("付款单号='{0}'", hd.BillNo));
+                        //soam = BLLFty.Create<ReportBLL>().GetStatementOfAccountMaterialToSupplierReport(hd.BillNo, hd.SupplierID.Value, dtl.Min(o => o.BillDate), dtl.Max(o => o.BillDate), "FSM");
+                        //soab = BLLFty.Create<ReportBLL>().GetStatementOfAccountBasketToSupplierReport(hd.BillNo, hd.SupplierID.Value, dtl.Min(o => o.BillDate), dtl.Max(o => o.BillDate), "FSM");
                     }
                     else
                     {
                         soas = null;
-                        //soam = BLLFty.Create<ReportBLL>().GetStatementOfAccountOfEMSReport(hd.BillNo, hd.SupplierID.Value, dtl.Min(o => o.BillDate), dtl.Max(o => o.BillDate));
-                        soam = BLLFty.Create<ReportBLL>().GetStatementOfAccountMaterialToSupplierReport(hd.BillNo, hd.SupplierID.Value, dtl.Min(o => o.BillDate), dtl.Max(o => o.BillDate), "EMS");
-                        soab = BLLFty.Create<ReportBLL>().GetStatementOfAccountBasketToSupplierReport(hd.BillNo, hd.SupplierID.Value, dtl.Min(o => o.BillDate), dtl.Max(o => o.BillDate), "EMS");
+                        //soam = BLLFty.Create<ReportBLL>().GetStatementOfAccountMaterialToSupplierReport(hd.BillNo, hd.SupplierID.Value, dtl.Min(o => o.BillDate), dtl.Max(o => o.BillDate), "EMS");
+                        //soab = BLLFty.Create<ReportBLL>().GetStatementOfAccountBasketToSupplierReport(hd.BillNo, hd.SupplierID.Value, dtl.Min(o => o.BillDate), dtl.Max(o => o.BillDate), "EMS");
                     }
 
                     decimal billAMT = dtl.Sum(o => o.LastPaidAMT.Value);
@@ -337,21 +336,20 @@ namespace USL
                 meLastAMT.EditValue = billAMT;
                 meTotalAMT.EditValue = (hd.Balance == null ? 0 : hd.Balance) + billAMT;
                 headID = hd.ID;
-                MainForm.BillSaveRefresh<VPaymentBill>();
+                MainForm.DataPageRefresh<VPaymentBill>();
                 statementOfAccountToSupplierReportBindingSource.DataSource = soa = //BLLFty.Create<ReportBLL>().GetStatementOfAccountToSupplierReport(string.Format("付款单号='{0}'", hd.BillNo));
                     ((List<StatementOfAccountToSupplierReport>)MainForm.dataSourceList[typeof(StatementOfAccountToSupplierReport)]).FindAll(o => o.付款单号 == hd.BillNo);
                 if (type == TypesListConstants.FSMPayment)
                 {
-                    soas = BLLFty.Create<ReportBLL>().GetStatementOfAccountSummaryToSupplierReport(string.Format("付款单号='{0}'", hd.BillNo));
-                    soam = BLLFty.Create<ReportBLL>().GetStatementOfAccountMaterialToSupplierReport(hd.BillNo, hd.SupplierID.Value, dtl.Min(o => o.BillDate), dtl.Max(o => o.BillDate), "FSM");
-                    soab = BLLFty.Create<ReportBLL>().GetStatementOfAccountBasketToSupplierReport(hd.BillNo, hd.SupplierID.Value, dtl.Min(o => o.BillDate), dtl.Max(o => o.BillDate), "FSM");
+                    //soas = BLLFty.Create<ReportBLL>().GetStatementOfAccountSummaryToSupplierReport(string.Format("付款单号='{0}'", hd.BillNo));
+                    //soam = BLLFty.Create<ReportBLL>().GetStatementOfAccountMaterialToSupplierReport(hd.BillNo, hd.SupplierID.Value, dtl.Min(o => o.BillDate), dtl.Max(o => o.BillDate), "FSM");
+                    //soab = BLLFty.Create<ReportBLL>().GetStatementOfAccountBasketToSupplierReport(hd.BillNo, hd.SupplierID.Value, dtl.Min(o => o.BillDate), dtl.Max(o => o.BillDate), "FSM");
                 }
                 else
                 {
                     soas = null;
-                    //soam = BLLFty.Create<ReportBLL>().GetStatementOfAccountOfEMSReport(hd.BillNo, hd.SupplierID.Value, dtl.Min(o => o.BillDate), dtl.Max(o => o.BillDate));
-                    soam = BLLFty.Create<ReportBLL>().GetStatementOfAccountMaterialToSupplierReport(hd.BillNo, hd.SupplierID.Value, dtl.Min(o => o.BillDate), dtl.Max(o => o.BillDate), "EMS");
-                    soab = BLLFty.Create<ReportBLL>().GetStatementOfAccountBasketToSupplierReport(hd.BillNo, hd.SupplierID.Value, dtl.Min(o => o.BillDate), dtl.Max(o => o.BillDate), "EMS");
+                    //soam = BLLFty.Create<ReportBLL>().GetStatementOfAccountMaterialToSupplierReport(hd.BillNo, hd.SupplierID.Value, dtl.Min(o => o.BillDate), dtl.Max(o => o.BillDate), "EMS");
+                    //soab = BLLFty.Create<ReportBLL>().GetStatementOfAccountBasketToSupplierReport(hd.BillNo, hd.SupplierID.Value, dtl.Min(o => o.BillDate), dtl.Max(o => o.BillDate), "EMS");
                 }
                 //DataQueryPageRefresh();
                 //QueryPageRefresh();
@@ -484,7 +482,7 @@ namespace USL
             }
             finally
             {
-                MainForm.BillSaveRefresh<VPaymentBill>();
+                MainForm.DataPageRefresh<VPaymentBill>();
                 this.Cursor = System.Windows.Forms.Cursors.Default;
             }
         }

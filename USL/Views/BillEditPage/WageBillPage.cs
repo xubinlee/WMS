@@ -49,16 +49,16 @@ namespace USL
             BindData(headID);
         }
 
-        public void BindData(Guid hdID)
+        public void BindData(object hdID)
         {
             gridControl.BeginUpdate();
-            if (hdID != Guid.Empty)
+            if (hdID is Guid)
             {
-                headID = hdID;
-                wageBillHdBindingSource.DataSource = hd = BLLFty.Create<WageBillBLL>().GetWageBillHd(hdID);
+                headID = (Guid)hdID;
+                wageBillHdBindingSource.DataSource = hd = BLLFty.Create<WageBillBLL>().GetWageBillHd(headID);
                 dtl = BLLFty.Create<WageBillBLL>().GetVWageBillDtl().FindAll(o =>
                                     o.UserID == new Guid(lueBusinessContact.EditValue.ToString()));
-                List<VWageBill> list = ((List<VWageBill>)MainForm.dataSourceList[typeof(VWageBill)]).FindAll(o => o.HdID == hdID);
+                List<VWageBill> list = ((List<VWageBill>)MainForm.dataSourceList[typeof(VWageBill)]).FindAll(o => o.HdID == headID);
                 for (int i = dtl.Count - 1; i >= 0; i--)
                 {
                     VWageBill obj = list.Find(o => o.年月 == dtl[i].YearMonth);
@@ -235,7 +235,7 @@ namespace USL
                         o.UserID == hd.UserID && (o.日期.Value.ToString("yyyy-MM").Equals(dtl.Min(m => m.YearMonth)) || o.日期.Value.ToString("yyyy-MM").Equals(dtl.Max(m => m.YearMonth))));
                 //DataQueryPageRefresh();
                 //QueryPageRefresh();
-                MainForm.BillSaveRefresh<VWageBill>();
+                MainForm.DataPageRefresh<VWageBill>();
                 ////MainForm.DataQueryPageRefresh();
                 CommonServices.ErrorTrace.SetSuccessfullyInfo(this.FindForm(), "保存成功");
                 return true;
@@ -323,7 +323,7 @@ namespace USL
             }
             finally
             {
-                MainForm.BillSaveRefresh<VWageBill>();
+                MainForm.DataPageRefresh<VWageBill>();
                 this.Cursor = System.Windows.Forms.Cursors.Default;
             }
         }

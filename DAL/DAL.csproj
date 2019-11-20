@@ -60,7 +60,7 @@
     <Compile Include="CompanyDAL.cs" />
     <Compile Include="AttGeneralLogDAL.cs" />
     <Compile Include="AttWageBillDAL.cs" />
-    <Compile Include="SystemStatusDAL.cs" />
+    <Compile Include="SystemInfoDAL.cs" />
     <Compile Include="WageBillDAL.cs" />
     <Compile Include="SLSalePriceDAL.cs" />
     <Compile Include="DataSourcesDAL.cs" />

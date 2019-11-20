@@ -34,10 +34,10 @@ namespace USL
         {
             base.OnLoad(e);
             winExplorerView.ShowFindPanel();
-            BindData();
+            BindData(null);
         }
 
-        public void BindData()
+        public void BindData(object obj)
         {
             vSupplierBindingSource.DataSource = MainForm.dataSourceList[typeof(VSupplier)];
             goodsBindingSource.DataSource = ((List<Goods>)MainForm.dataSourceList[typeof(Goods)]).FindAll(o => o.Type == (int)GoodsBigType.Mold);

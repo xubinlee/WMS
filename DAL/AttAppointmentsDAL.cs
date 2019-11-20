@@ -11,6 +11,11 @@ namespace DAL
 {
     public class AttAppointmentsDAL: IDALBase
     {
+        public List<AttParameters> GetAttParameters(DCC dcc)
+        {
+            return dcc.AttParameters.ToList();
+        }
+
         public List<AttAppointments> GetAttAppointments(DCC dcc)
         {
             return dcc.AttAppointments.ToList();

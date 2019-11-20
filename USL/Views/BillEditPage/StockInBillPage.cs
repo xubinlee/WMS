@@ -153,7 +153,7 @@ namespace USL
             }
         }
 
-        public void BindData(Guid hdID)
+        public void BindData(object hdID)
         {
             switch (billType)
             {
@@ -214,11 +214,11 @@ namespace USL
             else
                 goodsBindingSource.DataSource = ((List<Goods>)MainForm.dataSourceList[typeof(Goods)]).FindAll(o => o.Type == (int)goodsBigType);
 
-            if (hdID != Guid.Empty)
+            if (hdID is Guid)
             {
-                headID = hdID;
-                stockInBillHdBindingSource.DataSource = hd = BLLFty.Create<StockInBillBLL>().GetStockInBillHd(hdID);
-                stockInBillDtlBindingSource.DataSource = dtl = BLLFty.Create<StockInBillBLL>().GetStockInBillDtl(hdID);
+                headID = (Guid)hdID;
+                stockInBillHdBindingSource.DataSource = hd = BLLFty.Create<StockInBillBLL>().GetStockInBillHd(headID);
+                stockInBillDtlBindingSource.DataSource = dtl = BLLFty.Create<StockInBillBLL>().GetStockInBillDtl(headID);
             }
             vUsersInfoBindingSource.DataSource = MainForm.dataSourceList[typeof(VUsersInfo)];
             warehouseBindingSource.DataSource = warehouseList = MainForm.dataSourceList[typeof(Warehouse)] as List<Warehouse>;
@@ -1557,7 +1557,7 @@ namespace USL
                                 fsmDtlList.Add(fsmDtl);
                             }
                             BLLFty.Create<OrderBLL>().Insert(fsmHd, fsmDtlList);
-                            MainForm.BillSaveRefresh<VFSMOrder>();
+                            MainForm.DataPageRefresh<VFSMOrder>();
                             //XtraMessageBox.Show("领料出库单已成功生成。", "操作提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                             //定位

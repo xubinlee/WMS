@@ -16,6 +16,7 @@ using Utility;
 using CommonLibrary;
 using DevExpress.XtraGrid.Views.Grid;
 using DevExpress.XtraGrid.Columns;
+using System.Collections;
 
 namespace USL
 {
@@ -77,13 +78,13 @@ namespace USL
                 col额外费用.Visible = false;
         }
 
-        public void BindData(Guid hdID)
+        public void BindData(object hdID)
         {
             gridControl.BeginUpdate();
-            if (hdID != Guid.Empty)
+            if (hdID is Guid)
             {
-                headID = hdID;
-                receiptBillHdBindingSource.DataSource = hd = BLLFty.Create<ReceiptBillBLL>().GetReceiptBillHd(hdID);
+                headID = (Guid)hdID;
+                receiptBillHdBindingSource.DataSource = hd = BLLFty.Create<ReceiptBillBLL>().GetReceiptBillHd(headID);
                 switch (types.Find(o => o.Type == TypesListConstants.ReceiptBillType && o.No == int.Parse(lueBillType.EditValue.ToString())).SubType)
                 {
                     case TypesListConstants.SalesReceipt:
@@ -97,7 +98,7 @@ namespace USL
                                     o.SupplierID == new Guid(lueBusinessContact.EditValue.ToString()) && o.Type == int.Parse(lueBillType.EditValue.ToString()));
                         break;
                 }
-                List<VReceiptBill> list = ((List<VReceiptBill>)MainForm.dataSourceList[typeof(VReceiptBill)]).FindAll(o => o.HdID == hdID);
+                List<VReceiptBill> list = ((List<VReceiptBill>)MainForm.dataSourceList[typeof(VReceiptBill)]).FindAll(o => o.HdID == headID);
                 for (int i = dtl.Count - 1; i >= 0; i--)
                 {
                     VReceiptBill obj = list.Find(o => o.BillID == dtl[i].BillID);
@@ -331,7 +332,7 @@ namespace USL
                 meLastAMT.EditValue = billAMT;
                 meTotalAMT.EditValue = (hd.Balance == null ? 0 : hd.Balance) + billAMT;
                 headID = hd.ID;
-                MainForm.BillSaveRefresh<VReceiptBill>();
+                MainForm.DataPageRefresh<VReceiptBill>();
                 statementOfAccountToCustomerReportBindingSource.DataSource = soa = //BLLFty.Create<ReportBLL>().GetStatementOfAccountToCustomerReport(string.Format("收款单号='{0}'", hd.BillNo));
                     ((List<StatementOfAccountToCustomerReport>)MainForm.dataSourceList[typeof(StatementOfAccountToCustomerReport)]).FindAll(o => o.收款单号 == hd.BillNo);
                 //DataQueryPageRefresh();
@@ -472,7 +473,7 @@ namespace USL
             }
             finally
             {
-                MainForm.BillSaveRefresh<VReceiptBill>();
+                MainForm.DataPageRefresh<VReceiptBill>();
                 this.Cursor = System.Windows.Forms.Cursors.Default;
             }
         }
@@ -843,7 +844,7 @@ namespace USL
             }
             catch (Exception ex)
             {
-                CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "没有可打印的数据");
+                CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "没有可打印的数据.\r\n错误信息："+ex.Message);
             }
             finally
             {

@@ -44,5 +44,21 @@ namespace DAL
             dcc.Permission.Attach(obj);
             dcc.Refresh(System.Data.Linq.RefreshMode.KeepCurrentValues, obj);
         }
+
+        public void Update(DCC dcc,Guid userID, List<Permission> insertList)
+        {
+            using (TransactionScope ts = new TransactionScope())
+            {
+                if (insertList.Count > 0)
+                {
+                    // 先删除原来的数据，再新增（因为可能MainMenu有变动）
+                    var del = dcc.Permission.Where(o => o.UserID.Equals(userID));
+                    dcc.Permission.DeleteAllOnSubmit(del);
+                    dcc.Permission.InsertAllOnSubmit(insertList);
+                }
+                dcc.SubmitChanges();
+                ts.Complete();
+            }
+        }
     }
 }

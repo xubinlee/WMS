@@ -46,10 +46,10 @@ namespace USL
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            BindData();
+            BindData(null);
         }
 
-        public void BindData()
+        public void BindData(object obj)
         {
             GetYearMonthList();
             GetDataSource();

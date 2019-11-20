@@ -70,10 +70,10 @@ namespace USL
                     break;
             }
             winExplorerView.ShowFindPanel();
-            BindData();
+            BindData(null);
         }
 
-        public void BindData()
+        public void BindData(object obj)
         {
             if (bomType == BOMType.Assemble)
             {

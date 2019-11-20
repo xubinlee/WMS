@@ -13,3 +13,4 @@ D:\Project\WMS\IBase\obj\Debug\IBase.dll
 D:\Project\WMS\IBase\obj\Debug\IBase.pdb
 D:\WMS\IBase.dll
 D:\WMS\IBase.pdb
+D:\Project\WMS\IBase\obj\Debug\IBase.csprojAssemblyReference.cache

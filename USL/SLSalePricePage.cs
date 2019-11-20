@@ -38,7 +38,7 @@ namespace USL
         {
             base.OnLoad(e);
             winExplorerView.ShowFindPanel();
-            BindData();
+            BindData(null);
         }
 
         void SetDtlHeader(bool flag)
@@ -48,7 +48,7 @@ namespace USL
             colSPEC.Visible = !flag;
         }
 
-        public void BindData()
+        public void BindData(object obj)
         {
             if (businessContactType == BusinessContactType.Customer)
             {
@@ -168,7 +168,7 @@ namespace USL
                 addNew = false;
                 //DataQueryPageRefresh();
                 MainForm.dataSourceList[typeof(SLSalePrice)] = BLLFty.Create<SLSalePriceBLL>().GetSLSalePrice();
-                BindData();
+                BindData(null);
                 CommonServices.ErrorTrace.SetSuccessfullyInfo(this.FindForm(), "保存成功");
                 return true;
             }

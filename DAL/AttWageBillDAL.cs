@@ -32,11 +32,11 @@ namespace DAL
             return dcc.AttWageBillDtl.Where(o => o.HdID == hdID).ToList();
         }
 
-        public List<USPAttWageBillDtl> GetUSPAttWageBillDtl(DCC dcc)
-        {
-            ISingleResult<USPAttWageBillDtl> result = dcc.USPGetAttWageBillDtl();
-            return result.ToList();
-        }
+        //public List<USPAttWageBillDtl> GetUSPAttWageBillDtl(DCC dcc)
+        //{
+        //    ISingleResult<USPAttWageBillDtl> result = dcc.USPGetAttWageBillDtl();
+        //    return result.ToList();
+        //}
 
         public List<VAttWageBill> GetAttWageBill(DCC dcc)
         {

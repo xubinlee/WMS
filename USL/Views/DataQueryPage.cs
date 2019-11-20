@@ -55,8 +55,8 @@ namespace USL
             mainMenu = menu;
             dataSource = list;
             //itemDetailPageList = new Dictionary<string, ItemDetailPage>();
-            types = MainForm.ConvertList<TypesList>((IList)MainForm.dataSourceList[typeof(TypesList)]);
-            warehouseList = MainForm.ConvertList<Warehouse>((IList)MainForm.dataSourceList[typeof(Warehouse)]);
+            types = (List<TypesList>)MainForm.dataSourceList[typeof(TypesList)];
+            warehouseList = (List<Warehouse>)MainForm.dataSourceList[typeof(Warehouse)];
             // 盘点差异表/未上架商品确认单可编辑
             if (menu.Name.Equals(MainMenuConstants.ProfitAndLoss) ||
                 menu.Name.Equals(MainMenuConstants.UnlistedGoods)) {
@@ -94,8 +94,9 @@ namespace USL
             base.OnLoad(e);
             displayUsers = BLLFty.Create<UsersInfoBLL>().GetVUsersInfo();
             GetItemDetailPage();
-            InitGrid(dataSource);
+            BindData(dataSource);
             //SetGridSummaryItem();
+            MainForm.SetQueryPageGridColumn(gridView, mainMenu);
         }
 
         public void InitGrid<T>(IList list)
@@ -103,52 +104,20 @@ namespace USL
             if (mainMenu.Name.Equals(typeof(T).Name))
             {
                 gridControl.DataSource = list;
-                MainForm.SetQueryPageGridColumn(gridView, mainMenu);
+                //MainForm.SetQueryPageGridColumn(gridView, mainMenu);
             }
         }
 
-        public void InitGrid(IList list)
+        public void BindData(object list)
         {
-            ////gridControl.BeginUpdate();
-            //gridView.Columns.Clear();
-            //gridControl.DataSource = new Company();
             //类型相同才绑定
-            if (list.Count > 0 && mainMenu.Name.Equals(list[0].GetType().Name))
+            //if (list.Count > 0 && mainMenu.Name.Equals(list[0].GetType().Name))
+            if (list!=null && mainMenu.Name.Equals(list.GetType().GenericTypeArguments[0].Name))
             {
                 gridControl.DataSource = list;
-                MainForm.SetQueryPageGridColumn(gridView, mainMenu);
+                //MainForm.SetQueryPageGridColumn(gridView, mainMenu);
             }
-            
-            ////gridControl.EndUpdate();
-            //gridView.PopulateColumns();
-
         }
-
-        //void SetGridSummaryItem()
-        //{
-        //    foreach (string item in Enum.GetNames(typeof(SummaryItemColumns)))
-        //    {
-        //        GridColumn col = gridView.Columns.FirstOrDefault(c => c.FieldName == item);
-        //        if (col != null)
-        //        {
-        //            if (col.FieldName == "品名")
-        //            {
-        //                //合计说明
-        //                col.Summary.AddRange(new DevExpress.XtraGrid.GridSummaryItem[] {
-        //            new DevExpress.XtraGrid.GridColumnSummaryItem(DevExpress.Data.SummaryItemType.Sum, "品名", "总计:")});
-        //                gridView.GroupSummary.Add(DevExpress.Data.SummaryItemType.Sum, "品名", col, "小组合计:");
-        //            }
-        //            else
-        //            {
-        //                //总计
-        //                col.Summary.AddRange(new DevExpress.XtraGrid.GridSummaryItem[] {
-        //            new DevExpress.XtraGrid.GridColumnSummaryItem(DevExpress.Data.SummaryItemType.Sum, item, "{0}")});
-        //                //组计
-        //                gridView.GroupSummary.Add(DevExpress.Data.SummaryItemType.Sum, item, col, "{0}");
-        //            }
-        //        }
-        //    }
-        //}
 
         private void gridView_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
         {
@@ -395,8 +364,8 @@ namespace USL
                         form.ShowDialog();
                         if (mainMenu.Name == MainMenuConstants.Material)
                         {
-                            goodsList = MainForm.ConvertList<VMaterial>((IList)MainForm.dataSourceList[typeof(VMaterial)]).FindAll(o => o.Type == MainForm.GoodsBigType);
-                            InitGrid(goodsList);
+                            goodsList = ((List<VMaterial>)MainForm.dataSourceList[typeof(VMaterial)]).FindAll(o => o.Type == MainForm.GoodsBigType);
+                            BindData(goodsList);
                         }
                         //刷新数据
                         //itemDetailPage.DataQueryPageRefresh();
@@ -1192,7 +1161,7 @@ namespace USL
                                 CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), string.Format("第{0}行的编码不能为空。", iCount));
                                 return;
                             }
-                            Stocktaking entity = MainForm.ConvertList<Stocktaking>((IList)MainForm.dataSourceList[typeof(Stocktaking)]).FirstOrDefault(o => o.DeptID.Equals(dept.ID) && o.WarehouseID.Equals(warehouse.ID) && o.GoodsCode.Equals(code));
+                            Stocktaking entity = ((List<Stocktaking>)MainForm.dataSourceList[typeof(Stocktaking)]).FirstOrDefault(o => o.DeptID.Equals(dept.ID) && o.WarehouseID.Equals(warehouse.ID) && o.GoodsCode.Equals(code));
                             bool isNew = false;
                             int checkQty = 0;
                             if (entity == null)
@@ -1368,19 +1337,19 @@ namespace USL
 
         private void gridView_CellValueChanged(object sender, DevExpress.XtraGrid.Views.Base.CellValueChangedEventArgs e)
         {
-            IList list = null;
             GridView view = sender as GridView;
-            switch (mainMenu.Name)
-            {
-                case MainMenuConstants.ProfitAndLoss:
-                    list = MainForm.ConvertList<ProfitAndLoss>((IList)view.DataSource);
-                    break;
-                case MainMenuConstants.UnlistedGoods:
-                    list = MainForm.ConvertList<UnlistedGoods>((IList)view.DataSource);
-                    break;
-                default:
-                    break;
-            }
+            IList list = (IList)view.DataSource;
+            //switch (mainMenu.Name)
+            //{
+            //    case MainMenuConstants.ProfitAndLoss:
+            //        list = (List<ProfitAndLoss>)view.DataSource;
+            //        break;
+            //    case MainMenuConstants.UnlistedGoods:
+            //        list = (List<UnlistedGoods>)view.DataSource;
+            //        break;
+            //    default:
+            //        break;
+            //}
             if (list != null && list.Count > 0)
             {
                 if (e.Column == view.FocusedColumn && e.Column.FieldName.ToLower().Contains("qty"))

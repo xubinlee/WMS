@@ -36,10 +36,10 @@ namespace USL
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            BindData();
+            BindData(null);
         }
 
-        public void BindData()
+        public void BindData(object obj)
         {
             departmentBindingSource.DataSource = MainForm.dataSourceList[typeof(Department)];
             schClassBindingSource.DataSource = MainForm.dataSourceList[typeof(SchClass)] as List<SchClass>;
@@ -115,7 +115,7 @@ namespace USL
         {
             MainForm.dataSourceList[typeof(StaffSchClass)] = BLLFty.Create<StaffSchClassBLL>().GetStaffSchClass();
             MainForm.dataSourceList[typeof(VStaffSchClass)] = BLLFty.Create<StaffSchClassBLL>().GetVStaffSchClass();
-            BindData();
+            BindData(null);
             if (MainForm.itemDetailList.ContainsKey(MainMenuConstants.StaffAttendance))
             {
                 AttendanceSchedulingPage page = MainForm.itemDetailList[MainMenuConstants.StaffAttendance] as AttendanceSchedulingPage;

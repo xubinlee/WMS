@@ -162,7 +162,7 @@ namespace USL
             }
         }
 
-        public void BindData(Guid hdID)
+        public void BindData(object hdID)
         {
 
             businessContactBindingSource.DataSource = null;
@@ -209,20 +209,20 @@ namespace USL
                 SetDtlHeader(false);
                 businessContactType = (int)BusinessContactType.Supplier;
             }
-            if (hdID != Guid.Empty)
+            if (hdID is Guid)
             {
-                headID = hdID;
-                orderHdBindingSource.DataSource = hd = BLLFty.Create<OrderBLL>().GetOrderHd(hdID);
-                orderDtlBindingSource.DataSource = dtl = BLLFty.Create<OrderBLL>().GetOrderDtl(hdID);
+                headID = (Guid)hdID;
+                orderHdBindingSource.DataSource = hd = BLLFty.Create<OrderBLL>().GetOrderHd(headID);
+                orderDtlBindingSource.DataSource = dtl = BLLFty.Create<OrderBLL>().GetOrderDtl(headID);
                 if (billType == MainMenuConstants.ProductionOrder)
                 {
-                    billDtlByAssembleBindingSource.DataSource = dtlByAssemble= BLLFty.Create<OrderBLL>().GetVOrderDtlByBOM(hdID, (int)BOMType.Assemble);
-                    billDtlByBOMBindingSource.DataSource = dtlByBOM = BLLFty.Create<OrderBLL>().GetVOrderDtlByBOM(hdID, (int)BOMType.BOM);
+                    billDtlByAssembleBindingSource.DataSource = dtlByAssemble= BLLFty.Create<OrderBLL>().GetVOrderDtlByBOM(headID, (int)BOMType.Assemble);
+                    billDtlByBOMBindingSource.DataSource = dtlByBOM = BLLFty.Create<OrderBLL>().GetVOrderDtlByBOM(headID, (int)BOMType.BOM);
                 }
                 else if (billType == MainMenuConstants.FSMOrder)
                 {
                     ////billDtlByBOMBindingSource.DataSource = dtlByBOM = BLLFty.Create<OrderBLL>().GetVFSMOrderDtlByMoldList(hdID);
-                    vFSMOrderDtlByMoldMaterialBindingSource.DataSource = dtlByMoldMaterial = BLLFty.Create<OrderBLL>().GetVFSMOrderDtlByMoldMaterial(hdID);
+                    vFSMOrderDtlByMoldMaterialBindingSource.DataSource = dtlByMoldMaterial = BLLFty.Create<OrderBLL>().GetVFSMOrderDtlByMoldMaterial(headID);
                 }
                 else
                 {
@@ -525,7 +525,7 @@ namespace USL
                 }
                 gvAssemble.BestFitColumns();
                 //DataQueryPageRefresh();
-                MainForm.BillSaveRefresh<VOrder>();
+                MainForm.DataPageRefresh<VOrder>();
                 CommonServices.ErrorTrace.SetSuccessfullyInfo(this.FindForm(), "保存成功");
                 return true;
             }
@@ -630,9 +630,9 @@ namespace USL
                         hd.AuditDate = DateTime.Now;
                         hd.Status = 0;
                         BLLFty.Create<OrderBLL>().CancelAudit(hd);
-                        MainForm.BillSaveRefresh<VOrder>();
-                        MainForm.BillSaveRefresh<VProductionOrder>();
-                        MainForm.BillSaveRefresh<VFSMOrder>();
+                        MainForm.DataPageRefresh<VOrder>();
+                        MainForm.DataPageRefresh<VProductionOrder>();
+                        MainForm.DataPageRefresh<VFSMOrder>();
                         MainForm.InventoryRefresh();
                         CommonServices.ErrorTrace.SetSuccessfullyInfo(this.FindForm(), "取消审核成功");
                         return true;
@@ -829,9 +829,9 @@ namespace USL
                         BLLFty.Create<OrderBLL>().Update(hd);
                 }
                 //DataQueryPageRefresh();
-                MainForm.BillSaveRefresh<VOrder>();
-                MainForm.BillSaveRefresh<VProductionOrder>();
-                MainForm.BillSaveRefresh<VFSMOrder>();
+                MainForm.DataPageRefresh<VOrder>();
+                MainForm.DataPageRefresh<VProductionOrder>();
+                MainForm.DataPageRefresh<VFSMOrder>();
                 MainForm.InventoryRefresh();
                 CommonServices.ErrorTrace.SetSuccessfullyInfo(this.FindForm(), "审核成功");
                 return true;

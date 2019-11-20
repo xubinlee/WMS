@@ -154,16 +154,16 @@ namespace USL
             }
         }
 
-        public void BindData(Guid hdID)
+        public void BindData(object hdID)
         {
-            if (hdID != Guid.Empty)
+            if (hdID is Guid)
             {
-                headID = hdID;
-                stockOutBillHdBindingSource.DataSource = hd = BLLFty.Create<StockOutBillBLL>().GetStockOutBillHd(hdID);
-                stockOutBillDtlBindingSource.DataSource = dtl = BLLFty.Create<StockOutBillBLL>().GetStockOutBillDtl(hdID);
+                headID = (Guid)hdID;
+                stockOutBillHdBindingSource.DataSource = hd = BLLFty.Create<StockOutBillBLL>().GetStockOutBillHd(headID);
+                stockOutBillDtlBindingSource.DataSource = dtl = BLLFty.Create<StockOutBillBLL>().GetStockOutBillDtl(headID);
                 if (billType == MainMenuConstants.EMSStockOutBill && (lueType.ItemIndex == 0 || lueType.ItemIndex == -1) ||
                     billType == MainMenuConstants.FSMDPReturnBill)
-                    billDtlByBOMBindingSource.DataSource = dtlByBOM = BLLFty.Create<StockOutBillBLL>().GetVStockOutBillDtlByBOM(hdID, (int)BOMType.Assemble);
+                    billDtlByBOMBindingSource.DataSource = dtlByBOM = BLLFty.Create<StockOutBillBLL>().GetVStockOutBillDtlByBOM(headID, (int)BOMType.Assemble);
                 else
                     billDtlByBOMBindingSource.DataSource = dtlByBOM = new List<StockOutBillDtl>();
             }
