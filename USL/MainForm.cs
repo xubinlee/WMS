@@ -393,7 +393,7 @@ namespace USL
         void barUserInfo_ItemClick(object sender, ItemClickEventArgs e)
         {
             AboutBox ab = new AboutBox();
-            ab.ShowDialog();
+            ab.ShowDialog(); 
         }
 
         void InsertAlert()
@@ -417,7 +417,7 @@ namespace USL
                     obj.ID = Guid.NewGuid();
                     obj.BillID = order.ID;
                     obj.Caption = "交货提醒";
-                    obj.Text = string.Format("客户:[{0}],唛头:[{1}]的订货单[{2}]交货日期是:[{3}].请尽快发货。\r\n备注:{4}", customer == null ? string.Empty : customer.Name, order.MainMark, order.BillNo, order.DeliveryDate.ToString("yyyy-MM-dd"), order.Remark);
+                    obj.Text = string.Format("客户:[{0}],唛头:[{1}]的订货单[{2}]交货日期是:[{3}].请尽快发货。\r\n备注:{4}", customer.Name ?? string.Empty, order.MainMark, order.BillNo, order.DeliveryDate.ToString("yyyy-MM-dd"), order.Remark);
                     obj.AddTime = DateTime.Now;
                     insertlist.Add(obj);
                 }

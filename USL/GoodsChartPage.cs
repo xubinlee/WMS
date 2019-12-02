@@ -202,7 +202,7 @@ namespace USL
             }
             catch (Exception ex)
             {
-                CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "没有可打印的数据:"+ex.Message);
+                CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "没有可打印的数据。\r\n错误信息：" + ex.Message);
             }
             finally
             {
