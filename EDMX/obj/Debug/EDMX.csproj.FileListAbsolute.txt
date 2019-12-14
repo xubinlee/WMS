@@ -1,0 +1,8 @@
+D:\WMS\EDMX.dll.config
+D:\WMS\EDMX.dll
+D:\WMS\EDMX.pdb
+D:\Project\WMS\EDMX\obj\Debug\EDMX.csprojAssemblyReference.cache
+D:\Project\WMS\EDMX\obj\Debug\EDMX.csproj.CoreCompileInputs.cache
+D:\Project\WMS\EDMX\obj\Debug\EDMX.csproj.CopyComplete
+D:\Project\WMS\EDMX\obj\Debug\EDMX.dll
+D:\Project\WMS\EDMX\obj\Debug\EDMX.pdb

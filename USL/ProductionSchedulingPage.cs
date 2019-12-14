@@ -11,7 +11,7 @@ using DevExpress.XtraEditors;
 using IBase;
 using Factory;
 using BLL;
-using DBML;
+using EDMX;
 using CommonLibrary;
 using Utility;
 using DevExpress.XtraGrid.Views.Grid;
@@ -23,11 +23,13 @@ using DevExpress.XtraScheduler;
 using SchedulerReportingExample;
 using DevExpress.XtraScheduler.Reporting;
 using DevExpress.XtraReports.UI;
+using Utility.Interceptor;
 
 namespace USL
 {
     public partial class ProductionSchedulingPage : DevExpress.XtraEditors.XtraUserControl, IItemDetail
     {
+        private static ClientFactory clientFactory = LoggerInterceptor.CreateProxy<ClientFactory>();
         Guid focusedID;
         //bool addNew = false;  //是否新增
         public ProductionSchedulingPage()
@@ -47,8 +49,8 @@ namespace USL
         public void BindData(object obj)
         {
             schedulerStorage.BeginUpdate();
-            vUsersInfoBindingSource.DataSource = ((List<VUsersInfo>)MainForm.dataSourceList[typeof(VUsersInfo)]).FindAll(o =>
-                o.已删除 == false && o.部门 == "注塑机");
+            //vUsersInfoBindingSource.DataSource = clientFactory.GetData<VUsersInfo>().FindAll(o =>
+                //o.已删除 == false && o.部门 == "注塑机");
             GetPSDataSource();
             schedulerStorage.RefreshData();
             schedulerStorage.EndUpdate();
@@ -69,7 +71,7 @@ namespace USL
             if (winExplorerView.GetFocusedRowCellValue(colID) != null)
             {
                 focusedID = new Guid(winExplorerView.GetFocusedRowCellValue(colID).ToString());
-                appointmentsBindingSource.DataSource = ((List<Appointments>)MainForm.dataSourceList[typeof(Appointments)]).FindAll(o => o.UserID == focusedID);
+                appointmentsBindingSource.DataSource = BLLFty.Create<BaseBLL>().GetListBy<Appointments>(o => o.UserID == focusedID);
                 picStatus.Visible = false;
                 //DataView dv = erpToysDataSet.Appointments.DefaultView;
                 //dv.RowFilter = string.Format("UserID='{0}'", focusedID);
@@ -113,8 +115,8 @@ namespace USL
                 new SchedulerControlPrintAdapter(this.schedulerControl1);
             xr.SchedulerAdapter = scPrintAdapter;
             xr.CreateDocument(true);
-            xr.paramUserName.Value = ((List<UsersInfo>)MainForm.dataSourceList[typeof(UsersInfo)]).FirstOrDefault(o =>
-                o.ID == focusedID).Name;
+            xr.paramUserName.Value = BLLFty.Create<BaseBLL>().GetListBy<UsersInfo>(o =>
+                o.ID == focusedID).FirstOrDefault().Name;
             //xr.paramAMT.Value = ((List<VAppointments>)MainForm.dataSourceList[typeof(VAppointments)]).FindAll(o =>
             //    o.UserID == focusedID && o.日期.Value.Month == dateNavigator.DateTime.Month).Sum(o => o.当班金额);
 
@@ -161,27 +163,12 @@ namespace USL
             return aptList;
         }
 
-        /// <summary>
-        /// 刷新查询界面
-        /// </summary>
-        void PageRefresh()
-        {
-            MainForm.dataSourceList[typeof(Appointments)] = BLLFty.Create<AppointmentsBLL>().GetAppointments();
-            BindData(null);
-            if (MainForm.itemDetailList.ContainsKey(MainMenuConstants.SchedulingQuery))
-            {
-                DataQueryPage page = MainForm.itemDetailList[MainMenuConstants.SchedulingQuery] as DataQueryPage;
-                //刷新数据
-                MainForm.dataSourceList[typeof(VAppointments)] = BLLFty.Create<AppointmentsBLL>().GetVAppointments();
-                page.BindData((IList)MainForm.dataSourceList[typeof(VAppointments)]);
-            }
-        }
-
         private void schedulerStorage_AppointmentsChanged(object sender, PersistentObjectsEventArgs e)
         {
-            BLLFty.Create<AppointmentsBLL>().Update(GetAppointmentsList(e.Objects));
+            BLLFty.Create<BaseBLL>().UpdateByBulk(GetAppointmentsList(e.Objects));
             //刷新数据
-            PageRefresh();
+            clientFactory.DataPageRefresh<Appointments>();
+            //clientFactory.DataPageRefresh<VAppointments>();
         }
 
         private void schedulerStorage_AppointmentsInserted(object sender, PersistentObjectsEventArgs e)
@@ -194,27 +181,29 @@ namespace USL
                     CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "添加失败，请刷新数据后重试。");
                     break;
                 }
-                BLLFty.Create<AppointmentsBLL>().Insert(dbApt);
+                BLLFty.Create<BaseBLL>().Add<Appointments>(dbApt);
                 break;
             }
             //BLLFty.Create<AppointmentsBLL>().Insert(GetAppointmentsList(e.Objects));
             //刷新数据
-            PageRefresh();
+            clientFactory.DataPageRefresh<Appointments>();
+            //clientFactory.DataPageRefresh<VAppointments>();
         }
 
         private void schedulerStorage_AppointmentsDeleted(object sender, PersistentObjectsEventArgs e)
         {
-            foreach (Appointment apt in e.Objects)
-            {
-                if (apt.Id == null)
-                {
-                    CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "删除失败。");
-                    break;
-                }
-                BLLFty.Create<AppointmentsBLL>().Delete((Int64)apt.Id);
-            }
-            //刷新数据
-            PageRefresh();
+            //foreach (Appointment apt in e.Objects)
+            //{
+            //    if (apt.Id == null)
+            //    {
+            //        CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "删除失败。");
+            //        break;
+            //    }
+            //    BLLFty.Create<AppointmentsBLL>().Delete((Int64)apt.Id);
+            //}
+            ////刷新数据
+            //clientFactory.DataPageRefresh<Appointments>();
+            ////clientFactory.DataPageRefresh<VAppointments>();
         }
         private void schedulerControl1_MouseDown(object sender, MouseEventArgs e)
         {
@@ -226,30 +215,30 @@ namespace USL
 
         private void schedulerControl1_SelectionChanged(object sender, EventArgs e)
         {
-            VWageBill wage= ((List<VWageBill>)MainForm.dataSourceList[typeof(VWageBill)]).FirstOrDefault(o =>o.UserID==focusedID &&
-                o.年月 == Convert.ToString(((SchedulerControl)sender).SelectedInterval.Start.Year + "-" + ((SchedulerControl)sender).SelectedInterval.Start.Month.ToString().PadLeft(2,'0')));
-            //if (((SchedulerControl)sender).SelectedAppointments.Count > 0 &&
-            //    Convert.ToInt32(((SchedulerControl)sender).SelectedAppointments[0].CustomFields["WageStatus"]) == (int)WageStatus.Closed)
-            if (wage != null && wage.状态 == (int)BillStatus.Audited)
-            {
-                schedulerControl1.OptionsCustomization.AllowAppointmentConflicts = AppointmentConflictsMode.Forbidden;
-                schedulerControl1.OptionsCustomization.AllowAppointmentCopy = UsedAppointmentType.None;
-                schedulerControl1.OptionsCustomization.AllowAppointmentCreate = UsedAppointmentType.None;
-                schedulerControl1.OptionsCustomization.AllowAppointmentDelete = UsedAppointmentType.None;
-                schedulerControl1.OptionsCustomization.AllowAppointmentDrag = UsedAppointmentType.None;
-                schedulerControl1.OptionsCustomization.AllowAppointmentEdit = UsedAppointmentType.None;
-                picStatus.Visible = true;
-            }
-            else
-            {
-                schedulerControl1.OptionsCustomization.AllowAppointmentConflicts = AppointmentConflictsMode.Allowed;
-                schedulerControl1.OptionsCustomization.AllowAppointmentCopy = UsedAppointmentType.All;
-                schedulerControl1.OptionsCustomization.AllowAppointmentCreate = UsedAppointmentType.All;
-                schedulerControl1.OptionsCustomization.AllowAppointmentDelete = UsedAppointmentType.All;
-                schedulerControl1.OptionsCustomization.AllowAppointmentDrag = UsedAppointmentType.All;
-                schedulerControl1.OptionsCustomization.AllowAppointmentEdit = UsedAppointmentType.All;
-                picStatus.Visible = false;
-            }
+            //VWageBill wage= clientFactory.GetData<VWageBill>().FirstOrDefault(o =>o.UserID==focusedID &&
+            //    o.年月 == Convert.ToString(((SchedulerControl)sender).SelectedInterval.Start.Year + "-" + ((SchedulerControl)sender).SelectedInterval.Start.Month.ToString().PadLeft(2,'0')));
+            ////if (((SchedulerControl)sender).SelectedAppointments.Count > 0 &&
+            ////    Convert.ToInt32(((SchedulerControl)sender).SelectedAppointments[0].CustomFields["WageStatus"]) == (int)WageStatus.Closed)
+            //if (wage != null && wage.状态 == (int)BillStatus.Audited)
+            //{
+            //    schedulerControl1.OptionsCustomization.AllowAppointmentConflicts = AppointmentConflictsMode.Forbidden;
+            //    schedulerControl1.OptionsCustomization.AllowAppointmentCopy = UsedAppointmentType.None;
+            //    schedulerControl1.OptionsCustomization.AllowAppointmentCreate = UsedAppointmentType.None;
+            //    schedulerControl1.OptionsCustomization.AllowAppointmentDelete = UsedAppointmentType.None;
+            //    schedulerControl1.OptionsCustomization.AllowAppointmentDrag = UsedAppointmentType.None;
+            //    schedulerControl1.OptionsCustomization.AllowAppointmentEdit = UsedAppointmentType.None;
+            //    picStatus.Visible = true;
+            //}
+            //else
+            //{
+            //    schedulerControl1.OptionsCustomization.AllowAppointmentConflicts = AppointmentConflictsMode.Allowed;
+            //    schedulerControl1.OptionsCustomization.AllowAppointmentCopy = UsedAppointmentType.All;
+            //    schedulerControl1.OptionsCustomization.AllowAppointmentCreate = UsedAppointmentType.All;
+            //    schedulerControl1.OptionsCustomization.AllowAppointmentDelete = UsedAppointmentType.All;
+            //    schedulerControl1.OptionsCustomization.AllowAppointmentDrag = UsedAppointmentType.All;
+            //    schedulerControl1.OptionsCustomization.AllowAppointmentEdit = UsedAppointmentType.All;
+            //    picStatus.Visible = false;
+            //}
         }
 
     }

@@ -11,7 +11,7 @@ using DevExpress.XtraEditors;
 using IBase;
 using Factory;
 using BLL;
-using DBML;
+using EDMX;
 using CommonLibrary;
 using Utility;
 using DevExpress.XtraGrid.Views.Grid;
@@ -20,11 +20,13 @@ using DevExpress.XtraGrid.Views.Grid.ViewInfo;
 using System.Data.Linq;
 using DevExpress.XtraGrid.Views.WinExplorer;
 using DevExpress.XtraGrid.Views.Layout;
+using Utility.Interceptor;
 
 namespace USL
 {
     public partial class BOMPage : DevExpress.XtraEditors.XtraUserControl, IItemDetail
     {
+        private static ClientFactory clientFactory = LoggerInterceptor.CreateProxy<ClientFactory>();
         Guid focused;
         //List<UsersInfo> focusedUsers;
         List<StaffSchClass> staffSchClassList;
@@ -80,22 +82,7 @@ namespace USL
         {
             throw new NotImplementedException();
         }
-
-
-        /// <summary>
-        /// 刷新查询界面
-        /// </summary>
-        void PageRefresh()
-        {
-            MainForm.dataSourceList[typeof(StaffSchClass)] = BLLFty.Create<StaffSchClassBLL>().GetStaffSchClass();
-            MainForm.dataSourceList[typeof(VStaffSchClass)] = BLLFty.Create<StaffSchClassBLL>().GetVStaffSchClass();
-            BindData(null);
-            if (MainForm.itemDetailList.ContainsKey(MainMenuConstants.StaffAttendance))
-            {
-                AttendanceSchedulingPage page = MainForm.itemDetailList[MainMenuConstants.StaffAttendance] as AttendanceSchedulingPage;
-                page.PageRefresh();
-            }
-        }
+        
 
         public bool Save()
         {
@@ -163,13 +150,13 @@ namespace USL
         private void layoutView_RowUpdated(object sender, DevExpress.XtraGrid.Views.Base.RowObjectEventArgs e)
         {
             Save();
-            MainForm.DataPageRefresh<BOM>();
+            clientFactory.DataPageRefresh<BOM>();
         }
 
         private void layoutView_RowDeleted(object sender, DevExpress.Data.RowDeletedEventArgs e)
         {
             Save();
-            MainForm.DataPageRefresh<BOM>();
+            clientFactory.DataPageRefresh<BOM>();
         }
 
         private void layoutView_CustomUnboundColumnData(object sender, DevExpress.XtraGrid.Views.Base.CustomColumnDataEventArgs e)

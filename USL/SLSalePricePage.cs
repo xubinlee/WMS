@@ -11,18 +11,20 @@ using DevExpress.XtraEditors;
 using IBase;
 using Factory;
 using BLL;
-using DBML;
+using EDMX;
 using CommonLibrary;
 using Utility;
 using DevExpress.XtraGrid.Views.Grid;
 using System.Collections;
 using DevExpress.XtraGrid.Views.Grid.ViewInfo;
 using System.Data.Linq;
+using Utility.Interceptor;
 
 namespace USL
 {
     public partial class SLSalePricePage : DevExpress.XtraEditors.XtraUserControl, IItemDetail
     {
+        private static ClientFactory clientFactory = LoggerInterceptor.CreateProxy<ClientFactory>();
         List<SLSalePrice> sLSalePriceList;
         List<SLSalePrice> SLSalePriceList;
         Guid focusedID;
@@ -50,23 +52,23 @@ namespace USL
 
         public void BindData(object obj)
         {
-            if (businessContactType == BusinessContactType.Customer)
-            {
-                //内销客户
-                vBusinessContactBindingSource.DataSource = ((List<VCompany>)MainForm.dataSourceList[typeof(VCompany)]).FindAll(o => o.客户类型 == (int)CustomerType.DomesticSales);
-                goodsBindingSource.DataSource = ((List<Goods>)MainForm.dataSourceList[typeof(Goods)]).FindAll(o => o.Type == (int)GoodsBigType.Goods);
-                dpCustomer.Text = "客户列表";
-                SetDtlHeader(true);
-            }
-            else
-            {
-                vBusinessContactBindingSource.DataSource = ((List<VSupplier>)MainForm.dataSourceList[typeof(VSupplier)]);
-                goodsBindingSource.DataSource = ((List<Goods>)MainForm.dataSourceList[typeof(Goods)]).FindAll(o => o.Type > 0);
-                dpCustomer.Text = "供应商列表";
-                SetDtlHeader(false);
-            }
-            sLSalePriceList = ((List<SLSalePrice>)MainForm.dataSourceList[typeof(SLSalePrice)]);
-            GetMoldAllotDataSource();
+            //if (businessContactType == BusinessContactType.Customer)
+            //{
+            //    //内销客户
+            //    vBusinessContactBindingSource.DataSource = ((List<VCompany>)MainForm.dataSourceList[typeof(VCompany)]).FindAll(o => o.客户类型 == (int)CustomerType.DomesticSales);
+            //    goodsBindingSource.DataSource = ((List<Goods>)MainForm.dataSourceList[typeof(Goods)]).FindAll(o => o.Type == (int)GoodsBigType.Goods);
+            //    dpCustomer.Text = "客户列表";
+            //    SetDtlHeader(true);
+            //}
+            //else
+            //{
+            //    vBusinessContactBindingSource.DataSource = ((List<VSupplier>)MainForm.dataSourceList[typeof(VSupplier)]);
+            //    goodsBindingSource.DataSource = ((List<Goods>)MainForm.dataSourceList[typeof(Goods)]).FindAll(o => o.Type > 0);
+            //    dpCustomer.Text = "供应商列表";
+            //    SetDtlHeader(false);
+            //}
+            //sLSalePriceList = ((List<SLSalePrice>)MainForm.dataSourceList[typeof(SLSalePrice)]);
+            //GetMoldAllotDataSource();
         }
 
         private void winExplorerView_FocusedRowChanged(object sender, DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventArgs e)
@@ -81,19 +83,19 @@ namespace USL
 
         void GetMoldAllotDataSource()
         {
-            if (winExplorerView.GetFocusedRowCellValue(colID) != null)
-            {
-                focusedID = new Guid(winExplorerView.GetFocusedRowCellValue(colID).ToString());
-                sLSalePriceList = ((List<SLSalePrice>)MainForm.dataSourceList[typeof(SLSalePrice)]);
-                if (sLSalePriceList != null)
-                {
-                    bOMBindingSource.DataSource = SLSalePriceList = sLSalePriceList.FindAll(o => o.ID == focusedID);
-                }
-                else
-                {
-                    bOMBindingSource.DataSource = SLSalePriceList = new List<SLSalePrice>();
-                }
-            }
+            //if (winExplorerView.GetFocusedRowCellValue(colID) != null)
+            //{
+            //    focusedID = new Guid(winExplorerView.GetFocusedRowCellValue(colID).ToString());
+            //    sLSalePriceList = ((List<SLSalePrice>)MainForm.dataSourceList[typeof(SLSalePrice)]);
+            //    if (sLSalePriceList != null)
+            //    {
+            //        bOMBindingSource.DataSource = SLSalePriceList = sLSalePriceList.FindAll(o => o.ID == focusedID);
+            //    }
+            //    else
+            //    {
+            //        bOMBindingSource.DataSource = SLSalePriceList = new List<SLSalePrice>();
+            //    }
+            //}
         }
 
         public void Add()
@@ -115,72 +117,73 @@ namespace USL
 
         public bool Save()
         {
-            try
-            {
-                this.Cursor = System.Windows.Forms.Cursors.WaitCursor;
-                Hashtable hasGoods = new Hashtable();
-                if (SLSalePriceList == null)
-                {
-                    CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), string.Format("请完整填写{0}", dpBOM.Text.Trim()));
-                    return false;
-                }
-                //foreach (MoldAllot item in supplierMoldAllotList)
-                //{
-                //    item.SupplierID = focusedID;
-                //}
-                List<SLSalePrice> oldList = BLLFty.Create<SLSalePriceBLL>().GetSLSalePrice();
-                for (int i = SLSalePriceList.Count - 1; i >= 0; i--)
-                {
-                    if (SLSalePriceList[i].GoodsID == Guid.Empty || SLSalePriceList[i].Price == 0)
-                    {
-                        SLSalePriceList.RemoveAt(i);
-                        continue;
-                    }
-                    if (hasGoods[SLSalePriceList[i].GoodsID] == null)
-                        hasGoods.Add(SLSalePriceList[i].GoodsID, SLSalePriceList[i]);
-                    else
-                    {
-                        CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "不能重复选择货品。");
-                        return false;
-                    }
-                    SLSalePriceList[i].ID = focusedID;
-                    SLSalePriceList[i].Type = (int)businessContactType;
-                    SLSalePrice slSalePrict= oldList.FirstOrDefault(o =>
-                  o.ID == SLSalePriceList[i].ID && o.GoodsID == SLSalePriceList[i].GoodsID);
-                    if (slSalePrict != null && slSalePrict.Price == SLSalePriceList[i].Price)
-                        SLSalePriceList[i].UpdateTime = slSalePrict.UpdateTime;
-                    else
-                        SLSalePriceList[i].UpdateTime = DateTime.Now;
-                    if (slSalePrict != null && slSalePrict.Discount == SLSalePriceList[i].Discount)
-                        SLSalePriceList[i].UpdateTime = slSalePrict.UpdateTime;
-                    else
-                        SLSalePriceList[i].UpdateTime = DateTime.Now;
-                    //if (SLSalePriceList[i].PCS == 0)
-                    //    SLSalePriceList[i].PCS = 1;
-                }
-                //添加
-                if (addNew)
-                {
-                    BLLFty.Create<SLSalePriceBLL>().Insert(SLSalePriceList);
-                }
-                else//修改
-                    BLLFty.Create<SLSalePriceBLL>().Update(focusedID, SLSalePriceList);
-                addNew = false;
-                //DataQueryPageRefresh();
-                MainForm.dataSourceList[typeof(SLSalePrice)] = BLLFty.Create<SLSalePriceBLL>().GetSLSalePrice();
-                BindData(null);
-                CommonServices.ErrorTrace.SetSuccessfullyInfo(this.FindForm(), "保存成功");
-                return true;
-            }
-            catch (Exception ex)
-            {
-                CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), ex.Message);
-                return false;
-            }
-            finally
-            {
-                this.Cursor = System.Windows.Forms.Cursors.Default;
-            }
+            throw new NotImplementedException();
+            //try
+            //{
+            //    this.Cursor = System.Windows.Forms.Cursors.WaitCursor;
+            //    Hashtable hasGoods = new Hashtable();
+            //    if (SLSalePriceList == null)
+            //    {
+            //        CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), string.Format("请完整填写{0}", dpBOM.Text.Trim()));
+            //        return false;
+            //    }
+            //    //foreach (MoldAllot item in supplierMoldAllotList)
+            //    //{
+            //    //    item.SupplierID = focusedID;
+            //    //}
+            //    List<SLSalePrice> oldList = BLLFty.Create<BaseBLL>().GetListBy<SLSalePrice>(null);
+            //    for (int i = SLSalePriceList.Count - 1; i >= 0; i--)
+            //    {
+            //        if (SLSalePriceList[i].GoodsID == Guid.Empty || SLSalePriceList[i].Price == 0)
+            //        {
+            //            SLSalePriceList.RemoveAt(i);
+            //            continue;
+            //        }
+            //        if (hasGoods[SLSalePriceList[i].GoodsID] == null)
+            //            hasGoods.Add(SLSalePriceList[i].GoodsID, SLSalePriceList[i]);
+            //        else
+            //        {
+            //            CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "不能重复选择货品。");
+            //            return false;
+            //        }
+            //        SLSalePriceList[i].ID = focusedID;
+            //        SLSalePriceList[i].Type = (int)businessContactType;
+            //        SLSalePrice slSalePrict= oldList.FirstOrDefault(o =>
+            //      o.ID == SLSalePriceList[i].ID && o.GoodsID == SLSalePriceList[i].GoodsID);
+            //        if (slSalePrict != null && slSalePrict.Price == SLSalePriceList[i].Price)
+            //            SLSalePriceList[i].UpdateTime = slSalePrict.UpdateTime;
+            //        else
+            //            SLSalePriceList[i].UpdateTime = DateTime.Now;
+            //        if (slSalePrict != null && slSalePrict.Discount == SLSalePriceList[i].Discount)
+            //            SLSalePriceList[i].UpdateTime = slSalePrict.UpdateTime;
+            //        else
+            //            SLSalePriceList[i].UpdateTime = DateTime.Now;
+            //        //if (SLSalePriceList[i].PCS == 0)
+            //        //    SLSalePriceList[i].PCS = 1;
+            //    }
+            //    //添加
+            //    if (addNew)
+            //    {
+            //        BLLFty.Create<BaseBLL>().AddByBulkCopy<SLSalePrice>(SLSalePriceList);
+            //    }
+            //    else//修改
+            //        BLLFty.Create<BaseBLL>().Update(focusedID, SLSalePriceList);
+            //    addNew = false;
+            //    //DataQueryPageRefresh();
+            //    MainForm.dataSourceList[typeof(SLSalePrice)] = BLLFty.Create<SLSalePriceBLL>().GetSLSalePrice();
+            //    BindData(null);
+            //    CommonServices.ErrorTrace.SetSuccessfullyInfo(this.FindForm(), "保存成功");
+            //    return true;
+            //}
+            //catch (Exception ex)
+            //{
+            //    CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), ex.Message);
+            //    return false;
+            //}
+            //finally
+            //{
+            //    this.Cursor = System.Windows.Forms.Cursors.Default;
+            ////}
         }
 
         public bool Audit()
@@ -234,35 +237,35 @@ namespace USL
 
         private void gridView_CustomUnboundColumnData(object sender, DevExpress.XtraGrid.Views.Base.CustomColumnDataEventArgs e)
         {
-            GridView view = sender as GridView;
-            List<SLSalePrice> list = ((BindingSource)view.DataSource).DataSource as List<SLSalePrice>;
-            if (e.IsGetData && list != null && list.Count > 0)
-            {
-                Goods goods = ((List<Goods>)MainForm.dataSourceList[typeof(Goods)]).Find(o => o.ID == list[e.ListSourceRowIndex].GoodsID);
-                if (goods != null)
-                {
-                    if (e.Column == colName)
-                        e.Value = goods.Name;
-                    if (e.Column == colPic)
-                        e.Value = goods.Pic;
-                    if (e.Column == colPackaging && goods.PackagingID != null && goods.PackagingID != Guid.Empty)
-                        e.Value = ((List<Packaging>)MainForm.dataSourceList[typeof(Packaging)]).Find(o => o.ID == goods.PackagingID).Name;
-                    if (e.Column == colMEAS)
-                        e.Value = goods.MEAS;
-                    if (e.Column == colSPEC)
-                        e.Value = goods.SPEC;
-                    if (e.Column == colUnit)
-                        e.Value = goods.Unit;
-                    if (e.Column == colRemark)
-                        e.Value = goods.Remark;
-                    if (e.Column == colUpdateTime)
-                    {
-                        SLSalePrice sl = list.FirstOrDefault(o => o.ID == focusedID && o.GoodsID == goods.ID);
-                        if (sl != null)
-                            e.Value = sl.UpdateTime;
-                    }
-                }
-            }
+            //GridView view = sender as GridView;
+            //List<SLSalePrice> list = ((BindingSource)view.DataSource).DataSource as List<SLSalePrice>;
+            //if (e.IsGetData && list != null && list.Count > 0)
+            //{
+            //    Goods goods = ((List<Goods>)MainForm.dataSourceList[typeof(Goods)]).Find(o => o.ID == list[e.ListSourceRowIndex].GoodsID);
+            //    if (goods != null)
+            //    {
+            //        if (e.Column == colName)
+            //            e.Value = goods.Name;
+            //        if (e.Column == colPic)
+            //            e.Value = goods.Pic;
+            //        if (e.Column == colPackaging && goods.PackagingID != null && goods.PackagingID != Guid.Empty)
+            //            e.Value = ((List<Packaging>)MainForm.dataSourceList[typeof(Packaging)]).Find(o => o.ID == goods.PackagingID).Name;
+            //        if (e.Column == colMEAS)
+            //            e.Value = goods.MEAS;
+            //        if (e.Column == colSPEC)
+            //            e.Value = goods.SPEC;
+            //        if (e.Column == colUnit)
+            //            e.Value = goods.Unit;
+            //        if (e.Column == colRemark)
+            //            e.Value = goods.Remark;
+            //        if (e.Column == colUpdateTime)
+            //        {
+            //            SLSalePrice sl = list.FirstOrDefault(o => o.ID == focusedID && o.GoodsID == goods.ID);
+            //            if (sl != null)
+            //                e.Value = sl.UpdateTime;
+            //        }
+            //    }
+            //}
         }
 
         private void gridView_MouseDown(object sender, MouseEventArgs e)
@@ -309,13 +312,13 @@ namespace USL
         private void gridView_RowUpdated(object sender, DevExpress.XtraGrid.Views.Base.RowObjectEventArgs e)
         {
             Save();
-            MainForm.DataPageRefresh<SLSalePrice>();
+            clientFactory.DataPageRefresh<SLSalePrice>();
         }
 
         private void gridView_RowDeleted(object sender, DevExpress.Data.RowDeletedEventArgs e)
         {
             Save();
-            MainForm.DataPageRefresh<SLSalePrice>();
+            clientFactory.DataPageRefresh<SLSalePrice>();
         }
     }
 }

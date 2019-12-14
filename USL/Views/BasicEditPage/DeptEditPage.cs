@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using DevExpress.XtraEditors;
 using IBase;
-using DBML;
+using EDMX;
 using Factory;
 using BLL;
 using CommonLibrary;
@@ -17,6 +17,7 @@ using Utility;
 using System.Collections;
 using System.Reflection;
 using static Utility.EnumHelper;
+using Utility.Interceptor;
 
 namespace USL
 {
@@ -40,7 +41,7 @@ namespace USL
 
         private void GetTypeList()
         {
-            List<Department> depts = (List<Department>)MainForm.dataSourceList[typeof(Department)];
+            List<Department> depts = BLLFty.Create<BaseBLL>().GetListBy<Department>(null);
             //门店类型
             List<string> list = depts.Select(o => o.Type).Distinct().ToList();
             if (list != null)
@@ -71,16 +72,16 @@ namespace USL
                     dept = obj;
                     dept.ID = Guid.NewGuid();
                     dept.AddTime = DateTime.Now;
-                    List<Department> deptList = (List<Department>)MainForm.dataSourceList[typeof(Department)];
+                    List<Department> deptList = BLLFty.Create<BaseBLL>().GetListBy<Department>(null);
                     if (deptList.Exists(o => o.Name == dept.Code))
                     {
                         XtraMessageBox.Show("该门店已经存在，不能重复添加。", "操作提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return false;
                     }
-                    BLLFty.Create<DepartmentBLL>().Insert(dept);
+                    BLLFty.Create<BaseBLL>().Add<Department>(dept);
                 }
                 else//修改
-                    BLLFty.Create<DepartmentBLL>().Update(obj);
+                    BLLFty.Create<BaseBLL>().Modify<Department>(obj);
                 //CommonServices.ErrorTrace.SetSuccessfullyInfo(this.FindForm(), "保存成功");
                 return true;
             }

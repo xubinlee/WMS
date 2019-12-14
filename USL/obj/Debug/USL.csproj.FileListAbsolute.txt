@@ -109,17 +109,11 @@ D:\Project\WMS\USL\obj\Debug\USL.MoldAllotPage.resources
 D:\Project\WMS\USL\obj\Debug\USL.BOMEditPage.resources
 D:\Project\WMS\USL\obj\Debug\USL.LoginForm.resources
 D:\Project\WMS\USL\obj\Debug\USL.TabbedGoodsPage.resources
-D:\Project\WMS\USL\obj\Debug\USL.PaymentBillPage.resources
 D:\Project\WMS\USL\obj\Debug\USL.PermissionSettingPage.resources
 D:\Project\WMS\USL\obj\Debug\USL.AttWageBillPage.resources
-D:\Project\WMS\USL\obj\Debug\USL.WageBillPage.resources
-D:\Project\WMS\USL\obj\Debug\USL.ReceiptBillPage.resources
-D:\Project\WMS\USL\obj\Debug\USL.StockInBillPage.resources
-D:\Project\WMS\USL\obj\Debug\USL.StockOutBillPage.resources
 D:\Project\WMS\USL\obj\Debug\USL.SupplierEditPage.resources
 D:\Project\WMS\USL\obj\Debug\USL.PackagingEditPage.resources
 D:\Project\WMS\USL\obj\Debug\USL.GoodsTypeEditPage.resources
-D:\Project\WMS\USL\obj\Debug\USL.OrderEditPage.resources
 D:\Project\WMS\USL\obj\Debug\USL.UsersEditPage.resources
 D:\Project\WMS\USL\obj\Debug\USL.CompanyEditPage.resources
 D:\Project\WMS\USL\obj\Debug\USL.DataEditForm.resources

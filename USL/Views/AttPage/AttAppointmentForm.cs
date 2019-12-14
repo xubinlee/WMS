@@ -23,7 +23,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using DevExpress.XtraScheduler;
-using DBML;
+using EDMX;
 using Utility;
 using DevExpress.XtraEditors.Controls;
 
@@ -91,13 +91,14 @@ namespace USL
         /// </summary>
         public override bool SaveFormData(DevExpress.XtraScheduler.Appointment appointment)
         {
-            SchClass sch = ((List<SchClass>)MainForm.dataSourceList[typeof(SchClass)]).FirstOrDefault(o => o.Name == edtShowTimeAs.Text);
-            if (sch != null)
-            {
-                appointment.CustomFields["SchClassID"] = sch.ID;
-                appointment.CustomFields["SchClassName"] = sch.Name;
-            }
-            return base.SaveFormData(appointment);
+            throw new NotImplementedException();
+            //SchClass sch = ((List<SchClass>)MainForm.dataSourceList[typeof(SchClass)]).FirstOrDefault(o => o.Name == edtShowTimeAs.Text);
+            //if (sch != null)
+            //{
+            //    appointment.CustomFields["SchClassID"] = sch.ID;
+            //    appointment.CustomFields["SchClassName"] = sch.Name;
+            //}
+            //return base.SaveFormData(appointment);
         }
         /// <summary>
         /// Add your code to notify that any custom field is changed. Return true if a custom field is changed, otherwise false.
@@ -130,13 +131,13 @@ namespace USL
 
         void SetSchTime(string schName)
         {
-            SchClass sch = ((List<SchClass>)MainForm.dataSourceList[typeof(SchClass)]).FirstOrDefault(o =>
-                o.Name == schName);
-            if (sch != null)
-            {
-                seSchStartTime.EditValue = sch.StartTime;
-                seSchEndTime.EditValue = sch.EndTime;
-            }
+            //SchClass sch = ((List<SchClass>)MainForm.dataSourceList[typeof(SchClass)]).FirstOrDefault(o =>
+            //    o.Name == schName);
+            //if (sch != null)
+            //{
+            //    seSchStartTime.EditValue = sch.StartTime;
+            //    seSchEndTime.EditValue = sch.EndTime;
+            //}
         }
 
         private void icboAttStatus_EditValueChanged(object sender, EventArgs e)

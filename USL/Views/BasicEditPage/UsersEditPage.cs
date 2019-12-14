@@ -9,13 +9,16 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using DevExpress.XtraEditors;
 using IBase;
-using DBML;
+using EDMX;
 using Factory;
 using BLL;
 using Utility;
 using System.Data.Linq;
 using CommonLibrary;
 using System.Collections;
+using Utility.Interceptor;
+using MainMenu = EDMX.MainMenu;
+using System.Linq.Expressions;
 
 namespace USL
 {
@@ -43,7 +46,7 @@ namespace USL
                 lciSchClassWage.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Never;
                 lciTimeWage.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Never;
             }
-            types =MainForm.GetData<TypesList>();
+            types = BLLFty.Create<BaseBLL>().GetListByNoTracking<TypesList>(null);
             typesListBindingSource.DataSource = types.FindAll(o => o.Type == TypesListConstants.PrivilegeType);
             wageTypeBindingSource.DataSource = types.FindAll(o => o.Type == TypesListConstants.WageType);
             if (obj == null)
@@ -61,7 +64,7 @@ namespace USL
 
         public void BindData()
         {
-            departmentBindingSource.DataSource = MainForm.GetData<Department>();
+            departmentBindingSource.DataSource = BLLFty.Create<BaseBLL>().GetListBy<Department>(null);
         }
 
         public void Add()
@@ -79,19 +82,21 @@ namespace USL
                     obj.Photo = null;
                 else
                 {
-                    if (pePhoto.EditValue is Binary)
-                        obj.Photo = (Binary)pePhoto.EditValue;
+                    if (pePhoto.EditValue is byte[])
+                        obj.Photo = (byte[])pePhoto.EditValue;
                     else
                         obj.Photo = ImageHelper.MakeBuff((Image)pePhoto.EditValue);
                 }
-                if (BLLFty.Create<UsersInfoBLL>().IsExistAttCardnumber(obj))
+                Expression<Func<UsersInfo, bool>> whereLambda = o => o.ID != obj.ID && o.AttCardnumber.Equals(obj.AttCardnumber) && o.IsDel == false;
+                List<UsersInfo> users = BLLFty.Create<BaseBLL>().GetListByNoTracking<UsersInfo>(whereLambda);
+                if (string.IsNullOrEmpty(obj.AttCardnumber.Trim()) && users.Count > 0)
                 {
                     XtraMessageBox.Show(string.Format("考勤卡号：{0}已经存在，不允许添加重复考勤卡号。", obj.AttCardnumber), "操作提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return false;
                 }
                 //添加
                 //if (user == null)
-                if (user.ID==null || user.ID==Guid.Empty)
+                if (user.ID == null || user.ID == Guid.Empty)
                 {
                     //user = obj;
                     user.ID = Guid.NewGuid();
@@ -99,8 +104,7 @@ namespace USL
                     //添加功能权限信息
                     List<Permission> pList = new List<Permission>();
                     List<ButtonPermission> btnList = new List<ButtonPermission>();
-                    List<DBML.MainMenu> menuList = MainForm.GetData<DBML.MainMenu>();                    
-                    foreach (DBML.MainMenu menu in menuList)
+                    foreach (MainMenu menu in MainForm.AllMainMenuList)
                     {
                         Permission p = new Permission();
                         p.ID = menu.SerialNo;
@@ -128,7 +132,7 @@ namespace USL
                     BLLFty.Create<UsersInfoBLL>().Insert(user, pList, btnList);
                 }
                 else
-                    BLLFty.Create<UsersInfoBLL>().Update(obj);
+                    BLLFty.Create<BaseBLL>().Modify<UsersInfo>(obj);
                 //CommonServices.ErrorTrace.SetSuccessfullyInfo(this.FindForm(), "保存成功");
                 return true;
             }

@@ -30,6 +30,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Linq" />
@@ -40,47 +41,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AlertBLL.cs" />
-    <Compile Include="AttAppointmentsBLL.cs" />
-    <Compile Include="StaffSchClassBLL.cs" />
-    <Compile Include="SchClassBLL.cs" />
-    <Compile Include="BOMBLL.cs" />
-    <Compile Include="CompanyBLL.cs" />
-    <Compile Include="AppointmentsBLL.cs" />
-    <Compile Include="AttGeneralLogBLL.cs" />
-    <Compile Include="AttWageBillBLL.cs" />
-    <Compile Include="SystemInfoBLL.cs" />
-    <Compile Include="WageBillBLL.cs" />
-    <Compile Include="SLSalePriceBLL.cs" />
-    <Compile Include="DataSourcesBLL.cs" />
-    <Compile Include="DepartmentBLL.cs" />
-    <Compile Include="GoodsBLL.cs" />
-    <Compile Include="GoodsTypeBLL.cs" />
+    <Compile Include="BaseBLL.cs" />
     <Compile Include="InventoryBLL.cs" />
-    <Compile Include="MainMenuBLL.cs" />
-    <Compile Include="MoldAllotBLL.cs" />
-    <Compile Include="OrderBLL.cs" />
-    <Compile Include="PackagingBLL.cs" />
-    <Compile Include="PaymentBillBLL.cs" />
     <Compile Include="PermissionBLL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReceiptBillBLL.cs" />
-    <Compile Include="ReportBLL.cs" />
-    <Compile Include="StockInBillBLL.cs" />
-    <Compile Include="StockOutBillBLL.cs" />
-    <Compile Include="SupplierBLL.cs" />
-    <Compile Include="TypesListBLL.cs" />
     <Compile Include="UsersInfoBLL.cs" />
-    <Compile Include="WarehouseBLL.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DAL\DAL.csproj">
       <Project>{827ad114-afae-4bfc-8319-59a3a9e7da5c}</Project>
       <Name>DAL</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DBML\DBML.csproj">
-      <Project>{12d0e7f3-e5ff-45c6-be29-13f7e7569bb3}</Project>
-      <Name>DBML</Name>
+    <ProjectReference Include="..\EDMX\EDMX.csproj">
+      <Project>{B1AA6433-39A7-47FE-A404-1BCD2CBDD6E9}</Project>
+      <Name>EDMX</Name>
     </ProjectReference>
     <ProjectReference Include="..\Factory\Factory.csproj">
       <Project>{0943627b-01fe-40cd-ad12-72c5287621dd}</Project>

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.902
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBML", "DBML\DBML.csproj", "{12D0E7F3-E5FF-45C6-BE29-13F7E7569BB3}"
 EndProject
@@ -20,6 +20,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonLibrary", "CommonLibrary\CommonLibrary.csproj", "{4220D821-1E36-453E-88F7-0C932372FCEE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomComponent", "CustomComponent\CustomComponent.csproj", "{DF90DCBB-5E18-4918-BAE5-5551C1897DA2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EDMX", "EDMX\EDMX.csproj", "{B1AA6433-39A7-47FE-A404-1BCD2CBDD6E9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,8 +65,15 @@ Global
 		{DF90DCBB-5E18-4918-BAE5-5551C1897DA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF90DCBB-5E18-4918-BAE5-5551C1897DA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DF90DCBB-5E18-4918-BAE5-5551C1897DA2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1AA6433-39A7-47FE-A404-1BCD2CBDD6E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1AA6433-39A7-47FE-A404-1BCD2CBDD6E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1AA6433-39A7-47FE-A404-1BCD2CBDD6E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1AA6433-39A7-47FE-A404-1BCD2CBDD6E9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A491A31D-3BA4-4EBC-B7C6-70F5FC650A13}
 	EndGlobalSection
 EndGlobal

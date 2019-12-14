@@ -225,11 +225,11 @@
             // 
             // supplierBindingSource
             // 
-            this.supplierBindingSource.DataSource = typeof(DBML.Supplier);
+            this.supplierBindingSource.DataSource = typeof(EDMX.Supplier);
             // 
             // typesListBindingSource
             // 
-            this.typesListBindingSource.DataSource = typeof(DBML.TypesList);
+            this.typesListBindingSource.DataSource = typeof(EDMX.TypesList);
             // 
             // txtQQ
             // 

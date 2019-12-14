@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DevExpress.XtraEditors;
 using System.Collections;
-using DBML;
+using EDMX;
 using DevExpress.XtraGrid.Views.Grid.ViewInfo;
 using IBase;
 using Utility;
@@ -27,11 +27,13 @@ using System.Reflection;
 using static Utility.EnumHelper;
 using DevExpress.Utils;
 using System.Threading;
+using Utility.Interceptor;
 
 namespace USL
 {
     public partial class DataQueryPage : DevExpress.XtraEditors.XtraUserControl, IItemDetail, IExtensions
     {
+        private static ClientFactory clientFactory = LoggerInterceptor.CreateProxy<ClientFactory>();
         public MainMenu mainMenu;
         IList dataSource;
         Object currentObj = null;
@@ -39,7 +41,7 @@ namespace USL
         Dictionary<String, int> itemDetailButtonList; //子菜单按钮项
         //Dictionary<String, ItemDetailPage> itemDetailPageList;
         WindowsUIView view = null;
-        List<VUsersInfo> displayUsers;
+        //List<VUsersInfo> displayUsers;
         List<TypesList> types;   //类型列表
         List<Warehouse> warehouseList;
 
@@ -55,8 +57,8 @@ namespace USL
             mainMenu = menu;
             dataSource = list;
             //itemDetailPageList = new Dictionary<string, ItemDetailPage>();
-            types = (List<TypesList>)MainForm.dataSourceList[typeof(TypesList)];
-            warehouseList = (List<Warehouse>)MainForm.dataSourceList[typeof(Warehouse)];
+            types = BLLFty.Create<BaseBLL>().GetListByNoTracking<TypesList>(null);
+            warehouseList = BLLFty.Create<BaseBLL>().GetListByNoTracking<Warehouse>(null); 
             // 盘点差异表/未上架商品确认单可编辑
             if (menu.Name.Equals(MainMenuConstants.ProfitAndLoss) ||
                 menu.Name.Equals(MainMenuConstants.UnlistedGoods)) {
@@ -92,7 +94,7 @@ namespace USL
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            displayUsers = BLLFty.Create<UsersInfoBLL>().GetVUsersInfo();
+            //displayUsers = BLLFty.Create<UsersInfoBLL>().GetVUsersInfo();
             GetItemDetailPage();
             BindData(dataSource);
             //SetGridSummaryItem();
@@ -208,61 +210,61 @@ namespace USL
                         MainForm.hasItemDetailPage.Add(mainMenu.Name.Replace("Query", ""), true);
                     }
                     //切换到对应的单据界面并传递数据
-                    if (mainMenu.Name.ToUpper().Contains("BILLQUERY"))
-                    {
-                        if (mainMenu.Name.ToUpper().Contains("STOCKOUT") || mainMenu.Name == MainMenuConstants.GetMaterialBillQuery
-                            || mainMenu.Name == MainMenuConstants.FSMDPReturnBillQuery || mainMenu.Name == MainMenuConstants.EMSDPReturnBillQuery)
-                        {
-                            StockOutBillPage page = MainForm.itemDetailPageList[mainMenu.Name.Replace("Query", "")].itemDetail as StockOutBillPage;
-                            if (mainMenu.Name == MainMenuConstants.FGStockOutBillQuery)
-                                page.BindData(((VStockOutBill)currentObj).HdID);
-                            else
-                                page.BindData(((VMaterialStockOutBill)currentObj).HdID);
-                        }
-                        else if (mainMenu.Name.ToUpper().Contains("STOCKIN") || mainMenu.Name.ToUpper().Contains("ReturnBill".ToUpper()) || mainMenu.Name == MainMenuConstants.ReturnedMaterialBillQuery)
-                        {
-                            StockInBillPage page = MainForm.itemDetailPageList[mainMenu.Name.Replace("Query", "")].itemDetail as StockInBillPage;
-                            if (mainMenu.Name == MainMenuConstants.ProductionStockInBillQuery || mainMenu.Name == MainMenuConstants.SalesReturnBillQuery)
-                                page.BindData(((VStockInBill)currentObj).HdID);
-                            else
-                                page.BindData(((VMaterialStockInBill)currentObj).HdID);
-                        }
-                        else if (mainMenu.Name == MainMenuConstants.ReceiptBillQuery)
-                        {
-                            ReceiptBillPage page = MainForm.itemDetailPageList[mainMenu.Name.Replace("Query", "")].itemDetail as ReceiptBillPage;
-                            page.BindData(((VReceiptBill)currentObj).HdID);
-                        }
-                        else if (mainMenu.Name == MainMenuConstants.PaymentBillQuery)
-                        {
-                            PaymentBillPage page = MainForm.itemDetailPageList[mainMenu.Name.Replace("Query", "")].itemDetail as PaymentBillPage;
-                            page.BindData(((VPaymentBill)currentObj).HdID);
-                        }
-                        else if (mainMenu.Name == MainMenuConstants.WageBillQuery)
-                        {
-                            WageBillPage page = MainForm.itemDetailPageList[mainMenu.Name.Replace("Query", "")].itemDetail as WageBillPage;
-                            page.BindData(((VWageBill)currentObj).HdID);
-                        }
-                        else if (mainMenu.Name == MainMenuConstants.AttWageBillQuery)
-                        {
-                            AttWageBillPage page = MainForm.itemDetailPageList[mainMenu.Name.Replace("Query", "")].itemDetail as AttWageBillPage;
-                            page.BindData(((VAttWageBill)currentObj).HdID);
-                        }
-                    }
-                    else if (mainMenu.Name == MainMenuConstants.OrderQuery)
-                    {
-                        OrderEditPage page = MainForm.itemDetailPageList[MainMenuConstants.Order].itemDetail as OrderEditPage;
-                        page.BindData(((VOrder)currentObj).HdID);
-                    }
-                    else if (mainMenu.Name == MainMenuConstants.FSMOrderQuery)
-                    {
-                        OrderEditPage page = MainForm.itemDetailPageList[MainMenuConstants.FSMOrder].itemDetail as OrderEditPage;
-                        page.BindData(((VFSMOrder)currentObj).HdID);
-                    }
-                    else if (mainMenu.Name == MainMenuConstants.ProductionOrderQuery)
-                    {
-                        OrderEditPage page = MainForm.itemDetailPageList[MainMenuConstants.ProductionOrder].itemDetail as OrderEditPage;
-                        page.BindData(((VProductionOrder)currentObj).HdID);
-                    }
+                    //if (mainMenu.Name.ToUpper().Contains("BILLQUERY"))
+                    //{
+                    //    if (mainMenu.Name.ToUpper().Contains("STOCKOUT") || mainMenu.Name == MainMenuConstants.GetMaterialBillQuery
+                    //        || mainMenu.Name == MainMenuConstants.FSMDPReturnBillQuery || mainMenu.Name == MainMenuConstants.EMSDPReturnBillQuery)
+                    //    {
+                    //        StockOutBillPage page = MainForm.itemDetailPageList[mainMenu.Name.Replace("Query", "")].itemDetail as StockOutBillPage;
+                    //        if (mainMenu.Name == MainMenuConstants.FGStockOutBillQuery)
+                    //            page.BindData(((VStockOutBill)currentObj).HdID);
+                    //        else
+                    //            page.BindData(((VMaterialStockOutBill)currentObj).HdID);
+                    //    }
+                    //    else if (mainMenu.Name.ToUpper().Contains("STOCKIN") || mainMenu.Name.ToUpper().Contains("ReturnBill".ToUpper()) || mainMenu.Name == MainMenuConstants.ReturnedMaterialBillQuery)
+                    //    {
+                    //        StockInBillPage page = MainForm.itemDetailPageList[mainMenu.Name.Replace("Query", "")].itemDetail as StockInBillPage;
+                    //        if (mainMenu.Name == MainMenuConstants.ProductionStockInBillQuery || mainMenu.Name == MainMenuConstants.SalesReturnBillQuery)
+                    //            page.BindData(((VStockInBill)currentObj).HdID);
+                    //        else
+                    //            page.BindData(((VMaterialStockInBill)currentObj).HdID);
+                    //    }
+                    //    else if (mainMenu.Name == MainMenuConstants.ReceiptBillQuery)
+                    //    {
+                    //        ReceiptBillPage page = MainForm.itemDetailPageList[mainMenu.Name.Replace("Query", "")].itemDetail as ReceiptBillPage;
+                    //        page.BindData(((VReceiptBill)currentObj).HdID);
+                    //    }
+                    //    else if (mainMenu.Name == MainMenuConstants.PaymentBillQuery)
+                    //    {
+                    //        PaymentBillPage page = MainForm.itemDetailPageList[mainMenu.Name.Replace("Query", "")].itemDetail as PaymentBillPage;
+                    //        page.BindData(((VPaymentBill)currentObj).HdID);
+                    //    }
+                    //    else if (mainMenu.Name == MainMenuConstants.WageBillQuery)
+                    //    {
+                    //        WageBillPage page = MainForm.itemDetailPageList[mainMenu.Name.Replace("Query", "")].itemDetail as WageBillPage;
+                    //        page.BindData(((VWageBill)currentObj).HdID);
+                    //    }
+                    //    else if (mainMenu.Name == MainMenuConstants.AttWageBillQuery)
+                    //    {
+                    //        AttWageBillPage page = MainForm.itemDetailPageList[mainMenu.Name.Replace("Query", "")].itemDetail as AttWageBillPage;
+                    //        page.BindData(((VAttWageBill)currentObj).HdID);
+                    //    }
+                    //}
+                    //else if (mainMenu.Name == MainMenuConstants.OrderQuery)
+                    //{
+                    //    OrderEditPage page = MainForm.itemDetailPageList[MainMenuConstants.Order].itemDetail as OrderEditPage;
+                    //    page.BindData(((VOrder)currentObj).HdID);
+                    //}
+                    //else if (mainMenu.Name == MainMenuConstants.FSMOrderQuery)
+                    //{
+                    //    OrderEditPage page = MainForm.itemDetailPageList[MainMenuConstants.FSMOrder].itemDetail as OrderEditPage;
+                    //    page.BindData(((VFSMOrder)currentObj).HdID);
+                    //}
+                    //else if (mainMenu.Name == MainMenuConstants.ProductionOrderQuery)
+                    //{
+                    //    OrderEditPage page = MainForm.itemDetailPageList[MainMenuConstants.ProductionOrder].itemDetail as OrderEditPage;
+                    //    page.BindData(((VProductionOrder)currentObj).HdID);
+                    //}
                     else
                         return MainForm.mainMenuList[mainMenu.Name.Replace("Query", "")];
 
@@ -353,7 +355,7 @@ namespace USL
                     currentObj = gridView.GetRow(gridView.FocusedRowHandle);
                     if (mainMenu.ParentID == new Guid("7ea0e093-592a-420c-9a7f-8316f88c35e2"))//基础资料
                     {
-                        IList goodsList = null;
+                        //IList goodsList = null;
                         if (mainMenu.Name == MainMenuConstants.Material)
                         {
                             MainForm.GoodsBigType = types.Find(o =>
@@ -362,11 +364,11 @@ namespace USL
                         int focusRow = gridView.FocusedRowHandle;
                         DataEditForm form = new DataEditForm(mainMenu, currentObj, pageGroupCore);
                         form.ShowDialog();
-                        if (mainMenu.Name == MainMenuConstants.Material)
-                        {
-                            goodsList = ((List<VMaterial>)MainForm.dataSourceList[typeof(VMaterial)]).FindAll(o => o.Type == MainForm.GoodsBigType);
-                            BindData(goodsList);
-                        }
+                        //if (mainMenu.Name == MainMenuConstants.Material)
+                        //{
+                        //    goodsList = clientFactory.GetData<VMaterial>().FindAll(o => o.Type == MainForm.GoodsBigType);
+                        //    BindData(goodsList);
+                        //}
                         //刷新数据
                         //itemDetailPage.DataQueryPageRefresh();
                         gridView.FocusedRowHandle = focusRow;
@@ -379,36 +381,36 @@ namespace USL
                         else
                             MainForm.itemDetailPageList[mainMenu.Name.Replace("Query", "")].setNavButtonStatus(menu, ButtonType.btnAudit);
                     }
-                    else if (mainMenu.Name == MainMenuConstants.AlertQuery)
-                    {
-                        VAlert obj = currentObj as VAlert;
-                        MainMenu menu = null;
-                        if (obj.BillID != null)
-                        {
-                            if (obj.内容.Contains("DH"))
-                            {
-                                menu = MainForm.mainMenuList[MainMenuConstants.Order];
-                                MainForm.SetSelected(pageGroupCore, menu);
-                                OrderEditPage page = MainForm.itemDetailPageList[MainMenuConstants.Order].itemDetail as OrderEditPage;
-                                page.BindData(obj.BillID.Value);
-                            }
-                            else if (obj.内容.Contains("CK"))
-                            {
-                                menu = MainForm.mainMenuList[MainMenuConstants.FGStockOutBill];
-                                MainForm.SetSelected(pageGroupCore, menu);
-                                StockOutBillPage page = MainForm.itemDetailPageList[MainMenuConstants.FGStockOutBill].itemDetail as StockOutBillPage;
-                                page.BindData(obj.BillID.Value);
-                            }
-                        }
-                    }
-                    else if (mainMenu.Name == MainMenuConstants.SampleStockOutReport)
-                    {
-                        VSampleStockOut obj = currentObj as VSampleStockOut;
-                        MainMenu menu = MainForm.mainMenuList[MainMenuConstants.FGStockOutBill];
-                        MainForm.SetSelected(pageGroupCore, menu);
-                        StockOutBillPage page = MainForm.itemDetailPageList[MainMenuConstants.FGStockOutBill].itemDetail as StockOutBillPage;
-                        page.BindData(obj.HdID);
-                    }
+                    //else if (mainMenu.Name == MainMenuConstants.AlertQuery)
+                    //{
+                    //    VAlert obj = currentObj as VAlert;
+                    //    MainMenu menu = null;
+                    //    if (obj.BillID != null)
+                    //    {
+                    //        if (obj.内容.Contains("DH"))
+                    //        {
+                    //            menu = MainForm.mainMenuList[MainMenuConstants.Order];
+                    //            MainForm.SetSelected(pageGroupCore, menu);
+                    //            OrderEditPage page = MainForm.itemDetailPageList[MainMenuConstants.Order].itemDetail as OrderEditPage;
+                    //            page.BindData(obj.BillID.Value);
+                    //        }
+                    //        else if (obj.内容.Contains("CK"))
+                    //        {
+                    //            menu = MainForm.mainMenuList[MainMenuConstants.FGStockOutBill];
+                    //            MainForm.SetSelected(pageGroupCore, menu);
+                    //            StockOutBillPage page = MainForm.itemDetailPageList[MainMenuConstants.FGStockOutBill].itemDetail as StockOutBillPage;
+                    //            page.BindData(obj.BillID.Value);
+                    //        }
+                    //    }
+                    //}
+                    //else if (mainMenu.Name == MainMenuConstants.SampleStockOutReport)
+                    //{
+                    //    VSampleStockOut obj = currentObj as VSampleStockOut;
+                    //    MainMenu menu = MainForm.mainMenuList[MainMenuConstants.FGStockOutBill];
+                    //    MainForm.SetSelected(pageGroupCore, menu);
+                    //    StockOutBillPage page = MainForm.itemDetailPageList[MainMenuConstants.FGStockOutBill].itemDetail as StockOutBillPage;
+                    //    page.BindData(obj.HdID);
+                    //}
                 }
             }
             catch (Exception ex)
@@ -455,36 +457,39 @@ namespace USL
                         case MainMenuConstants.Department:
                             Department dept = currentObj as Department;
                             dept.IsDel = !dept.IsDel;
-                            BLLFty.Create<DepartmentBLL>().Update(dept);
+                            BLLFty.Create<BaseBLL>().Modify<Department>(dept);
                             break;
-                        case MainMenuConstants.Company:
-                            BLLFty.Create<CompanyBLL>().Delete(((VCompany)currentObj).ID);
-                            break;
-                        case MainMenuConstants.Supplier:
-                            BLLFty.Create<SupplierBLL>().Delete(((VSupplier)currentObj).ID);
-                            break;
+                        //case MainMenuConstants.Company:
+                        //    BLLFty.Create<CompanyBLL>().Delete(((VCompany)currentObj).ID);
+                        //    break;
+                        //case MainMenuConstants.Supplier:
+                        //    BLLFty.Create<SupplierBLL>().Delete(((VSupplier)currentObj).ID);
+                        //    break;
                         case MainMenuConstants.UsersInfo:
                             UsersInfo obj = currentObj as UsersInfo;
                             obj.IsDel = !obj.IsDel;
-                            BLLFty.Create<UsersInfoBLL>().Update(obj);
+                            BLLFty.Create<BaseBLL>().Modify<UsersInfo>(obj);
                             break;
                         case MainMenuConstants.Goods:
                             Goods goods = currentObj as Goods;
                             goods.IsDel = !goods.IsDel;
-                            BLLFty.Create<GoodsBLL>().Update(goods);
+                            BLLFty.Create<BaseBLL>().Modify<Goods>(goods);
                             break;
-                        case MainMenuConstants.Material:
-                            BLLFty.Create<GoodsBLL>().Delete(((VMaterial)currentObj).ID);
-                            break;
-                        case MainMenuConstants.GoodsType:
-                            BLLFty.Create<GoodsTypeBLL>().Delete(((VGoodsType)currentObj).ID);
-                            break;
-                        case MainMenuConstants.Packaging:
-                            BLLFty.Create<PackagingBLL>().Delete(((VPackaging)currentObj).ID);
+                        //case MainMenuConstants.Material:
+                        //    BLLFty.Create<GoodsBLL>().Delete(((VMaterial)currentObj).ID);
+                        //    break;
+                        //case MainMenuConstants.GoodsType:
+                        //    BLLFty.Create<GoodsTypeBLL>().Delete(((VGoodsType)currentObj).ID);
+                        //    break;
+                        //case MainMenuConstants.Packaging:
+                        //    BLLFty.Create<PackagingBLL>().Delete(((VPackaging)currentObj).ID);
+                        //    break;
+                        case MainMenuConstants.Inventory:
+                            BLLFty.Create<BaseBLL>().DeleteByBulk<Inventory>(null);
                             break;
                     }
                     //gridView.DeleteSelectedRows();
-                    MainForm.DataPageRefresh(mainMenu.Name, string.Empty);
+                    clientFactory.DataPageRefresh(mainMenu.Name, string.Empty);
                     CommonServices.ErrorTrace.SetSuccessfullyInfo(this.FindForm(), "删除成功");
                     //BillEditPageRefresh();
                     //itemDetailPageList[mainMenu.Name].DataPageRefresh();
@@ -518,152 +523,152 @@ namespace USL
 
                         #region PrintData
 
-                        if (MainForm.itemDetailList.ContainsKey(mainMenu.Name.Replace("Query", "").Trim()))
-                        {
-                            if (currentObj is VStockInBill)
-                            {
-                                VStockInBill bill = currentObj as VStockInBill;
-                                StockInBillPage page = MainForm.itemDetailList[mainMenu.Name.Replace("Query", "").Trim()] as StockInBillPage;
-                                page.BindData(bill.HdID);
-                                System.Windows.Forms.DialogResult result = XtraMessageBox.Show(string.Format("确定要{0}审核单据:{1}吗?", bill.状态 == 1 ? "取消" : "", bill.入库单号), "操作提示",
-                        System.Windows.Forms.MessageBoxButtons.OKCancel, System.Windows.Forms.MessageBoxIcon.Question, System.Windows.Forms.MessageBoxDefaultButton.Button2);
-                                if (result == System.Windows.Forms.DialogResult.OK)
-                                {
-                                    page.Hd = BLLFty.Create<StockInBillBLL>().GetStockInBillHd(bill.HdID);
-                                    return page.Audit();
-                                }
-                            }
-                            else if (currentObj is VMaterialStockInBill)
-                            {
-                                VMaterialStockInBill bill = currentObj as VMaterialStockInBill;
-                                StockInBillPage page = MainForm.itemDetailList[mainMenu.Name.Replace("Query", "").Trim()] as StockInBillPage;
-                                page.BindData(bill.HdID);
-                                System.Windows.Forms.DialogResult result = XtraMessageBox.Show(string.Format("确定要{0}审核单据:{1}吗?", bill.状态 == 1 ? "取消" : "", bill.入库单号), "操作提示",
-                        System.Windows.Forms.MessageBoxButtons.OKCancel, System.Windows.Forms.MessageBoxIcon.Question, System.Windows.Forms.MessageBoxDefaultButton.Button2);
-                                if (result == System.Windows.Forms.DialogResult.OK)
-                                {
-                                    page.Hd = BLLFty.Create<StockInBillBLL>().GetStockInBillHd(bill.HdID);
-                                    return page.Audit();
-                                }
-                            }
-                            else if (currentObj is VStockOutBill)
-                            {
-                                VStockOutBill bill = currentObj as VStockOutBill;
-                                StockOutBillPage page = MainForm.itemDetailList[mainMenu.Name.Replace("Query", "").Trim()] as StockOutBillPage;
-                                page.BindData(bill.HdID);
-                                System.Windows.Forms.DialogResult result = XtraMessageBox.Show(string.Format("确定要{0}审核单据:{1}吗?", bill.状态 == 1 ? "取消" : "", bill.出库单号), "操作提示",
-                        System.Windows.Forms.MessageBoxButtons.OKCancel, System.Windows.Forms.MessageBoxIcon.Question, System.Windows.Forms.MessageBoxDefaultButton.Button2);
-                                if (result == System.Windows.Forms.DialogResult.OK)
-                                {
-                                    page.Hd = BLLFty.Create<StockOutBillBLL>().GetStockOutBillHd(bill.HdID);
-                                    return page.Audit();
-                                }
-                            }
-                            else if (currentObj is VMaterialStockOutBill)
-                            {
-                                VMaterialStockOutBill bill = currentObj as VMaterialStockOutBill;
-                                StockOutBillPage page = MainForm.itemDetailList[mainMenu.Name.Replace("Query", "").Trim()] as StockOutBillPage;
-                                page.BindData(bill.HdID);
-                                System.Windows.Forms.DialogResult result = XtraMessageBox.Show(string.Format("确定要{0}审核单据:{1}吗?", bill.状态 == 1 ? "取消" : "", bill.出库单号), "操作提示",
-                        System.Windows.Forms.MessageBoxButtons.OKCancel, System.Windows.Forms.MessageBoxIcon.Question, System.Windows.Forms.MessageBoxDefaultButton.Button2);
-                                if (result == System.Windows.Forms.DialogResult.OK)
-                                {
-                                    page.Hd = BLLFty.Create<StockOutBillBLL>().GetStockOutBillHd(bill.HdID);
-                                    return page.Audit();
-                                }
-                            }
-                            else if (currentObj is VOrder)
-                            {
-                                VOrder bill = currentObj as VOrder;
-                                OrderEditPage page = MainForm.itemDetailList[mainMenu.Name.Replace("Query", "").Trim()] as OrderEditPage;
-                                page.BindData(bill.HdID);
-                                System.Windows.Forms.DialogResult result = XtraMessageBox.Show(string.Format("确定要{0}审核单据:{1}吗?", bill.状态 == 1 ? "取消" : "", bill.订货单号), "操作提示",
-                        System.Windows.Forms.MessageBoxButtons.OKCancel, System.Windows.Forms.MessageBoxIcon.Question, System.Windows.Forms.MessageBoxDefaultButton.Button2);
-                                if (result == System.Windows.Forms.DialogResult.OK)
-                                {
-                                    page.Hd = BLLFty.Create<OrderBLL>().GetOrderHd(bill.HdID);
-                                    return page.Audit();
-                                }
-                            }
-                            else if (currentObj is VFSMOrder)
-                            {
-                                VFSMOrder bill = currentObj as VFSMOrder;
-                                OrderEditPage page = MainForm.itemDetailList[mainMenu.Name.Replace("Query", "").Trim()] as OrderEditPage;
-                                page.BindData(bill.HdID);
-                                System.Windows.Forms.DialogResult result = XtraMessageBox.Show(string.Format("确定要{0}审核单据:{1}吗?", bill.状态 == 1 ? "取消" : "", bill.订货单号), "操作提示",
-                        System.Windows.Forms.MessageBoxButtons.OKCancel, System.Windows.Forms.MessageBoxIcon.Question, System.Windows.Forms.MessageBoxDefaultButton.Button2);
-                                if (result == System.Windows.Forms.DialogResult.OK)
-                                {
-                                    page.Hd = BLLFty.Create<OrderBLL>().GetOrderHd(bill.HdID);
-                                    return page.Audit();
-                                }
-                            }
-                            else if (currentObj is VProductionOrder)
-                            {
-                                VProductionOrder bill = currentObj as VProductionOrder;
-                                OrderEditPage page = MainForm.itemDetailList[mainMenu.Name.Replace("Query", "").Trim()] as OrderEditPage;
-                                page.BindData(bill.HdID);
-                                System.Windows.Forms.DialogResult result = XtraMessageBox.Show(string.Format("确定要{0}审核单据:{1}吗?", bill.状态 == 1 ? "取消" : "", bill.订货单号), "操作提示",
-                        System.Windows.Forms.MessageBoxButtons.OKCancel, System.Windows.Forms.MessageBoxIcon.Question, System.Windows.Forms.MessageBoxDefaultButton.Button2);
-                                if (result == System.Windows.Forms.DialogResult.OK)
-                                {
-                                    page.Hd = BLLFty.Create<OrderBLL>().GetOrderHd(bill.HdID);
-                                    return page.Audit();
-                                }
-                            }
-                            else if (currentObj is VReceiptBill)
-                            {
-                                VReceiptBill bill = currentObj as VReceiptBill;
-                                ReceiptBillPage page = MainForm.itemDetailList[mainMenu.Name.Replace("Query", "").Trim()] as ReceiptBillPage;
-                                page.BindData(bill.HdID);
-                                System.Windows.Forms.DialogResult result = XtraMessageBox.Show(string.Format("确定要{0}审核单据:{1}吗?", bill.状态 == 1 ? "取消" : "", bill.收款单号), "操作提示",
-                        System.Windows.Forms.MessageBoxButtons.OKCancel, System.Windows.Forms.MessageBoxIcon.Question, System.Windows.Forms.MessageBoxDefaultButton.Button2);
-                                if (result == System.Windows.Forms.DialogResult.OK)
-                                {
-                                    page.Hd = BLLFty.Create<ReceiptBillBLL>().GetReceiptBillHd(bill.HdID);
-                                    return page.Audit();
-                                }
-                            }
-                            else if (currentObj is VPaymentBill)
-                            {
-                                VPaymentBill bill = currentObj as VPaymentBill;
-                                PaymentBillPage page = MainForm.itemDetailList[mainMenu.Name.Replace("Query", "").Trim()] as PaymentBillPage;
-                                page.BindData(bill.HdID);
-                                System.Windows.Forms.DialogResult result = XtraMessageBox.Show(string.Format("确定要{0}审核单据:{1}吗?", bill.状态 == 1 ? "取消" : "", bill.付款单号), "操作提示",
-                        System.Windows.Forms.MessageBoxButtons.OKCancel, System.Windows.Forms.MessageBoxIcon.Question, System.Windows.Forms.MessageBoxDefaultButton.Button2);
-                                if (result == System.Windows.Forms.DialogResult.OK)
-                                {
-                                    page.Hd = BLLFty.Create<PaymentBillBLL>().GetPaymentBillHd(bill.HdID);
-                                    return page.Audit();
-                                }
-                            }
-                            else if (currentObj is VWageBill)
-                            {
-                                VWageBill bill = currentObj as VWageBill;
-                                WageBillPage page = MainForm.itemDetailList[mainMenu.Name.Replace("Query", "").Trim()] as WageBillPage;
-                                page.BindData(bill.HdID);
-                                System.Windows.Forms.DialogResult result = XtraMessageBox.Show(string.Format("确定要{0}审核单据:{1}吗?", bill.状态 == 1 ? "取消" : "", bill.工资单号), "操作提示",
-                        System.Windows.Forms.MessageBoxButtons.OKCancel, System.Windows.Forms.MessageBoxIcon.Question, System.Windows.Forms.MessageBoxDefaultButton.Button2);
-                                if (result == System.Windows.Forms.DialogResult.OK)
-                                {
-                                    page.Hd = BLLFty.Create<WageBillBLL>().GetWageBillHd(bill.HdID);
-                                    return page.Audit();
-                                }
-                            }
-                            else if (currentObj is VAttWageBill)
-                            {
-                                VAttWageBill bill = currentObj as VAttWageBill;
-                                AttWageBillPage page = MainForm.itemDetailList[mainMenu.Name.Replace("Query", "").Trim()] as AttWageBillPage;
-                                page.BindData(bill.HdID);
-                                System.Windows.Forms.DialogResult result = XtraMessageBox.Show(string.Format("确定要{0}审核单据:{1}吗?", bill.状态 == 1 ? "取消" : "", bill.工资单号), "操作提示",
-                        System.Windows.Forms.MessageBoxButtons.OKCancel, System.Windows.Forms.MessageBoxIcon.Question, System.Windows.Forms.MessageBoxDefaultButton.Button2);
-                                if (result == System.Windows.Forms.DialogResult.OK)
-                                {
-                                    page.Hd = BLLFty.Create<AttWageBillBLL>().GetAttWageBillHd(bill.HdID);
-                                    return page.Audit();
-                                }
-                            }
-                        }
+                        //if (ClientFactory.itemDetailList.ContainsKey(mainMenu.Name.Replace("Query", "").Trim()))
+                        //{
+                        //    if (currentObj is VStockInBill)
+                        //    {
+                        //        VStockInBill bill = currentObj as VStockInBill;
+                        //        StockInBillPage page = ClientFactory.itemDetailList[mainMenu.Name.Replace("Query", "").Trim()] as StockInBillPage;
+                        //        page.BindData(bill.HdID);
+                        //        System.Windows.Forms.DialogResult result = XtraMessageBox.Show(string.Format("确定要{0}审核单据:{1}吗?", bill.状态 == 1 ? "取消" : "", bill.入库单号), "操作提示",
+                        //System.Windows.Forms.MessageBoxButtons.OKCancel, System.Windows.Forms.MessageBoxIcon.Question, System.Windows.Forms.MessageBoxDefaultButton.Button2);
+                        //        if (result == System.Windows.Forms.DialogResult.OK)
+                        //        {
+                        //            page.Hd = BLLFty.Create<StockInBillBLL>().GetStockInBillHd(bill.HdID);
+                        //            return page.Audit();
+                        //        }
+                        //    }
+                        //    else if (currentObj is VMaterialStockInBill)
+                        //    {
+                        //        VMaterialStockInBill bill = currentObj as VMaterialStockInBill;
+                        //        StockInBillPage page = ClientFactory.itemDetailList[mainMenu.Name.Replace("Query", "").Trim()] as StockInBillPage;
+                        //        page.BindData(bill.HdID);
+                        //        System.Windows.Forms.DialogResult result = XtraMessageBox.Show(string.Format("确定要{0}审核单据:{1}吗?", bill.状态 == 1 ? "取消" : "", bill.入库单号), "操作提示",
+                        //System.Windows.Forms.MessageBoxButtons.OKCancel, System.Windows.Forms.MessageBoxIcon.Question, System.Windows.Forms.MessageBoxDefaultButton.Button2);
+                        //        if (result == System.Windows.Forms.DialogResult.OK)
+                        //        {
+                        //            page.Hd = BLLFty.Create<StockInBillBLL>().GetStockInBillHd(bill.HdID);
+                        //            return page.Audit();
+                        //        }
+                        //    }
+                        //    else if (currentObj is VStockOutBill)
+                        //    {
+                        //        VStockOutBill bill = currentObj as VStockOutBill;
+                        //        StockOutBillPage page = ClientFactory.itemDetailList[mainMenu.Name.Replace("Query", "").Trim()] as StockOutBillPage;
+                        //        page.BindData(bill.HdID);
+                        //        System.Windows.Forms.DialogResult result = XtraMessageBox.Show(string.Format("确定要{0}审核单据:{1}吗?", bill.状态 == 1 ? "取消" : "", bill.出库单号), "操作提示",
+                        //System.Windows.Forms.MessageBoxButtons.OKCancel, System.Windows.Forms.MessageBoxIcon.Question, System.Windows.Forms.MessageBoxDefaultButton.Button2);
+                        //        if (result == System.Windows.Forms.DialogResult.OK)
+                        //        {
+                        //            page.Hd = BLLFty.Create<StockOutBillBLL>().GetStockOutBillHd(bill.HdID);
+                        //            return page.Audit();
+                        //        }
+                        //    }
+                        //    else if (currentObj is VMaterialStockOutBill)
+                        //    {
+                        //        VMaterialStockOutBill bill = currentObj as VMaterialStockOutBill;
+                        //        StockOutBillPage page = ClientFactory.itemDetailList[mainMenu.Name.Replace("Query", "").Trim()] as StockOutBillPage;
+                        //        page.BindData(bill.HdID);
+                        //        System.Windows.Forms.DialogResult result = XtraMessageBox.Show(string.Format("确定要{0}审核单据:{1}吗?", bill.状态 == 1 ? "取消" : "", bill.出库单号), "操作提示",
+                        //System.Windows.Forms.MessageBoxButtons.OKCancel, System.Windows.Forms.MessageBoxIcon.Question, System.Windows.Forms.MessageBoxDefaultButton.Button2);
+                        //        if (result == System.Windows.Forms.DialogResult.OK)
+                        //        {
+                        //            page.Hd = BLLFty.Create<StockOutBillBLL>().GetStockOutBillHd(bill.HdID);
+                        //            return page.Audit();
+                        //        }
+                        //    }
+                        //    else if (currentObj is VOrder)
+                        //    {
+                        //        VOrder bill = currentObj as VOrder;
+                        //        OrderEditPage page = ClientFactory.itemDetailList[mainMenu.Name.Replace("Query", "").Trim()] as OrderEditPage;
+                        //        page.BindData(bill.HdID);
+                        //        System.Windows.Forms.DialogResult result = XtraMessageBox.Show(string.Format("确定要{0}审核单据:{1}吗?", bill.状态 == 1 ? "取消" : "", bill.订货单号), "操作提示",
+                        //System.Windows.Forms.MessageBoxButtons.OKCancel, System.Windows.Forms.MessageBoxIcon.Question, System.Windows.Forms.MessageBoxDefaultButton.Button2);
+                        //        if (result == System.Windows.Forms.DialogResult.OK)
+                        //        {
+                        //            page.Hd = BLLFty.Create<OrderBLL>().GetOrderHd(bill.HdID);
+                        //            return page.Audit();
+                        //        }
+                        //    }
+                        //    else if (currentObj is VFSMOrder)
+                        //    {
+                        //        VFSMOrder bill = currentObj as VFSMOrder;
+                        //        OrderEditPage page = ClientFactory.itemDetailList[mainMenu.Name.Replace("Query", "").Trim()] as OrderEditPage;
+                        //        page.BindData(bill.HdID);
+                        //        System.Windows.Forms.DialogResult result = XtraMessageBox.Show(string.Format("确定要{0}审核单据:{1}吗?", bill.状态 == 1 ? "取消" : "", bill.订货单号), "操作提示",
+                        //System.Windows.Forms.MessageBoxButtons.OKCancel, System.Windows.Forms.MessageBoxIcon.Question, System.Windows.Forms.MessageBoxDefaultButton.Button2);
+                        //        if (result == System.Windows.Forms.DialogResult.OK)
+                        //        {
+                        //            page.Hd = BLLFty.Create<OrderBLL>().GetOrderHd(bill.HdID);
+                        //            return page.Audit();
+                        //        }
+                        //    }
+                        //    else if (currentObj is VProductionOrder)
+                        //    {
+                        //        VProductionOrder bill = currentObj as VProductionOrder;
+                        //        OrderEditPage page = ClientFactory.itemDetailList[mainMenu.Name.Replace("Query", "").Trim()] as OrderEditPage;
+                        //        page.BindData(bill.HdID);
+                        //        System.Windows.Forms.DialogResult result = XtraMessageBox.Show(string.Format("确定要{0}审核单据:{1}吗?", bill.状态 == 1 ? "取消" : "", bill.订货单号), "操作提示",
+                        //System.Windows.Forms.MessageBoxButtons.OKCancel, System.Windows.Forms.MessageBoxIcon.Question, System.Windows.Forms.MessageBoxDefaultButton.Button2);
+                        //        if (result == System.Windows.Forms.DialogResult.OK)
+                        //        {
+                        //            page.Hd = BLLFty.Create<OrderBLL>().GetOrderHd(bill.HdID);
+                        //            return page.Audit();
+                        //        }
+                        //    }
+                        //    else if (currentObj is VReceiptBill)
+                        //    {
+                        //        VReceiptBill bill = currentObj as VReceiptBill;
+                        //        ReceiptBillPage page = ClientFactory.itemDetailList[mainMenu.Name.Replace("Query", "").Trim()] as ReceiptBillPage;
+                        //        page.BindData(bill.HdID);
+                        //        System.Windows.Forms.DialogResult result = XtraMessageBox.Show(string.Format("确定要{0}审核单据:{1}吗?", bill.状态 == 1 ? "取消" : "", bill.收款单号), "操作提示",
+                        //System.Windows.Forms.MessageBoxButtons.OKCancel, System.Windows.Forms.MessageBoxIcon.Question, System.Windows.Forms.MessageBoxDefaultButton.Button2);
+                        //        if (result == System.Windows.Forms.DialogResult.OK)
+                        //        {
+                        //            page.Hd = BLLFty.Create<ReceiptBillBLL>().GetReceiptBillHd(bill.HdID);
+                        //            return page.Audit();
+                        //        }
+                        //    }
+                        //    else if (currentObj is VPaymentBill)
+                        //    {
+                        //        VPaymentBill bill = currentObj as VPaymentBill;
+                        //        PaymentBillPage page = ClientFactory.itemDetailList[mainMenu.Name.Replace("Query", "").Trim()] as PaymentBillPage;
+                        //        page.BindData(bill.HdID);
+                        //        System.Windows.Forms.DialogResult result = XtraMessageBox.Show(string.Format("确定要{0}审核单据:{1}吗?", bill.状态 == 1 ? "取消" : "", bill.付款单号), "操作提示",
+                        //System.Windows.Forms.MessageBoxButtons.OKCancel, System.Windows.Forms.MessageBoxIcon.Question, System.Windows.Forms.MessageBoxDefaultButton.Button2);
+                        //        if (result == System.Windows.Forms.DialogResult.OK)
+                        //        {
+                        //            page.Hd = BLLFty.Create<PaymentBillBLL>().GetPaymentBillHd(bill.HdID);
+                        //            return page.Audit();
+                        //        }
+                        //    }
+                        //    else if (currentObj is VWageBill)
+                        //    {
+                        //        VWageBill bill = currentObj as VWageBill;
+                        //        WageBillPage page = ClientFactory.itemDetailList[mainMenu.Name.Replace("Query", "").Trim()] as WageBillPage;
+                        //        page.BindData(bill.HdID);
+                        //        System.Windows.Forms.DialogResult result = XtraMessageBox.Show(string.Format("确定要{0}审核单据:{1}吗?", bill.状态 == 1 ? "取消" : "", bill.工资单号), "操作提示",
+                        //System.Windows.Forms.MessageBoxButtons.OKCancel, System.Windows.Forms.MessageBoxIcon.Question, System.Windows.Forms.MessageBoxDefaultButton.Button2);
+                        //        if (result == System.Windows.Forms.DialogResult.OK)
+                        //        {
+                        //            page.Hd = BLLFty.Create<WageBillBLL>().GetWageBillHd(bill.HdID);
+                        //            return page.Audit();
+                        //        }
+                        //    }
+                        //    else if (currentObj is VAttWageBill)
+                        //    {
+                        //        VAttWageBill bill = currentObj as VAttWageBill;
+                        //        AttWageBillPage page = ClientFactory.itemDetailList[mainMenu.Name.Replace("Query", "").Trim()] as AttWageBillPage;
+                        //        page.BindData(bill.HdID);
+                        //        System.Windows.Forms.DialogResult result = XtraMessageBox.Show(string.Format("确定要{0}审核单据:{1}吗?", bill.状态 == 1 ? "取消" : "", bill.工资单号), "操作提示",
+                        //System.Windows.Forms.MessageBoxButtons.OKCancel, System.Windows.Forms.MessageBoxIcon.Question, System.Windows.Forms.MessageBoxDefaultButton.Button2);
+                        //        if (result == System.Windows.Forms.DialogResult.OK)
+                        //        {
+                        //            page.Hd = BLLFty.Create<AttWageBillBLL>().GetAttWageBillHd(bill.HdID);
+                        //            return page.Audit();
+                        //        }
+                        //    }
+                        //}
                         #endregion
                     }
                     return false;
@@ -848,20 +853,20 @@ namespace USL
                     //    page.BindData(bill.HdID);
                     //    page.Print();
                     //}
-                    if (currentObj is StatementOfAccountToCustomerReport && MainForm.itemDetailList.ContainsKey(MainMenuConstants.ReceiptBill))
-                    {
-                        StatementOfAccountToCustomerReport bill = currentObj as StatementOfAccountToCustomerReport;
-                        ReceiptBillPage page = MainForm.itemDetailList[MainMenuConstants.ReceiptBill] as ReceiptBillPage;
-                        page.BindData(((List<ReceiptBillHd>)MainForm.dataSourceList[typeof(ReceiptBillHd)]).FirstOrDefault(o => o.BillNo == bill.收款单号).ID);
-                        page.SendData(null);
-                    }
-                    else if (currentObj is StatementOfAccountToSupplierReport && MainForm.itemDetailList.ContainsKey(MainMenuConstants.PaymentBill))
-                    {
-                        StatementOfAccountToSupplierReport bill = currentObj as StatementOfAccountToSupplierReport;
-                        PaymentBillPage page = MainForm.itemDetailList[MainMenuConstants.PaymentBill] as PaymentBillPage;
-                        page.BindData(((List<PaymentBillHd>)MainForm.dataSourceList[typeof(PaymentBillHd)]).FirstOrDefault(o => o.BillNo == bill.付款单号).ID);
-                        page.SendData(null);
-                    }
+                    //if (currentObj is StatementOfAccountToCustomerReport && ClientFactory.itemDetailList.ContainsKey(MainMenuConstants.ReceiptBill))
+                    //{
+                    //    StatementOfAccountToCustomerReport bill = currentObj as StatementOfAccountToCustomerReport;
+                    //    ReceiptBillPage page = ClientFactory.itemDetailList[MainMenuConstants.ReceiptBill] as ReceiptBillPage;
+                    //    page.BindData(((List<ReceiptBillHd>)ClientFactory.dataSourceList[typeof(ReceiptBillHd)]).FirstOrDefault(o => o.BillNo == bill.收款单号).ID);
+                    //    page.SendData(null);
+                    //}
+                    //else if (currentObj is StatementOfAccountToSupplierReport && ClientFactory.itemDetailList.ContainsKey(MainMenuConstants.PaymentBill))
+                    //{
+                    //    StatementOfAccountToSupplierReport bill = currentObj as StatementOfAccountToSupplierReport;
+                    //    PaymentBillPage page = ClientFactory.itemDetailList[MainMenuConstants.PaymentBill] as PaymentBillPage;
+                    //    page.BindData(((List<PaymentBillHd>)ClientFactory.dataSourceList[typeof(PaymentBillHd)]).FirstOrDefault(o => o.BillNo == bill.付款单号).ID);
+                    //    page.SendData(null);
+                    //}
 
                     #endregion
                 }
@@ -905,7 +910,8 @@ namespace USL
 
         private void gridView_CustomColumnDisplayText(object sender, DevExpress.XtraGrid.Views.Base.CustomColumnDisplayTextEventArgs e)
         {
-            if (e.Value != null && MainForm.dataSourceList.Count > 0)
+            //if (e.Value != null && MainForm.dataSourceList.Count > 0)
+            if (e.Value!=null)
             {
                 if (e.Column.FieldName == "Status")
                 {
@@ -1084,40 +1090,41 @@ namespace USL
 
         public void Export()
         {
+            throw new NotImplementedException();
             //借用于设置货品停产
-            try
-            {
-                this.Cursor = System.Windows.Forms.Cursors.WaitCursor;
-                System.Windows.Forms.DialogResult result = XtraMessageBox.Show("确定要停产选择的货品吗?", "操作提示",
-                System.Windows.Forms.MessageBoxButtons.OKCancel, System.Windows.Forms.MessageBoxIcon.Question, System.Windows.Forms.MessageBoxDefaultButton.Button2);
-                if (result == System.Windows.Forms.DialogResult.OK)
-                {
-                    currentObj = gridView.GetRow(gridView.FocusedRowHandle);
-                    switch (mainMenu.Name)
-                    {
-                        case MainMenuConstants.Goods:
-                            Goods goods = BLLFty.Create<GoodsBLL>().GetGoods(((Goods)currentObj).ID);
-                            goods.IsDel = true;
-                            BLLFty.Create<GoodsBLL>().Update(goods);
-                            break;
-                        case MainMenuConstants.Material:
-                            Goods sf = BLLFty.Create<GoodsBLL>().GetGoods(((VMaterial)currentObj).ID);
-                            sf.IsDel = true;
-                            BLLFty.Create<GoodsBLL>().Update(sf);
-                            break;
-                    }
-                    MainForm.DataPageRefresh(mainMenu.Name,string.Empty);
-                    CommonServices.ErrorTrace.SetSuccessfullyInfo(this.FindForm(), "货品设置停产成功");
-                }
-            }
-            catch (Exception ex)
-            {
-                CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), ex.Message);
-            }
-            finally
-            {
-                this.Cursor = System.Windows.Forms.Cursors.Default;
-            }
+            //try
+            //{
+            //    this.Cursor = System.Windows.Forms.Cursors.WaitCursor;
+            //    System.Windows.Forms.DialogResult result = XtraMessageBox.Show("确定要停产选择的货品吗?", "操作提示",
+            //    System.Windows.Forms.MessageBoxButtons.OKCancel, System.Windows.Forms.MessageBoxIcon.Question, System.Windows.Forms.MessageBoxDefaultButton.Button2);
+            //    if (result == System.Windows.Forms.DialogResult.OK)
+            //    {
+            //        currentObj = gridView.GetRow(gridView.FocusedRowHandle);
+            //        switch (mainMenu.Name)
+            //        {
+            //            case MainMenuConstants.Goods:
+            //                Goods goods = BLLFty.Create<GoodsBLL>().GetGoods(((Goods)currentObj).ID);
+            //                goods.IsDel = true;
+            //                BLLFty.Create<GoodsBLL>().Update(goods);
+            //                break;
+            //            case MainMenuConstants.Material:
+            //                Goods sf = BLLFty.Create<GoodsBLL>().GetGoods(((VMaterial)currentObj).ID);
+            //                sf.IsDel = true;
+            //                BLLFty.Create<GoodsBLL>().Update(sf);
+            //                break;
+            //        }
+            //        clientFactory.DataPageRefresh(mainMenu.Name,string.Empty);
+            //        CommonServices.ErrorTrace.SetSuccessfullyInfo(this.FindForm(), "货品设置停产成功");
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), ex.Message);
+            //}
+            //finally
+            //{
+            //    this.Cursor = System.Windows.Forms.Cursors.Default;
+            //}
         }
 
         public void SendData(object data)
@@ -1127,7 +1134,7 @@ namespace USL
             {
                 string code = string.Empty;
                 Dictionary<string, object> dict = (Dictionary<string, object>)data;
-                Department dept = dict[MainMenuConstants.Department] as Department;
+                //Department dept = dict[MainMenuConstants.Department] as Department;
                 Warehouse warehouse = dict[MainMenuConstants.Warehouse] as Warehouse;
                 int iCount = 1;
                 WaitDialogForm waitDialogForm = null;
@@ -1140,7 +1147,7 @@ namespace USL
                     if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                     {
                         new Thread((ThreadStart)delegate {
-                            waitDialogForm = new WaitDialogForm("请稍候...", "正在加载数据", new Size(300, 60), this.FindForm());
+                            waitDialogForm = new WaitDialogForm("请稍候...", "正在导入数据", new Size(300, 60), this.FindForm());
                             System.Windows.Forms.Application.Run(waitDialogForm);
                         }).Start();
 
@@ -1148,7 +1155,8 @@ namespace USL
 
                         List<Stocktaking> insertList = new List<Stocktaking>();
                         List<Stocktaking> updateList = new List<Stocktaking>();
-                        //List<Stocktaking> stList = BLLFty.Create<InventoryBLL>().GetStocktaking();
+                        List<string> repeatCodeList = new List<string>();
+                        List<Stocktaking> stList = BLLFty.Create<BaseBLL>().GetListBy<Stocktaking>(null);
                         foreach (DataRow row in ds.Tables[0].Rows)
                         {
                             iCount++;
@@ -1161,16 +1169,16 @@ namespace USL
                                 CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), string.Format("第{0}行的编码不能为空。", iCount));
                                 return;
                             }
-                            Stocktaking entity = ((List<Stocktaking>)MainForm.dataSourceList[typeof(Stocktaking)]).FirstOrDefault(o => o.DeptID.Equals(dept.ID) && o.WarehouseID.Equals(warehouse.ID) && o.GoodsCode.Equals(code));
+                            Stocktaking entity = stList.FirstOrDefault(o => o.DeptID.Equals(MainForm.department.ID) && o.WarehouseID.Equals(warehouse.ID) && o.GoodsCode.Equals(code));
                             bool isNew = false;
-                            int checkQty = 0;
+                            int oldCheckQty = 0;
                             if (entity == null)
                             {
                                 entity = new Stocktaking();
                                 entity.ID = Guid.NewGuid();
-                                entity.DeptID = dept.ID;
-                                entity.DeptCode = dept.Code;
-                                entity.DeptName = dept.Name;
+                                entity.DeptID = MainForm.department.ID;
+                                entity.DeptCode = MainForm.department.Code;
+                                entity.DeptName = MainForm.department.Name;
                                 entity.WarehouseID = warehouse.ID;
                                 entity.WarehouseCode = warehouse.Code;
                                 entity.WarehouseName = warehouse.Name;
@@ -1179,7 +1187,7 @@ namespace USL
                             else
                             {
                                 // 记录之前的盘点数，和新导入的合并
-                                checkQty = entity.CheckQty;
+                                oldCheckQty = entity.CheckQty;
                             }
                             foreach (PropertyInfo p in entity.GetType().GetProperties())
                             {
@@ -1205,15 +1213,16 @@ namespace USL
                             }
                             if (isNew)
                             {
-                                // 新导入的编号如果有重复，则合并
-                                Stocktaking repeatItem = insertList.FirstOrDefault(o => o.WarehouseID.Equals(entity.WarehouseID) && o.GoodsCode.Equals(entity.GoodsCode));
-                                if (repeatItem == null)
+                                // excel表里的编码如果有重复，则合并
+                                if (repeatCodeList.Contains(entity.GoodsCode))
                                 {
-                                    insertList.Add(entity);
+                                    Stocktaking repeatItem = insertList.FirstOrDefault(o => o.GoodsCode.Equals(entity.GoodsCode));
+                                    repeatItem.CheckQty += entity.CheckQty;
                                 }
                                 else
                                 {
-                                    repeatItem.CheckQty += entity.CheckQty;
+                                    insertList.Add(entity);
+                                    repeatCodeList.Add(entity.GoodsCode);
                                 }
 
                                 //insertList.ForEach(o=>{
@@ -1226,14 +1235,14 @@ namespace USL
                             }
                             else
                             {
-                                entity.CheckQty += checkQty;// 合并盘点数
+                                entity.CheckQty += oldCheckQty;// 合并盘点数
                                 updateList.Add(entity);
                             }
                         }
                         if (insertList.Count > 0 || updateList.Count > 0)
                         {
-                            BLLFty.Create<InventoryBLL>().Import(insertList, updateList);
-                            MainForm.DataPageRefresh<Stocktaking>();
+                            BLLFty.Create<BaseBLL>().AddAndUpdate(insertList, updateList);
+                            clientFactory.DataPageRefresh<Stocktaking>();
                             //InitGrid(list);
                             //刷新盘点盈亏表
                             //if (MainForm.itemDetailList.ContainsKey(MainMenuConstants.ProfitAndLoss))
@@ -1269,70 +1278,71 @@ namespace USL
 
         public object ReceiveData()
         {
-            currentObj = gridView.GetRow(gridView.FocusedRowHandle);
-            if (mainMenu.Name == MainMenuConstants.ProductionOrderQuery)
-            {
-                if (currentObj == null)
-                {
-                    CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "请选择要产品回收的布产单。");
-                    return null;
-                }
-                VProductionOrder order = currentObj as VProductionOrder;
-                if (order == null || order.状态 == (int)BillStatus.UnAudited)
-                {
-                    CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "未审核布产单不允许回收产品。");
-                    return null;
-                }
-                if (order.SupplierID == null)
-                {
-                    CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "请填写加工厂家。");
-                    return null;
-                }
-                if (order.未收箱数 <= 0)
-                {
-                    CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "布产数量已经全部发完，不能再回收产品。");
-                    return null;
-                }
+            throw new NotImplementedException();
+            //currentObj = gridView.GetRow(gridView.FocusedRowHandle);
+            //if (mainMenu.Name == MainMenuConstants.ProductionOrderQuery)
+            //{
+            //    if (currentObj == null)
+            //    {
+            //        CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "请选择要产品回收的布产单。");
+            //        return null;
+            //    }
+            //    VProductionOrder order = currentObj as VProductionOrder;
+            //    if (order == null || order.状态 == (int)BillStatus.UnAudited)
+            //    {
+            //        CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "未审核布产单不允许回收产品。");
+            //        return null;
+            //    }
+            //    if (order.SupplierID == null)
+            //    {
+            //        CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "请填写加工厂家。");
+            //        return null;
+            //    }
+            //    if (order.未收箱数 <= 0)
+            //    {
+            //        CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "布产数量已经全部发完，不能再回收产品。");
+            //        return null;
+            //    }
 
-                System.Windows.Forms.DialogResult result = XtraMessageBox.Show("确定要回收产品吗?", "操作提示",
-                               System.Windows.Forms.MessageBoxButtons.OKCancel, System.Windows.Forms.MessageBoxIcon.Question, System.Windows.Forms.MessageBoxDefaultButton.Button2);
-                if (result == System.Windows.Forms.DialogResult.OK)
-                {
-                    return currentObj;
-                }
-                else
-                    return null;
-            }
-            else if (mainMenu.Name == MainMenuConstants.SalesReturnBillQuery)
-            {
-                if (currentObj == null)
-                {
-                    CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "请选择要退料的退货单。");
-                    return null;
-                }
-                VStockInBill bill = currentObj as VStockInBill;
-                //if (bill == null || bill.状态 == (int)BillStatus.UnAudited)
-                //{
-                //    CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "未审核退货单不允许退料入库。");
-                //    return null;
-                //}
-                if (bill.已退料入库 == true)
-                {
-                    CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "该退货单物料已退货入库。");
-                    return null;
-                }
+            //    System.Windows.Forms.DialogResult result = XtraMessageBox.Show("确定要回收产品吗?", "操作提示",
+            //                   System.Windows.Forms.MessageBoxButtons.OKCancel, System.Windows.Forms.MessageBoxIcon.Question, System.Windows.Forms.MessageBoxDefaultButton.Button2);
+            //    if (result == System.Windows.Forms.DialogResult.OK)
+            //    {
+            //        return currentObj;
+            //    }
+            //    else
+            //        return null;
+            //}
+            //else if (mainMenu.Name == MainMenuConstants.SalesReturnBillQuery)
+            //{
+            //    if (currentObj == null)
+            //    {
+            //        CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "请选择要退料的退货单。");
+            //        return null;
+            //    }
+            //    VStockInBill bill = currentObj as VStockInBill;
+            //    //if (bill == null || bill.状态 == (int)BillStatus.UnAudited)
+            //    //{
+            //    //    CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "未审核退货单不允许退料入库。");
+            //    //    return null;
+            //    //}
+            //    if (bill.已退料入库 == true)
+            //    {
+            //        CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "该退货单物料已退货入库。");
+            //        return null;
+            //    }
 
-                System.Windows.Forms.DialogResult result = XtraMessageBox.Show("确定要将退货物料入库吗?", "操作提示",
-                               System.Windows.Forms.MessageBoxButtons.OKCancel, System.Windows.Forms.MessageBoxIcon.Question, System.Windows.Forms.MessageBoxDefaultButton.Button2);
-                if (result == System.Windows.Forms.DialogResult.OK)
-                {
-                    return currentObj;
-                }
-                else
-                    return null;
-            }
-            else
-                return currentObj;
+            //    System.Windows.Forms.DialogResult result = XtraMessageBox.Show("确定要将退货物料入库吗?", "操作提示",
+            //                   System.Windows.Forms.MessageBoxButtons.OKCancel, System.Windows.Forms.MessageBoxIcon.Question, System.Windows.Forms.MessageBoxDefaultButton.Button2);
+            //    if (result == System.Windows.Forms.DialogResult.OK)
+            //    {
+            //        return currentObj;
+            //    }
+            //    else
+            //        return null;
+            //}
+            //else
+            //    return currentObj;
         }
 
         private void gridView_CellValueChanged(object sender, DevExpress.XtraGrid.Views.Base.CellValueChangedEventArgs e)
@@ -1366,10 +1376,10 @@ namespace USL
                 switch (mainMenu.Name)
                 {
                     case MainMenuConstants.ProfitAndLoss:
-                        BLLFty.Create<InventoryBLL>().UpdateProfitAndLoss((List<ProfitAndLoss>)list);
+                        BLLFty.Create<BaseBLL>().UpdateByBulk((List<ProfitAndLoss>)list);
                         break;
                     case MainMenuConstants.UnlistedGoods:
-                        BLLFty.Create<InventoryBLL>().UpdateUnlistedGoods((List<UnlistedGoods>)list);
+                        BLLFty.Create<BaseBLL>().UpdateByBulk((List<UnlistedGoods>)list);
                         break;
                     default:
                         break;

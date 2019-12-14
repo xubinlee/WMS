@@ -8,24 +8,26 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using DevExpress.XtraEditors;
-using DBML;
+using EDMX;
 using Factory;
 using BLL;
 using IBase;
 using CommonLibrary;
 using Utility;
+using Utility.Interceptor;
 
 namespace USL
 {
     public partial class CompanyEditPage : DevExpress.XtraEditors.XtraUserControl,IDataEdit
     {
+        private static ClientFactory clientFactory = LoggerInterceptor.CreateProxy<ClientFactory>();
         Company company = null;
         List<TypesList> types;   //类型列表
 
         public CompanyEditPage(Object obj)
         {
             InitializeComponent();
-            types = MainForm.dataSourceList[typeof(TypesList)] as List<TypesList>;
+            types = MainForm.TypesList;
             //单据类型
             typesListBindingSource.DataSource = types.FindAll(o => o.Type == TypesListConstants.CustomerType);
             if (obj == null)
@@ -60,16 +62,17 @@ namespace USL
                     company = obj;
                     company.ID = Guid.NewGuid();
                     company.AddTime = DateTime.Now;
-                    if (((List<Company>)MainForm.dataSourceList[typeof(Company)]).Exists(o => o.Name == company.Name))
+                    bool exists = BLLFty.Create<BaseBLL>().GetListByNoTracking<Company>(o => o.ID != obj.ID && o.Name.Equals(company.Name)).Any();
+                    if (exists)
                     {
 
                         XtraMessageBox.Show("该客户已经存在，不能重复添加。", "操作提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return false;
                     }
-                    BLLFty.Create<CompanyBLL>().Insert(company);
+                    BLLFty.Create<BaseBLL>().Add<Company>(company);
                 }
                 else//修改
-                    BLLFty.Create<CompanyBLL>().Update(obj);
+                    BLLFty.Create<BaseBLL>().Modify<Company>(obj);
                 //CommonServices.ErrorTrace.SetSuccessfullyInfo(this.FindForm(), "保存成功");
                 return true;
             }

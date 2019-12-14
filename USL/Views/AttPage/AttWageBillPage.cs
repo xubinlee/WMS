@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using DevExpress.XtraEditors;
 using IBase;
-using DBML;
+using EDMX;
 using Factory;
 using BLL;
 using Utility;
@@ -17,14 +17,16 @@ using CommonLibrary;
 using DevExpress.XtraGrid.Views.Grid;
 using DevExpress.XtraGrid.Columns;
 using System.Collections;
+using Utility.Interceptor;
 
 namespace USL
 {
     public partial class AttWageBillPage : DevExpress.XtraEditors.XtraUserControl, IItemDetail, IExtensions
     {
+        private static ClientFactory clientFactory = LoggerInterceptor.CreateProxy<ClientFactory>();
         AttWageBillHd hd;
         List<USPAttWageBillDtl> dtl;
-        List<VAttAppointments> apt;
+        //List<VAttAppointments> apt;
         Guid headID;
 
         public AttWageBillHd Hd
@@ -52,50 +54,49 @@ namespace USL
 
         public void BindData(object hdID)
         {
-            gridControl.BeginUpdate();
-            if (hdID is Guid)
-            {
-                headID = (Guid)hdID;
-                attWageBillHdBindingSource.DataSource = hd = BLLFty.Create<AttWageBillBLL>().GetAttWageBillHd(headID);
-                //dtl = BLLFty.Create<AttWageBillBLL>().GetUSPAttWageBillDtl().FindAll(o =>
-                                    //o.YearMonth == Convert.ToDateTime(deYearMonth.EditValue).ToString("yyyy-MM"));
-                List<VAttWageBill> list = ((List<VAttWageBill>)MainForm.dataSourceList[typeof(VAttWageBill)]).FindAll(o => o.HdID == headID);
-                for (int i = dtl.Count - 1; i >= 0; i--)
-                {
-                    VAttWageBill obj = list.Find(o => o.UserID == dtl[i].UserID);
-                    if (obj != null)
-                    {
-                        dtl[i].Welfare = obj.福利;
-                        dtl[i].Deduction = obj.扣款;
-                        dtl[i].SocialSecurity = obj.代扣社保;
-                        dtl[i].IndividualIncomeTax = obj.代扣个税;
-                        dtl[i].CheckItem = true;
-                    }
-                    else
-                        dtl.RemoveAt(i);
-                }
-                uSPAttWageBillDtlBindingSource.DataSource = dtl;
-                //vAttAppointmentsBindingSource.DataSource = apt =
-                //    ((List<VAttAppointments>)MainForm.dataSourceList[typeof(VAttAppointments)]).FindAll(o =>
-                //        o.UserID == hd.UserID && (o.日期.Value.ToString("yyyy-MM").Equals(dtl.Min(m => m.YearMonth)) || o.日期.Value.ToString("yyyy-MM").Equals(dtl.Max(m => m.YearMonth))));
-                vAttAppointmentsBindingSource.DataSource = apt =
-                    ((List<VAttAppointments>)MainForm.dataSourceList[typeof(VAttAppointments)]).FindAll(o =>
-                        o.日期.Value.ToString("yyyy-MM").Equals(hd.YearMonth));
-                decimal billAMT = dtl.Sum(o => o.AMT);
-                meLastAMT.EditValue = billAMT;
-                meTotalAMT.EditValue = (hd.Balance == null ? 0 : hd.Balance) + billAMT;
-            }
-            vUsersInfoBindingSource.DataSource = ((List<VUsersInfo>)MainForm.dataSourceList[typeof(VUsersInfo)]).FindAll(o => o.已删除 == false && o.部门 != "注塑机");
-            gridView.BestFitColumns();
-            gridView.FindFilterText = string.Empty;
-            gridControl.EndUpdate();
+            //gridControl.BeginUpdate();
+            //if (hdID is Guid)
+            //{
+            //    headID = (Guid)hdID;
+            //    attWageBillHdBindingSource.DataSource = hd = BLLFty.Create<AttWageBillBLL>().GetAttWageBillHd(headID);
+            //    //dtl = BLLFty.Create<AttWageBillBLL>().GetUSPAttWageBillDtl().FindAll(o =>
+            //                        //o.YearMonth == Convert.ToDateTime(deYearMonth.EditValue).ToString("yyyy-MM"));
+            //    List<VAttWageBill> list = clientFactory.GetData<VAttWageBill>().FindAll(o => o.HdID == headID);
+            //    for (int i = dtl.Count - 1; i >= 0; i--)
+            //    {
+            //        VAttWageBill obj = list.Find(o => o.UserID == dtl[i].UserID);
+            //        if (obj != null)
+            //        {
+            //            dtl[i].Welfare = obj.福利;
+            //            dtl[i].Deduction = obj.扣款;
+            //            dtl[i].SocialSecurity = obj.代扣社保;
+            //            dtl[i].IndividualIncomeTax = obj.代扣个税;
+            //            dtl[i].CheckItem = true;
+            //        }
+            //        else
+            //            dtl.RemoveAt(i);
+            //    }
+            //    uSPAttWageBillDtlBindingSource.DataSource = dtl;
+            //    //vAttAppointmentsBindingSource.DataSource = apt =
+            //    //    ((List<VAttAppointments>)MainForm.dataSourceList[typeof(VAttAppointments)]).FindAll(o =>
+            //    //        o.UserID == hd.UserID && (o.日期.Value.ToString("yyyy-MM").Equals(dtl.Min(m => m.YearMonth)) || o.日期.Value.ToString("yyyy-MM").Equals(dtl.Max(m => m.YearMonth))));
+            //    vAttAppointmentsBindingSource.DataSource = apt = clientFactory.GetData<VAttAppointments>().FindAll(o =>
+            //            o.日期.Value.ToString("yyyy-MM").Equals(hd.YearMonth));
+            //    decimal billAMT = dtl.Sum(o => o.AMT);
+            //    meLastAMT.EditValue = billAMT;
+            //    meTotalAMT.EditValue = (hd.Balance == null ? 0 : hd.Balance) + billAMT;
+            //}
+            //vUsersInfoBindingSource.DataSource = clientFactory.GetData<VUsersInfo>().FindAll(o => o.已删除 == false && o.部门 != "注塑机");
+            //gridView.BestFitColumns();
+            //gridView.FindFilterText = string.Empty;
+            //gridControl.EndUpdate();
         }
 
         public void Add()
         {
             attWageBillHdBindingSource.DataSource = hd = new AttWageBillHd();
             uSPAttWageBillDtlBindingSource.DataSource = dtl = new List<USPAttWageBillDtl>();
-            hd.BillNo = MainForm.GetBillMaxBillNo(MainMenuConstants.WageBill, "GZ");
+            hd.BillNo = MainForm.GetMaxBillNo(MainMenuConstants.WageBill, true).MaxBillNo;
             meLastAMT.EditValue = null;
             meTotalAMT.EditValue = null;
             headID = Guid.Empty;
@@ -111,40 +112,40 @@ namespace USL
 
         public void Del()
         {
-            try
-            {
-                this.Cursor = System.Windows.Forms.Cursors.WaitCursor;
-                System.Windows.Forms.DialogResult result = XtraMessageBox.Show("确定要删除选择的记录吗?", "操作提示",
-                System.Windows.Forms.MessageBoxButtons.OKCancel, System.Windows.Forms.MessageBoxIcon.Question, System.Windows.Forms.MessageBoxDefaultButton.Button2);
-                if (result == System.Windows.Forms.DialogResult.OK)
-                {
-                    if (hd != null)
-                    {
-                        AttWageBillHd dCheck = BLLFty.Create<AttWageBillBLL>().GetAttWageBillHd(hd.ID);
-                        if (dCheck.Status == (int)BillStatus.UnAudited)
-                            BLLFty.Create<AttWageBillBLL>().Delete(hd.ID);
-                        else
-                        {
-                            CommonServices.ErrorTrace.SetSuccessfullyInfo(this.FindForm(), "该单据已审核，不允许删除。");
-                            return;
-                        }
+            //try
+            //{
+            //    this.Cursor = System.Windows.Forms.Cursors.WaitCursor;
+            //    System.Windows.Forms.DialogResult result = XtraMessageBox.Show("确定要删除选择的记录吗?", "操作提示",
+            //    System.Windows.Forms.MessageBoxButtons.OKCancel, System.Windows.Forms.MessageBoxIcon.Question, System.Windows.Forms.MessageBoxDefaultButton.Button2);
+            //    if (result == System.Windows.Forms.DialogResult.OK)
+            //    {
+            //        if (hd != null)
+            //        {
+            //            AttWageBillHd dCheck = BLLFty.Create<AttWageBillBLL>().GetAttWageBillHd(hd.ID);
+            //            if (dCheck.Status == (int)BillStatus.UnAudited)
+            //                BLLFty.Create<AttWageBillBLL>().Delete(hd.ID);
+            //            else
+            //            {
+            //                CommonServices.ErrorTrace.SetSuccessfullyInfo(this.FindForm(), "该单据已审核，不允许删除。");
+            //                return;
+            //            }
 
-                    }
-                    //刷新查询界面
-                    MainForm.GetDBData<VAttWageBill>(string.Empty);
-                    attWageBillHdBindingSource.DataSource = hd = new AttWageBillHd();
-                    uSPAttWageBillDtlBindingSource.DataSource = dtl = new List<USPAttWageBillDtl>();
-                    CommonServices.ErrorTrace.SetSuccessfullyInfo(this.FindForm(), "删除成功");
-                }
-            }
-            catch (Exception ex)
-            {
-                CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), ex.Message);
-            }
-            finally
-            {
-                this.Cursor = System.Windows.Forms.Cursors.Default;
-            }
+            //        }
+            //        //刷新查询界面
+            //        //clientFactory.DataPageRefresh<VAttWageBill>();
+            //        attWageBillHdBindingSource.DataSource = hd = new AttWageBillHd();
+            //        uSPAttWageBillDtlBindingSource.DataSource = dtl = new List<USPAttWageBillDtl>();
+            //        CommonServices.ErrorTrace.SetSuccessfullyInfo(this.FindForm(), "删除成功");
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), ex.Message);
+            //}
+            //finally
+            //{
+            //    this.Cursor = System.Windows.Forms.Cursors.Default;
+            ////}
         }
 
         bool BillValidated()
@@ -171,181 +172,182 @@ namespace USL
 
         public bool Save()
         {
-            try
-            {
-                this.Cursor = System.Windows.Forms.Cursors.WaitCursor;
-                if (string.IsNullOrEmpty(txtBillNo.Text.Trim()))
-                {
-                    CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "单据编号不能为空，请点击添加按钮添加单据。");
-                    return false;
-                }
-                if (BillValidated() == false)
-                    return false;
-                if (headID == Guid.Empty)
-                    hd.ID = Guid.NewGuid();
-                hd.Maker = MainForm.usersInfo.ID;
-                hd.MakeDate = DateTime.Now;
-                hd.Auditor = null;
-                hd.AuditDate = null;
-                hd.Status = 0;
-                hd.YearMonth = Convert.ToDateTime(deYearMonth.EditValue).ToString("yyyy-MM");
-                //获取明细列表界面数据（筛选后数据）
-                List<USPAttWageBillDtl> rDtl = new List<USPAttWageBillDtl>();
-                for (int i = 0; i < gridView.RowCount; i++)
-                {
-                    if (gridView.GetRow(i) != null && Convert.ToBoolean(gridView.GetRowCellValue(i, colCheckItem)))
-                        rDtl.Add((USPAttWageBillDtl)gridView.GetRow(i));
-                    
-                }
-                List<AttWageBillDtl> dtlList = new List<AttWageBillDtl>();
-                bool errFlag = false;
-                if (rDtl.Count == 0)
-                {
-                    errFlag = true;
-                    CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "请选择需要结算的单据信息");
-                }
-                foreach (USPAttWageBillDtl item in rDtl)
-                {
-                    AttWageBillDtl obj = new AttWageBillDtl();
-                    obj.ID = Guid.NewGuid();
-                    obj.HdID = hd.ID;
-                    obj.UserID = item.UserID;
-                    obj.Classes = item.Classes;
-                    obj.Late = item.Late;
-                    obj.Early = item.Early;
-                    obj.LateCount = item.LateCount;
-                    obj.EarlyCount = item.EarlyCount;
-                    obj.Absent = item.Absent;
-                    obj.Forget = item.Forget;
-                    obj.Leave = item.Leave;
-                    obj.Wages = item.Wages;
-                    obj.Welfare = item.Welfare;
-                    obj.Deduction = item.Deduction;
-                    obj.SocialSecurity = item.SocialSecurity;
-                    obj.IndividualIncomeTax = item.IndividualIncomeTax;
-                    obj.AMT = item.AMT;
-                    dtlList.Add(obj);
-                }
-                if (errFlag)
-                    return false;
-                dtl = rDtl;
-                //添加
-                if (headID == Guid.Empty)
-                {
-                    //hd.ID = Guid.NewGuid();
-                    BLLFty.Create<AttWageBillBLL>().Insert(hd, dtlList);
-                }
-                else//修改
-                    BLLFty.Create<AttWageBillBLL>().Update(hd, dtlList);
-                decimal billAMT = rDtl.Sum(o => o.AMT);
-                meLastAMT.EditValue = billAMT;
-                meTotalAMT.EditValue = (hd.Balance == null ? 0 : hd.Balance) + billAMT;
-                headID = hd.ID;
-                //vAttAppointmentsBindingSource.DataSource = apt =
-                //    ((List<VAttAppointments>)MainForm.dataSourceList[typeof(VAttAppointments)]).FindAll(o =>
-                //        o.UserID == hd.UserID && (o.日期.Value.ToString("yyyy-MM").Equals(dtl.Min(m => m.YearMonth)) || o.日期.Value.ToString("yyyy-MM").Equals(dtl.Max(m => m.YearMonth))));
-                vAttAppointmentsBindingSource.DataSource = apt =
-                    ((List<VAttAppointments>)MainForm.dataSourceList[typeof(VAttAppointments)]).FindAll(o =>
-                        o.日期.Value.ToString("yyyy-MM").Equals(hd.YearMonth));
-                //DataQueryPageRefresh();
-                //QueryPageRefresh();
-                MainForm.DataPageRefresh<VAttWageBill>();
-                CommonServices.ErrorTrace.SetSuccessfullyInfo(this.FindForm(), "保存成功");
-                return true;
-            }
-            catch (Exception ex)
-            {
-                if (ex.HResult == -2146232060)  //违反了PRIMARY KEY约束
-                    CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), string.Format("单号:{0}已经存在,请重新添加新单。", hd.BillNo));
-                else
-                CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), ex.Message);
-                return false;
-            }
-            finally
-            {
-                this.Cursor = System.Windows.Forms.Cursors.Default;
-            }
+            throw new NotImplementedException();
+            //try
+            //{
+            //    this.Cursor = System.Windows.Forms.Cursors.WaitCursor;
+            //    if (string.IsNullOrEmpty(txtBillNo.Text.Trim()))
+            //    {
+            //        CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "单据编号不能为空，请点击添加按钮添加单据。");
+            //        return false;
+            //    }
+            //    if (BillValidated() == false)
+            //        return false;
+            //    if (headID == Guid.Empty)
+            //        hd.ID = Guid.NewGuid();
+            //    hd.Maker = MainForm.usersInfo.ID;
+            //    hd.MakeDate = DateTime.Now;
+            //    hd.Auditor = null;
+            //    hd.AuditDate = null;
+            //    hd.Status = 0;
+            //    hd.YearMonth = Convert.ToDateTime(deYearMonth.EditValue).ToString("yyyy-MM");
+            //    //获取明细列表界面数据（筛选后数据）
+            //    List<USPAttWageBillDtl> rDtl = new List<USPAttWageBillDtl>();
+            //    for (int i = 0; i < gridView.RowCount; i++)
+            //    {
+            //        if (gridView.GetRow(i) != null && Convert.ToBoolean(gridView.GetRowCellValue(i, colCheckItem)))
+            //            rDtl.Add((USPAttWageBillDtl)gridView.GetRow(i));
+
+            //    }
+            //    List<AttWageBillDtl> dtlList = new List<AttWageBillDtl>();
+            //    bool errFlag = false;
+            //    if (rDtl.Count == 0)
+            //    {
+            //        errFlag = true;
+            //        CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "请选择需要结算的单据信息");
+            //    }
+            //    foreach (USPAttWageBillDtl item in rDtl)
+            //    {
+            //        AttWageBillDtl obj = new AttWageBillDtl();
+            //        obj.ID = Guid.NewGuid();
+            //        obj.HdID = hd.ID;
+            //        obj.UserID = item.UserID;
+            //        obj.Classes = item.Classes;
+            //        obj.Late = item.Late;
+            //        obj.Early = item.Early;
+            //        obj.LateCount = item.LateCount;
+            //        obj.EarlyCount = item.EarlyCount;
+            //        obj.Absent = item.Absent;
+            //        obj.Forget = item.Forget;
+            //        obj.Leave = item.Leave;
+            //        obj.Wages = item.Wages;
+            //        obj.Welfare = item.Welfare;
+            //        obj.Deduction = item.Deduction;
+            //        obj.SocialSecurity = item.SocialSecurity;
+            //        obj.IndividualIncomeTax = item.IndividualIncomeTax;
+            //        obj.AMT = item.AMT;
+            //        dtlList.Add(obj);
+            //    }
+            //    if (errFlag)
+            //        return false;
+            //    dtl = rDtl;
+            //    //添加
+            //    if (headID == Guid.Empty)
+            //    {
+            //        //hd.ID = Guid.NewGuid();
+            //        BLLFty.Create<AttWageBillBLL>().Insert(hd, dtlList);
+            //    }
+            //    else//修改
+            //        BLLFty.Create<AttWageBillBLL>().Update(hd, dtlList);
+            //    decimal billAMT = rDtl.Sum(o => o.AMT);
+            //    meLastAMT.EditValue = billAMT;
+            //    meTotalAMT.EditValue = (hd.Balance == null ? 0 : hd.Balance) + billAMT;
+            //    headID = hd.ID;
+            //    //vAttAppointmentsBindingSource.DataSource = apt =
+            //    //    ((List<VAttAppointments>)MainForm.dataSourceList[typeof(VAttAppointments)]).FindAll(o =>
+            //    //        o.UserID == hd.UserID && (o.日期.Value.ToString("yyyy-MM").Equals(dtl.Min(m => m.YearMonth)) || o.日期.Value.ToString("yyyy-MM").Equals(dtl.Max(m => m.YearMonth))));
+            //    vAttAppointmentsBindingSource.DataSource = apt = clientFactory.GetData<VAttAppointments>().FindAll(o =>
+            //            o.日期.Value.ToString("yyyy-MM").Equals(hd.YearMonth));
+            //    //DataQueryPageRefresh();
+            //    //QueryPageRefresh();
+            //    clientFactory.DataPageRefresh<VAttWageBill>();
+            //    CommonServices.ErrorTrace.SetSuccessfullyInfo(this.FindForm(), "保存成功");
+            //    return true;
+            //}
+            //catch (Exception ex)
+            //{
+            //    if (ex.HResult == -2146232060)  //违反了PRIMARY KEY约束
+            //        CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), string.Format("单号:{0}已经存在,请重新添加新单。", hd.BillNo));
+            //    else
+            //    CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), ex.Message);
+            //    return false;
+            //}
+            //finally
+            //{
+            //    this.Cursor = System.Windows.Forms.Cursors.Default;
+            ////}
         }
 
         public bool Audit()
         {
-            try
-            {
-                this.Cursor = System.Windows.Forms.Cursors.WaitCursor;
-                if (hd != null)
-                {
-                    AttWageBillHd wage = BLLFty.Create<AttWageBillBLL>().GetAttWageBillHd(hd.ID);
-                    //dtl = BLLFty.Create<AttWageBillBLL>().GetUSPAttWageBillDtl().FindAll(o =>
-                                        //o.YearMonth == hd.YearMonth);
+            throw new NotImplementedException();
+            //try
+            //{
+            //    this.Cursor = System.Windows.Forms.Cursors.WaitCursor;
+            //    if (hd != null)
+            //    {
+            //        AttWageBillHd wage = BLLFty.Create<AttWageBillBLL>().GetAttWageBillHd(hd.ID);
+            //        //dtl = BLLFty.Create<AttWageBillBLL>().GetUSPAttWageBillDtl().FindAll(o =>
+            //                            //o.YearMonth == hd.YearMonth);
 
-                    hd.Auditor = MainForm.usersInfo.ID;
-                    hd.AuditDate = DateTime.Now;
-                    hd.Status = 1;
-                    hd.YearMonth = Convert.ToDateTime(deYearMonth.EditValue).ToString("yyyy-MM");
+            //        hd.Auditor = MainForm.usersInfo.ID;
+            //        hd.AuditDate = DateTime.Now;
+            //        hd.Status = 1;
+            //        hd.YearMonth = Convert.ToDateTime(deYearMonth.EditValue).ToString("yyyy-MM");
 
-                    List<AttAppointments> aptList = new List<AttAppointments>();
-                    List<AttGeneralLog> logList = new List<AttGeneralLog>();
-                    List<Alert> dellist = new List<Alert>();
-                    foreach (USPAttWageBillDtl item in dtl)
-                    {
-                        UsersInfo user = ((List<UsersInfo>)MainForm.dataSourceList[typeof(UsersInfo)]).FirstOrDefault(o =>
-                            o.ID == item.UserID);
-                        List<AttAppointments> apts = ((List<AttAppointments>)MainForm.dataSourceList[typeof(AttAppointments)]).FindAll(o =>
-                        o.UserID == item.UserID && o.CheckInTime.Value.ToString("yyyy-MM").Equals(item.YearMonth));
-                        if (wage != null && wage.Status == 1)  //取消审核
-                        {
-                            hd.Auditor = MainForm.usersInfo.ID;
-                            hd.AuditDate = DateTime.Now;
-                            hd.Status = 0;
-                            foreach (AttAppointments a in apts)
-                            {
-                                a.WageStatus = (int)WageStatus.UnClosed;
-                            }
-                        }
-                        else
-                        {
-                            foreach (AttAppointments a in apts)
-                            {
-                                a.WageStatus = (int)WageStatus.Closed;
-                            }
-                        }
-                        aptList.AddRange(apts);
-                        //删除考勤机下载记录
-                        List<AttGeneralLog> logs = ((List<AttGeneralLog>)MainForm.dataSourceList[typeof(AttGeneralLog)]).FindAll(o =>
-                        o.EnrollNumber == user.Code && o.AttTime.ToString("yyyy-MM").Equals(item.YearMonth));
-                        logList.AddRange(logs);
-                        //删除提醒信息
-                        //Alert alert = ((List<Alert>)MainForm.dataSourceList[typeof(Alert)]).Find(o => o.BillID == item.BillID);
-                        //if (alert != null)
-                        //    dellist.Add(alert);
-                    }
-                    BLLFty.Create<AttWageBillBLL>().Audit(hd, aptList, logList, dellist);
-                    MainForm.SetAlertCount();
+            //        List<AttAppointments> aptList = new List<AttAppointments>();
+            //        List<AttGeneralLog> logList = new List<AttGeneralLog>();
+            //        List<Alert> dellist = new List<Alert>();
+            //        foreach (USPAttWageBillDtl item in dtl)
+            //        {
+            //            UsersInfo user = BLLFty.Create<BaseBLL>().GetListBy<UsersInfo>(o =>
+            //                o.ID == item.UserID).FirstOrDefault();
+            //            List<AttAppointments> apts = BLLFty.Create<BaseBLL>().GetListBy<AttAppointments>(o =>
+            //            o.UserID == item.UserID && o.CheckInTime.Value.ToString("yyyy-MM").Equals(item.YearMonth));
+            //            if (wage != null && wage.Status == 1)  //取消审核
+            //            {
+            //                hd.Auditor = MainForm.usersInfo.ID;
+            //                hd.AuditDate = DateTime.Now;
+            //                hd.Status = 0;
+            //                foreach (AttAppointments a in apts)
+            //                {
+            //                    a.WageStatus = (int)WageStatus.UnClosed;
+            //                }
+            //            }
+            //            else
+            //            {
+            //                foreach (AttAppointments a in apts)
+            //                {
+            //                    a.WageStatus = (int)WageStatus.Closed;
+            //                }
+            //            }
+            //            aptList.AddRange(apts);
+            //            //删除考勤机下载记录
+            //            List<AttGeneralLog> logs = BLLFty.Create<BaseBLL>().GetListBy<AttGeneralLog>(o =>
+            //            o.EnrollNumber == user.Code && o.AttTime.ToString("yyyy-MM").Equals(item.YearMonth));
+            //            logList.AddRange(logs);
+            //            //删除提醒信息
+            //            //Alert alert = ((List<Alert>)MainForm.dataSourceList[typeof(Alert)]).Find(o => o.BillID == item.BillID);
+            //            //if (alert != null)
+            //            //    dellist.Add(alert);
+            //        }
+            //        BLLFty.Create<AttWageBillBLL>().Audit(hd, aptList, logList, dellist);
+            //        //MainForm.SetAlertCount();
 
-                    if (wage != null && wage.Status == 1)  //取消审核
-                        CommonServices.ErrorTrace.SetSuccessfullyInfo(this.FindForm(), "取消审核成功");
-                    else
-                        CommonServices.ErrorTrace.SetSuccessfullyInfo(this.FindForm(), "审核成功");
-                    BindData(hd.ID);
-                    return true;
-                }
-                else
-                {
-                    //DataQueryPageRefresh();
-                    CommonServices.ErrorTrace.SetSuccessfullyInfo(this.FindForm(), "没有可审核的单据");
-                    return false;
-                }
-            }
-            catch (Exception ex)
-            {
-                CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), ex.Message);
-                return false;
-            }
-            finally
-            {
-                MainForm.DataPageRefresh<VAttWageBill>();
-                this.Cursor = System.Windows.Forms.Cursors.Default;
-            }
+            //        if (wage != null && wage.Status == 1)  //取消审核
+            //            CommonServices.ErrorTrace.SetSuccessfullyInfo(this.FindForm(), "取消审核成功");
+            //        else
+            //            CommonServices.ErrorTrace.SetSuccessfullyInfo(this.FindForm(), "审核成功");
+            //        BindData(hd.ID);
+            //        return true;
+            //    }
+            //    else
+            //    {
+            //        //DataQueryPageRefresh();
+            //        CommonServices.ErrorTrace.SetSuccessfullyInfo(this.FindForm(), "没有可审核的单据");
+            //        return false;
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), ex.Message);
+            //    return false;
+            //}
+            //finally
+            //{
+            //    //clientFactory.DataPageRefresh<VAttWageBill>();
+            //    this.Cursor = System.Windows.Forms.Cursors.Default;
+            ////}
         }
 
         public void Print()
@@ -458,7 +460,7 @@ namespace USL
         {
             if (!string.IsNullOrEmpty(txtBillNo.Text.Trim()))
             {
-                List<AttWageBillHd> bills = ((List<AttWageBillHd>)MainForm.dataSourceList[typeof(AttWageBillHd)]).OrderBy(o => o.BillNo).ToList();
+                List<AttWageBillHd> bills = BLLFty.Create<BaseBLL>().GetListBy<AttWageBillHd>(null).OrderBy(o => o.BillNo).ToList();
                 for (int i = 0; i < bills.Count; i++)
                 {
                     if (bills[i].BillNo.Equals(txtBillNo.Text.Trim()))
@@ -490,7 +492,7 @@ namespace USL
         {
             if (!string.IsNullOrEmpty(txtBillNo.Text.Trim()))
             {
-                List<AttWageBillHd> bills = ((List<AttWageBillHd>)MainForm.dataSourceList[typeof(AttWageBillHd)]).OrderBy(o => o.BillNo).ToList();
+                List<AttWageBillHd> bills = BLLFty.Create<BaseBLL>().GetListBy<AttWageBillHd>(null).OrderBy(o => o.BillNo).ToList();
                 for (int i = 0; i < bills.Count; i++)
                 {
                     if (bills[i].BillNo.Equals(txtBillNo.Text.Trim()))
@@ -530,73 +532,73 @@ namespace USL
 
         public void SendData(object data)
         {
-            try
-            {
-                this.Cursor = System.Windows.Forms.Cursors.WaitCursor;
-                if (string.IsNullOrEmpty(txtBillNo.Text.Trim()))
-                {
-                    CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "没有可打印的数据");
-                    return;
-                }
-                DevExpress.XtraGrid.GridControl printControl = gcAPT;
-                gcAPT.DataSource = apt;
-                if (printControl == null || apt == null)
-                {
-                    CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "没有可打印的数据");
-                    return;
-                }
-                foreach (DevExpress.XtraGrid.Columns.GridColumn col in ((GridView)printControl.MainView).Columns)
-                {
-                    col.BestFit();
-                }
+            //try
+            //{
+            //    this.Cursor = System.Windows.Forms.Cursors.WaitCursor;
+            //    if (string.IsNullOrEmpty(txtBillNo.Text.Trim()))
+            //    {
+            //        CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "没有可打印的数据");
+            //        return;
+            //    }
+            //    DevExpress.XtraGrid.GridControl printControl = gcAPT;
+            //    gcAPT.DataSource = apt;
+            //    if (printControl == null || apt == null)
+            //    {
+            //        CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "没有可打印的数据");
+            //        return;
+            //    }
+            //    foreach (DevExpress.XtraGrid.Columns.GridColumn col in ((GridView)printControl.MainView).Columns)
+            //    {
+            //        col.BestFit();
+            //    }
                 
-                PrintSettingController psc = new PrintSettingController(printControl);
+            //    PrintSettingController psc = new PrintSettingController(printControl);
 
-                //页眉 
-                if (hd != null)
-                {
-                    psc.PrintCompany = MainForm.Company;
-                    psc.PrintHeader = "日程工资明细";
-                    //psc.PrintLeftHeader = "工资单号：" + hd.BillNo + "\r\n"
-                    //    + "职工姓名：" + lueBusinessContact.Text;
-                    //psc.PrintRightHeader = "开始日期：" + apt.Min(o => o.日期).Value.ToString("yyyy-MM-dd") + "\r\n"
-                    //    + "结束日期：" + apt.Max(o => o.日期).Value.ToString("yyyy-MM-dd");
-                    psc.PrintLeftHeader = "工资单号：" + hd.BillNo;
-                    psc.PrintRightHeader = "工资年月：" + deYearMonth.Text;
-                }
-                //获取明细列表界面数据（筛选后数据）
-                decimal billAMT = 0;
-                List<USPAttWageBillDtl> rDtl = new List<USPAttWageBillDtl>();
-                for (int i = 0; i < gridView.RowCount; i++)
-                {
-                    if (gridView.GetRow(i) != null && Convert.ToBoolean(gridView.GetRowCellValue(i, colCheckItem)))
-                        rDtl.Add((USPAttWageBillDtl)gridView.GetRow(i));
-                }
-                billAMT = rDtl.Sum(o => o.AMT);
-                psc.IsBill = false;
-                if (hd.Balance != null)
-                    psc.Balance = string.Format("上期结欠:{0:c}     共欠:{1:c}", hd.Balance, billAMT + hd.Balance);
-                //横纵向 
-                //psc.LandScape = this.rbtnHorizon.Checked;
-                //if (MainForm.Company.Contains("镇阳"))
-                //    psc.LandScape = false;
-                //else
-                    psc.LandScape = true;
-                //纸型 
-                psc.PaperKind = System.Drawing.Printing.PaperKind.A4;
-                //加载页面设置信息 
-                psc.LoadPageSetting();
+            //    //页眉 
+            //    if (hd != null)
+            //    {
+            //        psc.PrintCompany = MainForm.Company;
+            //        psc.PrintHeader = "日程工资明细";
+            //        //psc.PrintLeftHeader = "工资单号：" + hd.BillNo + "\r\n"
+            //        //    + "职工姓名：" + lueBusinessContact.Text;
+            //        //psc.PrintRightHeader = "开始日期：" + apt.Min(o => o.日期).Value.ToString("yyyy-MM-dd") + "\r\n"
+            //        //    + "结束日期：" + apt.Max(o => o.日期).Value.ToString("yyyy-MM-dd");
+            //        psc.PrintLeftHeader = "工资单号：" + hd.BillNo;
+            //        psc.PrintRightHeader = "工资年月：" + deYearMonth.Text;
+            //    }
+            //    //获取明细列表界面数据（筛选后数据）
+            //    decimal billAMT = 0;
+            //    List<USPAttWageBillDtl> rDtl = new List<USPAttWageBillDtl>();
+            //    for (int i = 0; i < gridView.RowCount; i++)
+            //    {
+            //        if (gridView.GetRow(i) != null && Convert.ToBoolean(gridView.GetRowCellValue(i, colCheckItem)))
+            //            rDtl.Add((USPAttWageBillDtl)gridView.GetRow(i));
+            //    }
+            //    billAMT = rDtl.Sum(o => o.AMT);
+            //    psc.IsBill = false;
+            //    if (hd.Balance != null)
+            //        psc.Balance = string.Format("上期结欠:{0:c}     共欠:{1:c}", hd.Balance, billAMT + hd.Balance);
+            //    //横纵向 
+            //    //psc.LandScape = this.rbtnHorizon.Checked;
+            //    //if (MainForm.Company.Contains("镇阳"))
+            //    //    psc.LandScape = false;
+            //    //else
+            //        psc.LandScape = true;
+            //    //纸型 
+            //    psc.PaperKind = System.Drawing.Printing.PaperKind.A4;
+            //    //加载页面设置信息 
+            //    psc.LoadPageSetting();
 
-                psc.Preview();
-            }
-            catch (Exception ex)
-            {
-                CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "没有可打印的数据。\r\n错误信息：" + ex.Message);
-            }
-            finally
-            {
-                this.Cursor = System.Windows.Forms.Cursors.Default;
-            }
+            //    psc.Preview();
+            //}
+            //catch (Exception ex)
+            //{
+            //    CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "没有可打印的数据。\r\n错误信息：" + ex.Message);
+            //}
+            //finally
+            //{
+            //    this.Cursor = System.Windows.Forms.Cursors.Default;
+            ////}
         }
 
         public object ReceiveData()

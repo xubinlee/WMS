@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using DevExpress.XtraBars.Docking2010.Views.WindowsUI;
 using DevExpress.XtraBars.Docking2010.Views;
 using System.Drawing;
-using DBML;
+using EDMX;
 using Factory;
 using BLL;
 using DevExpress.XtraBars;
@@ -32,28 +32,36 @@ using static Utility.EnumHelper;
 using System.Reflection;
 using System.Data.Linq;
 using System.Transactions;
+using DevExpress.XtraEditors.Filtering;
+using Utility.Interceptor;
+using MainMenu = EDMX.MainMenu;
+using System.Linq.Expressions;
 
 namespace USL
 {
     public partial class MainForm : XtraForm,IToolbar,IStatusbar
     {
+        //public static Dictionary<Type, object> dataSourceList = new Dictionary<Type, object>();
         //Thread threadGetVDataSource;
         Thread threadGetUserInfo;
         //Thread threadInsertAlert;
         public static Dictionary<String, int> alertCount;
         public static UsersInfo usersInfo;
+        public static Department department;
         ////public static List<Permission> userPermissions; //功能项权限
         public static List<ButtonPermission> buttonPermissions;//按钮权限
         //PageGroup pageGroupCore;
         //SampleDataSource dataSource;
         //Dictionary<SampleDataGroup, PageGroup> groupsItemDetailPage;
-        static List<DBML.MainMenu> menuList;
-        static List<SystemStatus> statusList;
-        Dictionary<DBML.MainMenu, PageGroup> groupsItemDetailPage;
+        static List<MainMenu> userMenuList; // 用户菜单，有权限设置的菜单列表
+        public static List<MainMenu> UserMenuList { get => userMenuList; }
+        private static List<MainMenu> allMainMenuList; // 菜单总表
+        public static List<MainMenu> AllMainMenuList { get => allMainMenuList; }
+        //static List<SystemStatus> statusList;
+        public ErrorInfoControl ErrorListControl { get => this.errorInfoControl1; }        
+        Dictionary<MainMenu, PageGroup> groupsItemDetailPage;
         public static Dictionary<Guid, PageGroup> groupsItemDetailList;
-        public static Dictionary<String, IItemDetail> itemDetailList;
         Dictionary<String, int> itemDetailButtonList; //子菜单按钮项
-        public static Dictionary<Type, object> dataSourceList;  //数据集
         public static AlertControl alertControl;
         //public static int exportSalesReceiptDate = int.Parse(ConfigurationManager.AppSettings["ExportSalesReceiptDate"]);  //外销账期
         static int goodsBigType = 0;  //Goods大类
@@ -142,13 +150,21 @@ namespace USL
             set { MainForm.attParam = value; }
         }
 
-        static SystemInfo sysInfo = null;
+        //static SystemInfo sysInfo = null;
 
-        public static SystemInfo SysInfo
-        {
-            get { return MainForm.sysInfo; }
-            set { MainForm.sysInfo = value; }
-        }
+        //public static SystemInfo SysInfo
+        //{
+        //    get { return MainForm.sysInfo; }
+        //    set { MainForm.sysInfo = value; }
+        //}
+
+        static List<TypesList> typesList = null;
+
+        public static List<TypesList> TypesList { get => typesList; }
+
+        public static Dictionary<String, MainMenu> mainMenuList = new Dictionary<String, MainMenu>();
+        public static Dictionary<String, ItemDetailPage> itemDetailPageList = new Dictionary<String, ItemDetailPage>();
+        public static Hashtable hasItemDetailPage = new Hashtable();
 
         static bool isLandScape = true;
 
@@ -246,56 +262,39 @@ namespace USL
 
                     this.tools.Visible = false;
                     windowsUIView.AddTileWhenCreatingDocument = DevExpress.Utils.DefaultBoolean.False;
-                    //dataSource = new SampleDataSource();
-                    //userPermissions.Find(o => o.Caption.Trim() == item.Caption.Trim()).CheckBoxState;
-                    menuList = BLLFty.Create<MainMenuBLL>().GetMainMenu();
-                    statusList = BLLFty.Create<SystemInfoBLL>().GetSystemStatus();
-                    List<Permission> pList = BLLFty.Create<PermissionBLL>().GetPermission().FindAll(o => o.UserID == usersInfo.ID);
-
+                    userMenuList = BLLFty.Create<BaseBLL>().GetListBy<MainMenu>(null);
+                    allMainMenuList = userMenuList;
+                    //statusList = cli BLLFty.Create<SystemInfoBLL>().GetSystemStatus();
+                    List<Permission> pList = BLLFty.Create<BaseBLL>().GetListBy<Permission>(o => o.UserID == usersInfo.ID);
 
                     //如果MainMenu有变更，更新用户权限列表
-                    updatePermission(pList);
-
-                    pList = BLLFty.Create<PermissionBLL>().GetPermission().FindAll(o => o.UserID == usersInfo.ID);
+                    pList = updatePermission(pList);
                     //设置权限
-                    for (int i = menuList.Count - 1; i >= 0; i--)
+                    for (int i = userMenuList.Count - 1; i >= 0; i--)
                     {
-                        if (menuList[i].ParentID == null)
+                        if (userMenuList[i].ParentID == null)
                             continue;
-                        if (pList.FirstOrDefault(o => o.Caption.Trim() == menuList[i].Caption.Trim()).CheckBoxState == false)
+                        Permission p = pList.FirstOrDefault(o => o.Caption.Trim() == userMenuList[i].Caption.Trim());
+                        if (p!=null && p.CheckBoxState == false)
                         {
-                            menuList.RemoveAt(i);
+                            userMenuList.RemoveAt(i);
                             continue;
                         }
                     }
                     alertCount = new Dictionary<string, int>();
                     //groupsItemDetailPage = new Dictionary<SampleDataGroup, PageGroup>();
-                    groupsItemDetailPage = new Dictionary<DBML.MainMenu, PageGroup>();
+                    groupsItemDetailPage = new Dictionary<MainMenu, PageGroup>();
                     groupsItemDetailList = new Dictionary<Guid, PageGroup>();
-                    itemDetailList = new Dictionary<String, IItemDetail>();  //ItemDetailPage页面所有加载的Control
                     itemDetailButtonList = new Dictionary<string, int>();
-                    dataSourceList = new Dictionary<Type, object>();
                     alertControl = new AlertControl(this.components);
                     alertControl.FormShowingEffect = AlertFormShowingEffect.SlideHorizontal;
 
                     SetStateBarInfo();
                     //GetDataSource();
                     //GetVDataSource();
-                    List<Department> depts = BLLFty.Create<DepartmentBLL>().GetDepartment();
-                    dataSourceList.Add(typeof(Department), depts);
-                    List<SystemStatus> ss = BLLFty.Create<SystemInfoBLL>().GetSystemStatus();
-                    dataSourceList.Add(typeof(SystemStatus), ss);
-                    List<TypesList> types = BLLFty.Create<TypesListBLL>().GetTypesList();
-                    dataSourceList.Add(typeof(TypesList), types);
-                    List<Warehouse> warehouseList = BLLFty.Create<WarehouseBLL>().GetWarehouse();
-                    dataSourceList.Add(typeof(Warehouse), warehouseList);
-                    List<Permission> permissionList = BLLFty.Create<PermissionBLL>().GetPermission();
-                    dataSourceList.Add(typeof(Permission), permissionList);
-                    List<ButtonPermission> buttonPermissionList = BLLFty.Create<PermissionBLL>().GetButtonPermission();
-                    dataSourceList.Add(typeof(ButtonPermission), buttonPermissionList);
-                    buttonPermissions = BLLFty.Create<PermissionBLL>().GetButtonPermission().FindAll(o => o.UserID == usersInfo.ID);
-                    attParam = BLLFty.Create<AttAppointmentsBLL>().GetAttParameters().FirstOrDefault(o => o.CommMode == "TCP/IP");
-                    sysInfo = BLLFty.Create<SystemInfoBLL>().GetSystemInfo().FirstOrDefault(o => o.Company.Contains(MainForm.Company));
+                    buttonPermissions =BLLFty.Create<BaseBLL>().GetListBy<ButtonPermission>(o => o.UserID == usersInfo.ID);
+                    attParam =BLLFty.Create<BaseBLL>().GetListByNoTracking<AttParameters>(o => o.CommMode == "TCP/IP").FirstOrDefault();
+                    typesList = BLLFty.Create<BaseBLL>().GetListByNoTracking<TypesList>(null);
                     CreateLayout();
                     ts.Complete();
                 }
@@ -312,10 +311,10 @@ namespace USL
             }
         }
 
-        private void updatePermission(List<Permission> pList)
+        private List<Permission> updatePermission(List<Permission> pList)
         {
             List<Permission> insertList = new List<Permission>();
-            menuList.FindAll(o=>o.CheckBoxState).ForEach(menu =>
+            allMainMenuList.ForEach(menu =>
             {
                 Permission p = pList.FirstOrDefault(o => o.UserID == usersInfo.ID && o.Caption == menu.Caption);
                 Permission obj = new Permission();
@@ -335,7 +334,13 @@ namespace USL
                 insertList.Add(obj);
             });
             if (insertList.Count > 0)
-                BLLFty.Create<PermissionBLL>().Update(usersInfo.ID, insertList);
+            {
+                Expression<Func<Permission, bool>> delWhere = o => o.UserID.Equals(usersInfo.ID);
+                BLLFty.Create<BaseBLL>().DeleteAndAdd(delWhere, insertList);
+                return BLLFty.Create<BaseBLL>().GetListBy<Permission>(o => o.UserID == usersInfo.ID);
+            }
+            else
+                return pList;
         }
 
         protected override void OnLoad(EventArgs e)
@@ -350,7 +355,7 @@ namespace USL
             ////{
             ////    alertControl.Show(this, item.Caption, item.Text, global::USL.Properties.Resources.Alarm_Clock);
             ////}
-            SetAlertCount();
+            //SetAlertCount();
             barUserInfo.ItemClick += barUserInfo_ItemClick;
             //AlertControl ac = new AlertControl();
             //ac.AppearanceCaption.Font = new Font("宋体", 15);
@@ -370,25 +375,25 @@ namespace USL
         /// <summary>
         /// 提醒记录数量
         /// </summary>
-        public static void SetAlertCount()
-        {
-            List<Alert> alertList = BLLFty.Create<AlertBLL>().GetAlert();//((List<Alert>)MainForm.dataSourceList[typeof(Alert)]);
-            alertCount.Clear();
-            foreach (Alert item in alertList)
-            {
-                if (alertCount.ContainsKey(item.Caption) == false)
-                {
-                    alertCount.Add(item.Caption, 1);
-                }
-                else
-                    alertCount[item.Caption] = ++alertCount[item.Caption];
-            }
-            //lblAlert.Caption = "提醒信息：";
-            //foreach (KeyValuePair<String, int> kvp in alertCount)
-            //{
-            //    lblAlert.Caption += string.Format("{0}条{1}；", kvp.Value, kvp.Key);
-            //}
-        }
+        //public static void SetAlertCount()
+        //{
+        //    List<Alert> alertList = BLLFty.Create<AlertBLL>().GetAlert();//((List<Alert>)MainForm.dataSourceList[typeof(Alert)]);
+        //    alertCount.Clear();
+        //    foreach (Alert item in alertList)
+        //    {
+        //        if (alertCount.ContainsKey(item.Caption) == false)
+        //        {
+        //            alertCount.Add(item.Caption, 1);
+        //        }
+        //        else
+        //            alertCount[item.Caption] = ++alertCount[item.Caption];
+        //    }
+        //    //lblAlert.Caption = "提醒信息：";
+        //    //foreach (KeyValuePair<String, int> kvp in alertCount)
+        //    //{
+        //    //    lblAlert.Caption += string.Format("{0}条{1}；", kvp.Value, kvp.Key);
+        //    //}
+        //}
 
         void barUserInfo_ItemClick(object sender, ItemClickEventArgs e)
         {
@@ -398,71 +403,71 @@ namespace USL
 
         void InsertAlert()
         {
-            // 删除所有单据提醒记录
-            BLLFty.Create<AlertBLL>().DeleteBill();
-            //单据交货日期提醒
-            List<Alert> dellist = new List<Alert>();
-            List<Alert> insertlist = new List<Alert>();
-            //订货单
-            List<OrderHd> orderList = BLLFty.Create<OrderBLL>().GetOrderHd();
-            foreach (OrderHd order in orderList)
-            {
-                //Alert alert = BLLFty.Create<AlertBLL>().GetAlert().Find(o => o.BillID == order.ID);
-                //if (alert != null)
-                //    dellist.Add(alert);
-                Company customer = BLLFty.Create<CompanyBLL>().GetCompany().FirstOrDefault(o => o.ID == order.CompanyID);
-                if (order.Status == 0 && order.DeliveryDate <= DateTime.Now.AddDays(3))
-                {
-                    Alert obj = new Alert();
-                    obj.ID = Guid.NewGuid();
-                    obj.BillID = order.ID;
-                    obj.Caption = "交货提醒";
-                    obj.Text = string.Format("客户:[{0}],唛头:[{1}]的订货单[{2}]交货日期是:[{3}].请尽快发货。\r\n备注:{4}", customer.Name ?? string.Empty, order.MainMark, order.BillNo, order.DeliveryDate.ToString("yyyy-MM-dd"), order.Remark);
-                    obj.AddTime = DateTime.Now;
-                    insertlist.Add(obj);
-                }
-            }
+            //// 删除所有单据提醒记录
+            //BLLFty.Create<AlertBLL>().DeleteBill();
+            ////单据交货日期提醒
+            //List<Alert> dellist = new List<Alert>();
+            //List<Alert> insertlist = new List<Alert>();
+            ////订货单
+            //List<OrderHd> orderList = BLLFty.Create<OrderBLL>().GetOrderHd();
+            //foreach (OrderHd order in orderList)
+            //{
+            //    //Alert alert = BLLFty.Create<AlertBLL>().GetAlert().Find(o => o.BillID == order.ID);
+            //    //if (alert != null)
+            //    //    dellist.Add(alert);
+            //    Company customer = BLLFty.Create<CompanyBLL>().GetCompany().FirstOrDefault(o => o.ID == order.CompanyID);
+            //    if (order.Status == 0 && order.DeliveryDate <= DateTime.Now.AddDays(3))
+            //    {
+            //        Alert obj = new Alert();
+            //        obj.ID = Guid.NewGuid();
+            //        obj.BillID = order.ID;
+            //        obj.Caption = "交货提醒";
+            //        obj.Text = string.Format("客户:[{0}],唛头:[{1}]的订货单[{2}]交货日期是:[{3}].请尽快发货。\r\n备注:{4}", customer.Name ?? string.Empty, order.MainMark, order.BillNo, order.DeliveryDate.ToString("yyyy-MM-dd"), order.Remark);
+            //        obj.AddTime = DateTime.Now;
+            //        insertlist.Add(obj);
+            //    }
+            //}
 
-            //出库单
-            List<StockOutBillHd> billList = BLLFty.Create<StockOutBillBLL>().GetStockOutBillHd();
-            foreach (StockOutBillHd bill in billList)
-            {
-                //Alert alert = BLLFty.Create<AlertBLL>().GetAlert().Find(o => o.BillID == bill.ID);
-                //if (alert != null)
-                //    dellist.Add(alert);
-                Company customer = BLLFty.Create<CompanyBLL>().GetCompany().FirstOrDefault(o => o.ID == bill.CompanyID);
-                List<TypesList> types = BLLFty.Create<TypesListBLL>().GetTypesList();
-                string billName = types.Find(o => o.Type == TypesListConstants.StockOutBillType && o.No == bill.Type).Name;
-                if (bill.Status == 0 && bill.DeliveryDate <= DateTime.Now.AddDays(3))
-                {
-                    Alert obj = new Alert();
-                    obj.ID = Guid.NewGuid();
-                    obj.BillID = bill.ID;
-                    obj.Caption = "交货提醒";
-                    obj.Text = string.Format("客户:[{0}],唛头:[{1}]的{2}单[{3}]交货日期是:[{4}].请尽快发货。\r\n备注:{5}", customer == null ? string.Empty : customer.Name, bill.MainMark, billName, bill.BillNo, bill.DeliveryDate.ToString("yyyy-MM-dd"), bill.Remark);
-                    obj.AddTime = DateTime.Now;
-                    insertlist.Add(obj);
-                }
-                if (bill.CompanyID != null)  
-                {
-                    Company company = BLLFty.Create<CompanyBLL>().GetCompany().Find(o => o.ID == bill.CompanyID && o.Type == 1);//外销客户
-                    if (bill.Status == 1 && company != null && company.AccountPeriod.HasValue && company.AccountPeriod.Value > 0 && bill.BillDate.AddDays(company.AccountPeriod.Value) <= DateTime.Now)  //外销账期，如交货后45天收款
-                    {
-                        Alert obj = new Alert();
-                        obj.ID = Guid.NewGuid();
-                        obj.BillID = bill.ID;
-                        obj.Caption = "收款提醒";
-                        obj.Text = string.Format("客户:[{0}],唛头:[{1}]的{2}单[{3}]的账期{4}天已到.可以收款了。\r\n备注:{5}", company.Name, bill.MainMark, billName, bill.BillNo, company.AccountPeriod.Value, bill.Remark);
-                        obj.AddTime = DateTime.Now;
-                        insertlist.Add(obj);
-                    }
-                }
-            }
-            if (dellist.Count > 0 || insertlist.Count > 0)
-                BLLFty.Create<AlertBLL>().Insert(dellist, insertlist);
+            ////出库单
+            //List<StockOutBillHd> billList = BLLFty.Create<StockOutBillBLL>().GetStockOutBillHd();
+            //foreach (StockOutBillHd bill in billList)
+            //{
+            //    //Alert alert = BLLFty.Create<AlertBLL>().GetAlert().Find(o => o.BillID == bill.ID);
+            //    //if (alert != null)
+            //    //    dellist.Add(alert);
+            //    Company customer = BLLFty.Create<CompanyBLL>().GetCompany().FirstOrDefault(o => o.ID == bill.CompanyID);
+            //    List<TypesList> types = BLLFty.Create<TypesListBLL>().GetTypesList();
+            //    string billName = types.Find(o => o.Type == TypesListConstants.StockOutBillType && o.No == bill.Type).Name;
+            //    if (bill.Status == 0 && bill.DeliveryDate <= DateTime.Now.AddDays(3))
+            //    {
+            //        Alert obj = new Alert();
+            //        obj.ID = Guid.NewGuid();
+            //        obj.BillID = bill.ID;
+            //        obj.Caption = "交货提醒";
+            //        obj.Text = string.Format("客户:[{0}],唛头:[{1}]的{2}单[{3}]交货日期是:[{4}].请尽快发货。\r\n备注:{5}", customer == null ? string.Empty : customer.Name, bill.MainMark, billName, bill.BillNo, bill.DeliveryDate.ToString("yyyy-MM-dd"), bill.Remark);
+            //        obj.AddTime = DateTime.Now;
+            //        insertlist.Add(obj);
+            //    }
+            //    if (bill.CompanyID != null)  
+            //    {
+            //        Company company = BLLFty.Create<CompanyBLL>().GetCompany().Find(o => o.ID == bill.CompanyID && o.Type == 1);//外销客户
+            //        if (bill.Status == 1 && company != null && company.AccountPeriod.HasValue && company.AccountPeriod.Value > 0 && bill.BillDate.AddDays(company.AccountPeriod.Value) <= DateTime.Now)  //外销账期，如交货后45天收款
+            //        {
+            //            Alert obj = new Alert();
+            //            obj.ID = Guid.NewGuid();
+            //            obj.BillID = bill.ID;
+            //            obj.Caption = "收款提醒";
+            //            obj.Text = string.Format("客户:[{0}],唛头:[{1}]的{2}单[{3}]的账期{4}天已到.可以收款了。\r\n备注:{5}", company.Name, bill.MainMark, billName, bill.BillNo, company.AccountPeriod.Value, bill.Remark);
+            //            obj.AddTime = DateTime.Now;
+            //            insertlist.Add(obj);
+            //        }
+            //    }
+            //}
+            //if (dellist.Count > 0 || insertlist.Count > 0)
+            //    BLLFty.Create<AlertBLL>().Insert(dellist, insertlist);
         }
 
-        public static void SetSelected(PageGroup pageGroupCore, DBML.MainMenu mainMenu)
+        public static void SetSelected(PageGroup pageGroupCore, MainMenu mainMenu)
         {
             BaseContentContainer documentContainer = pageGroupCore.Parent as BaseContentContainer;
             if (documentContainer != null)
@@ -476,7 +481,7 @@ namespace USL
                 }
                 //进入二级菜单
                 int i = 0, index = 0;
-                foreach (DBML.MainMenu mm in menuList.FindAll(o => o.ParentID == mainMenu.ParentID))
+                foreach (MainMenu mm in userMenuList.FindAll(o => o.ParentID == mainMenu.ParentID))
                 {
                     if (MainForm.hasItemDetailPage[mm.Name] == null)
                     {
@@ -500,86 +505,84 @@ namespace USL
         /// <returns></returns>
         public static SystemStatus GetMaxBillNo(String billType, bool IsCreated)
         {
+            string prefix = string.Empty;
+            MainMenu menu = allMainMenuList.FirstOrDefault(o => o.Name.Equals(billType));
+            if (menu != null)
+                prefix = menu.Prefix;
+            string no = prefix + DateTime.Now.ToString("yyyyMMdd") + "000";
             SystemStatus entity = null;
-            try
+            List<SystemStatus> list = BLLFty.Create<BaseBLL>().GetListBy<SystemStatus>(null);
+            if (list != null)
             {
-                string prefix = string.Empty;
-                DBML.MainMenu menu = menuList.FirstOrDefault(o => o.Name.Equals(billType));
-                if (menu != null)
-                    prefix = menu.Prefix;
-                string no = prefix + DateTime.Now.ToString("yyyyMMdd") + "000";
-
-                List <SystemStatus> list = BLLFty.Create<SystemInfoBLL>().GetSystemStatus();
-                if (list != null)
+                entity = list.FirstOrDefault(o => o.MainMenuName.Equals(billType));
+                if (entity != null)
+                    no = entity.MaxBillNo.Trim();
+            }
+            if (entity == null)
+            {
+                entity = new SystemStatus()
                 {
-                    entity = list.FirstOrDefault(o => o.MainMenuName.Equals(billType));
-                    if (entity != null)
-                        no = entity.MaxBillNo.Trim();
+                    MainMenuName = billType,
+                    MaxBillNo = no,
+                    Status = 0
+                };
+            }
+            if (IsCreated)
+            {
+                // 单号流水+1
+                if (no.Length == 13 && no.Substring(2, 8).Equals(DateTime.Now.ToString("yyyyMMdd")))
+                {
+                    no = prefix + DateTime.Now.ToString("yyyyMMdd") + Convert.ToString(int.Parse(no.Substring(10, 3)) + 1).PadLeft(3, '0');
+                    entity.MaxBillNo = no;
                 }
-                if (IsCreated)
+                else
                 {
-                    // 单号流水+1
-                    if (no.Length == 13 && no.Substring(2, 8).Equals(DateTime.Now.ToString("yyyyMMdd")))
-                    {
-                        no = prefix + DateTime.Now.ToString("yyyyMMdd") + Convert.ToString(int.Parse(no.Substring(10, 3)) + 1).PadLeft(3, '0');
-                    }
-                    if (entity == null)
-                    {
-                        entity = new SystemStatus();
-                        entity.MainMenuName = billType;
-                        entity.MaxBillNo = no;
-                        entity.Status = 0;
-                        BLLFty.Create<SystemInfoBLL>().Insert(entity);
-                    }
-                    else
-                    {
-                        entity.MaxBillNo = no;
-                        BLLFty.Create<SystemInfoBLL>().Update(entity);
-                    }
-                    DataPageRefresh<SystemStatus>();
+
+                    XtraMessageBox.Show("单号格式错误。", "操作提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return null;
                 }
             }
-            catch { }
+            BLLFty.Create<BaseBLL>().AddOrUpdate(entity);
             return entity;
         }
 
-        public static string GetBillMaxBillNo(String billType, String prefix)
-        {
-            string no = string.Empty;
-            switch (billType)
-            {
-                case MainMenuConstants.Order:
-                    no = BLLFty.Create<OrderBLL>().GetMaxBillNo();
-                    break;
-                case MainMenuConstants.StockInBillType:
-                    no = BLLFty.Create<StockInBillBLL>().GetMaxBillNo();
-                    break;
-                case MainMenuConstants.StockOutBillType:
-                    no = BLLFty.Create<StockOutBillBLL>().GetMaxBillNo();
-                    break;
-                case MainMenuConstants.ReceiptBill:
-                    no = BLLFty.Create<ReceiptBillBLL>().GetMaxBillNo();
-                    break;
-                case MainMenuConstants.PaymentBill:
-                    no = BLLFty.Create<PaymentBillBLL>().GetMaxBillNo();
-                    break;
-                case MainMenuConstants.WageBill:
-                    no = BLLFty.Create<WageBillBLL>().GetMaxBillNo();
-                    break;
-                default:
-                    break;
-            }
-            if (string.IsNullOrEmpty(no))
-                no = prefix + DateTime.Now.ToString("yyyyMMdd") + "001";
-            else
-            {
-                if (no.Substring(2, 8).Equals(DateTime.Now.ToString("yyyyMMdd")))
-                    no = prefix + DateTime.Now.ToString("yyyyMMdd") + Convert.ToString(int.Parse(no.Substring(10, 3)) + 1).PadLeft(3, '0');
-                else
-                    no = prefix + DateTime.Now.ToString("yyyyMMdd") + "001";
-            }
-            return no;
-        }
+        //public static string GetBillMaxBillNo(String billType, String prefix)
+        //{
+        //    string no = string.Empty;
+        //    switch (billType)
+        //    {
+        //        case MainMenuConstants.Order:
+        //            no = BLLFty.Create<OrderBLL>().GetMaxBillNo();
+        //            break;
+        //        case MainMenuConstants.StockInBillType:
+        //            no = BLLFty.Create<StockInBillBLL>().GetMaxBillNo();
+        //            break;
+        //        case MainMenuConstants.StockOutBillType:
+        //            no = BLLFty.Create<StockOutBillBLL>().GetMaxBillNo();
+        //            break;
+        //        case MainMenuConstants.ReceiptBill:
+        //            no = BLLFty.Create<ReceiptBillBLL>().GetMaxBillNo();
+        //            break;
+        //        case MainMenuConstants.PaymentBill:
+        //            no = BLLFty.Create<PaymentBillBLL>().GetMaxBillNo();
+        //            break;
+        //        case MainMenuConstants.WageBill:
+        //            no = BLLFty.Create<WageBillBLL>().GetMaxBillNo();
+        //            break;
+        //        default:
+        //            break;
+        //    }
+        //    if (string.IsNullOrEmpty(no))
+        //        no = prefix + DateTime.Now.ToString("yyyyMMdd") + "001";
+        //    else
+        //    {
+        //        if (no.Substring(2, 8).Equals(DateTime.Now.ToString("yyyyMMdd")))
+        //            no = prefix + DateTime.Now.ToString("yyyyMMdd") + Convert.ToString(int.Parse(no.Substring(10, 3)) + 1).PadLeft(3, '0');
+        //        else
+        //            no = prefix + DateTime.Now.ToString("yyyyMMdd") + "001";
+        //    }
+        //    return no;
+        //}
 
         /// <summary>
         /// 获得外箱规格对应的体积
@@ -598,191 +601,191 @@ namespace USL
             return iVolume;
         }
 
-        static VStaffSchClass GetStaffSchClass(AttGeneralLog log, Guid? deptID)
-        {
-            //AttFlag:True表示签到，False表示签退
-            VStaffSchClass result = null;
-            List<VStaffSchClass> schList = ((List<VStaffSchClass>)dataSourceList[typeof(VStaffSchClass)]).FindAll(o => o.DeptID == deptID);
-            VStaffSchClass schIn = schList.FirstOrDefault(o =>
-                o.CheckInStartTime.Value.TimeOfDay <= log.AttTime.TimeOfDay && o.CheckInEndTime.Value.TimeOfDay >= log.AttTime.TimeOfDay);
-            if (schIn == null)
-            {
-                VStaffSchClass schOut = schList.FirstOrDefault(o =>
-                    o.CheckOutStartTime.Value.TimeOfDay <= log.AttTime.TimeOfDay && o.CheckOutEndTime.Value.TimeOfDay >= log.AttTime.TimeOfDay);
-                if (schOut != null)
-                {
-                    log.AttFlag = false;
-                    result = schOut;
-                }
-            }
-            else
-            {
-                log.AttFlag = true;
-                result = schIn;
-            }
-            return result;
-        }
+        //static VStaffSchClass GetStaffSchClass(AttGeneralLog log, Guid? deptID)
+        //{
+        //    //AttFlag:True表示签到，False表示签退
+        //    VStaffSchClass result = null;
+        //    List<VStaffSchClass> schList =clientFactory.GetData<VStaffSchClass>().FindAll(o => o.DeptID == deptID);
+        //    VStaffSchClass schIn = schList.FirstOrDefault(o =>
+        //        o.CheckInStartTime.Value.TimeOfDay <= log.AttTime.TimeOfDay && o.CheckInEndTime.Value.TimeOfDay >= log.AttTime.TimeOfDay);
+        //    if (schIn == null)
+        //    {
+        //        VStaffSchClass schOut = schList.FirstOrDefault(o =>
+        //            o.CheckOutStartTime.Value.TimeOfDay <= log.AttTime.TimeOfDay && o.CheckOutEndTime.Value.TimeOfDay >= log.AttTime.TimeOfDay);
+        //        if (schOut != null)
+        //        {
+        //            log.AttFlag = false;
+        //            result = schOut;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        log.AttFlag = true;
+        //        result = schIn;
+        //    }
+        //    return result;
+        //}
 
-        public static void GetAttAppointments()
-        {
-            //添加考勤报表
-            List<AttGeneralLog> attGLogs = (List<AttGeneralLog>)dataSourceList[typeof(AttGeneralLog)];
-            Hashtable hasAtt = new Hashtable();
-            List<AttAppointments> aptList = BLLFty.Create<AttAppointmentsBLL>().GetAttAppointments();
-            List<AttAppointments> aptInsertList = new List<AttAppointments>();
-            List<AttAppointments> aptUpdateList = new List<AttAppointments>();
-            //List<VAttAppointments> vaptList = new List<VAttAppointments>();
-            AttAppointments apt = null;
-            VStaffSchClass vssc = null;
-            foreach (AttGeneralLog log in attGLogs)
-            {
-                UsersInfo user = ((List<UsersInfo>)dataSourceList[typeof(UsersInfo)]).FirstOrDefault(o => o.Code == log.EnrollNumber && o.IsDel == false);
-                if (user == null)
-                    continue;
-                if (log.SchClassID == null || log.SchClassID == Guid.Empty)
-                {
-                    vssc = GetStaffSchClass(log, user.DeptID);
-                    if (vssc == null)
-                        continue;  //排除那些无意义的打卡记录
-                }
-                else
-                    vssc = ((List<VStaffSchClass>)dataSourceList[typeof(VStaffSchClass)]).FirstOrDefault(o =>
-                        o.SchClassID == log.SchClassID && o.DeptID == user.DeptID);
-                if (user != null && vssc != null)
-                {
-                    if (hasAtt[log.EnrollNumber + log.AttTime.ToString("yyyyMMdd") + vssc.Name] == null)
-                    //AttAppointments apt = aptList.FirstOrDefault(o => o.UserID == user.ID
-                    //    && (o.CheckInTime.Value.ToString("yyyyMM") == log.AttTime.ToString("yyyyMM") || o.CheckOutTime.Value.ToString("yyyyMM") == log.AttTime.ToString("yyyyMM"))
-                    //    && o.SchClassName == vssc.Name);
-                    //if (apt == null)
-                    {
-                        apt = new AttAppointments();
-                        apt.UserID = user.ID;
-                        apt.SchClassID = vssc.SchClassID;
-                        apt.SchClassName = vssc.Name;
-                        apt.SchSerialNo = vssc.SchSerialNo;
-                        apt.SchStartTime = vssc.StartTime;
-                        apt.SchEndTime = vssc.EndTime;
-                        if (log.AttFlag)
-                        {
-                            apt.CheckInTime = log.AttTime;
-                            apt.GLogStartID = log.ID;
-                            int late = (int)(log.AttTime.TimeOfDay - vssc.StartTime.Value.TimeOfDay).TotalMinutes;
-                            if (late > vssc.LateMinutes)
-                                apt.LateMinutes = late;
-                        }
-                        else if (log.AttFlag == false)
-                        {
-                            apt.CheckOutTime = log.AttTime;
-                            apt.GLogEndID = log.ID;
-                            int early = (int)(vssc.EndTime.Value.TimeOfDay - log.AttTime.TimeOfDay).TotalMinutes;
-                            if (early > vssc.EarlyMinutes)
-                                apt.EarlyMinutes = early;
-                        }
-                        apt.AttStatus = log.AttStatus;
-                        apt.Description = log.Description;
-                        //apt = SetAttStatus(apt);
-                        //aptInsertList.Add(apt);
-                        hasAtt.Add(log.EnrollNumber + log.AttTime.ToString("yyyyMMdd") + vssc.Name, apt);
-                    }
-                    else
-                    {
-                        apt = hasAtt[log.EnrollNumber + log.AttTime.ToString("yyyyMMdd") + vssc.Name] as AttAppointments;
-                        apt.UserID = user.ID;
-                        apt.SchClassID = vssc.SchClassID;
-                        apt.SchClassName = vssc.Name;
-                        apt.SchSerialNo = vssc.SchSerialNo;
-                        apt.SchStartTime = vssc.StartTime;
-                        apt.SchEndTime = vssc.EndTime;
-                        if (log.AttFlag)
-                        {
-                            apt.CheckInTime = log.AttTime;
-                            apt.GLogStartID = log.ID;
-                            int late = (int)(log.AttTime.TimeOfDay - vssc.StartTime.Value.TimeOfDay).TotalMinutes;
-                            if (late > vssc.LateMinutes)
-                                apt.LateMinutes = late;
-                        }
-                        else if (log.AttFlag == false)
-                        {
-                            apt.CheckOutTime = log.AttTime;
-                            apt.GLogEndID = log.ID;
-                            int early = (int)(vssc.EndTime.Value.TimeOfDay - log.AttTime.TimeOfDay).TotalMinutes;
-                            if (early > vssc.EarlyMinutes)
-                                apt.EarlyMinutes = early;
-                        }
-                        apt.AttStatus = log.AttStatus;
-                        apt.Description = log.Description;
-                        //apt = SetAttStatus(apt);
-                        //aptUpdateList.Add(apt);
-                        hasAtt[log.EnrollNumber + log.AttTime.ToString("yyyyMMdd") + vssc.Name] = apt;
-                    }
-                }
-            }
+        //public static void GetAttAppointments()
+        //{
+        //    //添加考勤报表
+        //    List<AttGeneralLog> attGLogs =clientFactory.GetData<AttGeneralLog>();
+        //    Hashtable hasAtt = new Hashtable();
+        //    List<AttAppointments> aptList = BLLFty.Create<AttAppointmentsBLL>().GetAttAppointments();
+        //    List<AttAppointments> aptInsertList = new List<AttAppointments>();
+        //    List<AttAppointments> aptUpdateList = new List<AttAppointments>();
+        //    //List<VAttAppointments> vaptList = new List<VAttAppointments>();
+        //    AttAppointments apt = null;
+        //    VStaffSchClass vssc = null;
+        //    foreach (AttGeneralLog log in attGLogs)
+        //    {
+        //        UsersInfo user = clientFactory.GetData<UsersInfo>().FirstOrDefault(o => o.Code == log.EnrollNumber && o.IsDel == false);
+        //        if (user == null)
+        //            continue;
+        //        if (log.SchClassID == null || log.SchClassID == Guid.Empty)
+        //        {
+        //            vssc = GetStaffSchClass(log, user.DeptID);
+        //            if (vssc == null)
+        //                continue;  //排除那些无意义的打卡记录
+        //        }
+        //        else
+        //            vssc =clientFactory.GetData<VStaffSchClass>().FirstOrDefault(o =>
+        //                o.SchClassID == log.SchClassID && o.DeptID == user.DeptID);
+        //        if (user != null && vssc != null)
+        //        {
+        //            if (hasAtt[log.EnrollNumber + log.AttTime.ToString("yyyyMMdd") + vssc.Name] == null)
+        //            //AttAppointments apt = aptList.FirstOrDefault(o => o.UserID == user.ID
+        //            //    && (o.CheckInTime.Value.ToString("yyyyMM") == log.AttTime.ToString("yyyyMM") || o.CheckOutTime.Value.ToString("yyyyMM") == log.AttTime.ToString("yyyyMM"))
+        //            //    && o.SchClassName == vssc.Name);
+        //            //if (apt == null)
+        //            {
+        //                apt = new AttAppointments();
+        //                apt.UserID = user.ID;
+        //                apt.SchClassID = vssc.SchClassID;
+        //                apt.SchClassName = vssc.Name;
+        //                apt.SchSerialNo = vssc.SchSerialNo;
+        //                apt.SchStartTime = vssc.StartTime;
+        //                apt.SchEndTime = vssc.EndTime;
+        //                if (log.AttFlag)
+        //                {
+        //                    apt.CheckInTime = log.AttTime;
+        //                    apt.GLogStartID = log.ID;
+        //                    int late = (int)(log.AttTime.TimeOfDay - vssc.StartTime.Value.TimeOfDay).TotalMinutes;
+        //                    if (late > vssc.LateMinutes)
+        //                        apt.LateMinutes = late;
+        //                }
+        //                else if (log.AttFlag == false)
+        //                {
+        //                    apt.CheckOutTime = log.AttTime;
+        //                    apt.GLogEndID = log.ID;
+        //                    int early = (int)(vssc.EndTime.Value.TimeOfDay - log.AttTime.TimeOfDay).TotalMinutes;
+        //                    if (early > vssc.EarlyMinutes)
+        //                        apt.EarlyMinutes = early;
+        //                }
+        //                apt.AttStatus = log.AttStatus;
+        //                apt.Description = log.Description;
+        //                //apt = SetAttStatus(apt);
+        //                //aptInsertList.Add(apt);
+        //                hasAtt.Add(log.EnrollNumber + log.AttTime.ToString("yyyyMMdd") + vssc.Name, apt);
+        //            }
+        //            else
+        //            {
+        //                apt = hasAtt[log.EnrollNumber + log.AttTime.ToString("yyyyMMdd") + vssc.Name] as AttAppointments;
+        //                apt.UserID = user.ID;
+        //                apt.SchClassID = vssc.SchClassID;
+        //                apt.SchClassName = vssc.Name;
+        //                apt.SchSerialNo = vssc.SchSerialNo;
+        //                apt.SchStartTime = vssc.StartTime;
+        //                apt.SchEndTime = vssc.EndTime;
+        //                if (log.AttFlag)
+        //                {
+        //                    apt.CheckInTime = log.AttTime;
+        //                    apt.GLogStartID = log.ID;
+        //                    int late = (int)(log.AttTime.TimeOfDay - vssc.StartTime.Value.TimeOfDay).TotalMinutes;
+        //                    if (late > vssc.LateMinutes)
+        //                        apt.LateMinutes = late;
+        //                }
+        //                else if (log.AttFlag == false)
+        //                {
+        //                    apt.CheckOutTime = log.AttTime;
+        //                    apt.GLogEndID = log.ID;
+        //                    int early = (int)(vssc.EndTime.Value.TimeOfDay - log.AttTime.TimeOfDay).TotalMinutes;
+        //                    if (early > vssc.EarlyMinutes)
+        //                        apt.EarlyMinutes = early;
+        //                }
+        //                apt.AttStatus = log.AttStatus;
+        //                apt.Description = log.Description;
+        //                //apt = SetAttStatus(apt);
+        //                //aptUpdateList.Add(apt);
+        //                hasAtt[log.EnrollNumber + log.AttTime.ToString("yyyyMMdd") + vssc.Name] = apt;
+        //            }
+        //        }
+        //    }
 
-            foreach (DictionaryEntry de in hasAtt)
-            {
-                AttAppointments obj = de.Value as AttAppointments;               
-                if (obj.AttStatus < (int)AttStatusType.Absent)  //判断考勤状态
-                {
-                    if (obj.LateMinutes != null && obj.LateMinutes > 0)
-                        obj.AttStatus = (int)AttStatusType.Late;
-                    if (obj.EarlyMinutes != null && obj.EarlyMinutes > 0)
-                        obj.AttStatus = (int)AttStatusType.Early;
-                    if (obj.LateMinutes != null && obj.LateMinutes > 0 && obj.EarlyMinutes != null && obj.EarlyMinutes > 0)
-                        obj.AttStatus = (int)AttStatusType.LateEarly;
-                    if (obj.CheckInTime == null)
-                    {
-                        obj.AttStatus = (int)AttStatusType.NoCheckIn;
-                        obj.CheckInTime = obj.CheckOutTime.Value.Date;
-                    }
-                    if (obj.CheckOutTime == null)
-                    {
-                        obj.AttStatus = (int)AttStatusType.NoCheckOut;
-                        obj.CheckOutTime = obj.CheckInTime.Value.Date;
-                    }
-                    if (obj.CheckInTime == null && obj.CheckOutTime == null)
-                        obj.AttStatus = (int)AttStatusType.Absent;
-                }
-                else
-                {
-                    if (obj.CheckInTime == null)
-                        obj.CheckInTime = obj.CheckOutTime.Value.Date;
-                    if (obj.CheckOutTime == null)
-                        obj.CheckOutTime = obj.CheckInTime.Value.Date;
-                    if (obj.LateMinutes != null && obj.LateMinutes >= 0)
-                        obj.LateMinutes = null;
-                    if (obj.EarlyMinutes != null && obj.EarlyMinutes >= 0)
-                        obj.EarlyMinutes = null;
-                }
-                if (obj.LateMinutes.GetValueOrDefault() > 0 || obj.EarlyMinutes.GetValueOrDefault() > 0)
-                    obj.Location = string.Format("{0} {1}", obj.LateMinutes, obj.EarlyMinutes);
-                obj.Subject = EnumHelper.GetDescription<AttStatusType>((AttStatusType)obj.AttStatus, false);
+        //    foreach (DictionaryEntry de in hasAtt)
+        //    {
+        //        AttAppointments obj = de.Value as AttAppointments;               
+        //        if (obj.AttStatus < (int)AttStatusType.Absent)  //判断考勤状态
+        //        {
+        //            if (obj.LateMinutes != null && obj.LateMinutes > 0)
+        //                obj.AttStatus = (int)AttStatusType.Late;
+        //            if (obj.EarlyMinutes != null && obj.EarlyMinutes > 0)
+        //                obj.AttStatus = (int)AttStatusType.Early;
+        //            if (obj.LateMinutes != null && obj.LateMinutes > 0 && obj.EarlyMinutes != null && obj.EarlyMinutes > 0)
+        //                obj.AttStatus = (int)AttStatusType.LateEarly;
+        //            if (obj.CheckInTime == null)
+        //            {
+        //                obj.AttStatus = (int)AttStatusType.NoCheckIn;
+        //                obj.CheckInTime = obj.CheckOutTime.Value.Date;
+        //            }
+        //            if (obj.CheckOutTime == null)
+        //            {
+        //                obj.AttStatus = (int)AttStatusType.NoCheckOut;
+        //                obj.CheckOutTime = obj.CheckInTime.Value.Date;
+        //            }
+        //            if (obj.CheckInTime == null && obj.CheckOutTime == null)
+        //                obj.AttStatus = (int)AttStatusType.Absent;
+        //        }
+        //        else
+        //        {
+        //            if (obj.CheckInTime == null)
+        //                obj.CheckInTime = obj.CheckOutTime.Value.Date;
+        //            if (obj.CheckOutTime == null)
+        //                obj.CheckOutTime = obj.CheckInTime.Value.Date;
+        //            if (obj.LateMinutes != null && obj.LateMinutes >= 0)
+        //                obj.LateMinutes = null;
+        //            if (obj.EarlyMinutes != null && obj.EarlyMinutes >= 0)
+        //                obj.EarlyMinutes = null;
+        //        }
+        //        if (obj.LateMinutes.GetValueOrDefault() > 0 || obj.EarlyMinutes.GetValueOrDefault() > 0)
+        //            obj.Location = string.Format("{0} {1}", obj.LateMinutes, obj.EarlyMinutes);
+        //        obj.Subject = EnumHelper.GetDescription<AttStatusType>((AttStatusType)obj.AttStatus, false);
 
-                AttAppointments attApt = aptList.FirstOrDefault(o => o.UserID == obj.UserID
-                    && o.CheckInTime.Value.ToString("yyyyMMdd") == obj.CheckInTime.Value.ToString("yyyyMMdd")
-                    && o.SchClassName == obj.SchClassName);
-                if (attApt == null)
-                    aptInsertList.Add(obj);
-                else
-                {
-                    attApt.SchClassID = obj.SchClassID;
-                    attApt.SchClassName = obj.SchClassName;
-                    attApt.SchSerialNo = obj.SchSerialNo;
-                    attApt.SchStartTime = obj.SchStartTime;
-                    attApt.SchEndTime = obj.SchEndTime;
-                    attApt.CheckInTime = obj.CheckInTime;
-                    attApt.CheckOutTime = obj.CheckOutTime;
-                    attApt.LateMinutes = obj.LateMinutes;
-                    attApt.EarlyMinutes = obj.EarlyMinutes;
-                    attApt.AttStatus = obj.AttStatus;
-                    attApt.Subject = obj.Subject;
-                    attApt.Location = obj.Location;
-                    attApt.Description = obj.Description;
-                    aptUpdateList.Add(attApt);
-                }
-            }
-            BLLFty.Create<AttAppointmentsBLL>().Save(aptInsertList, aptUpdateList);
-        }
+        //        AttAppointments attApt = aptList.FirstOrDefault(o => o.UserID == obj.UserID
+        //            && o.CheckInTime.Value.ToString("yyyyMMdd") == obj.CheckInTime.Value.ToString("yyyyMMdd")
+        //            && o.SchClassName == obj.SchClassName);
+        //        if (attApt == null)
+        //            aptInsertList.Add(obj);
+        //        else
+        //        {
+        //            attApt.SchClassID = obj.SchClassID;
+        //            attApt.SchClassName = obj.SchClassName;
+        //            attApt.SchSerialNo = obj.SchSerialNo;
+        //            attApt.SchStartTime = obj.SchStartTime;
+        //            attApt.SchEndTime = obj.SchEndTime;
+        //            attApt.CheckInTime = obj.CheckInTime;
+        //            attApt.CheckOutTime = obj.CheckOutTime;
+        //            attApt.LateMinutes = obj.LateMinutes;
+        //            attApt.EarlyMinutes = obj.EarlyMinutes;
+        //            attApt.AttStatus = obj.AttStatus;
+        //            attApt.Subject = obj.Subject;
+        //            attApt.Location = obj.Location;
+        //            attApt.Description = obj.Description;
+        //            aptUpdateList.Add(attApt);
+        //        }
+        //    }
+        //    BLLFty.Create<AttAppointmentsBLL>().Save(aptInsertList, aptUpdateList);
+        //}
 
 
         #region 注释
@@ -1564,94 +1567,8 @@ namespace USL
             //}
         }
         #endregion
-
-        public static List<T> GetData<T>() where T : class, new()
-        {
-            List<T> list = new List<T>();
-            if (dataSourceList.ContainsKey(typeof(T)))
-                list = (List<T>)MainForm.dataSourceList[typeof(T)];
-            else
-            {
-                list = BLLFty.Create<ReportBLL>().GetT<T>(string.Empty);
-                dataSourceList.Add(typeof(T), list);
-            }
-            return list;
-        }
-
-        public static List<T> GetDBData<T>(String filter) where T : class, new()
-        {
-            List<T> list = BLLFty.Create<ReportBLL>().GetT<T>(filter);
-            if (dataSourceList.ContainsKey(typeof(T)))
-            {
-                dataSourceList[typeof(T)] = list;
-            }
-            else
-            {
-                dataSourceList.Add(typeof(T), list);
-            }
-            return list;
-        }
-
-        /// <summary>
-        /// 刷新类型对应的查询界面
-        /// </summary>
-        /// <typeparam name="T">类型</typeparam>
-        //public static void QueryPageRefresh<T>() where T : class, new()
-        //{
-        //    IList list = GetDBData<T>(string.Empty);
-        //    if (MainForm.itemDetailList.ContainsKey(typeof(T).Name))
-        //    {
-        //        DataQueryPage page = MainForm.itemDetailList[typeof(T).Name] as DataQueryPage;
-        //        page.InitGrid<T>(list);
-        //    }
-        //}
-
-        /// <summary>
-        /// 刷新类型对应的查询界面
-        /// </summary>
-        /// <param name="name">类型名称</param>
-        /// <param name="filter">查询条件</param>
-        /// <returns></returns>
-        public static IList DataPageRefresh(String name, String filter)
-        {
-            IList list = null;
-            Assembly asm = Assembly.LoadFrom(AppDomain.CurrentDomain.BaseDirectory + "/DBML.dll");
-            Type type = asm.GetType("DBML." + name);
-            if (type != null)
-            {
-                list = BLLFty.Create<ReportBLL>().GetList(type, filter);
-                if (dataSourceList.ContainsKey(type))
-                {
-                    dataSourceList[type] = list;
-                }
-                else
-                {
-                    dataSourceList.Add(type, list);
-                }
-            }
-            foreach (KeyValuePair<String, IItemDetail> kvp in itemDetailList)
-            {
-                kvp.Value.BindData(list);
-            }
-            return list;
-        }
-
-        /// <summary>
-        /// 刷新所有界面
-        /// </summary>
-        /// <typeparam name="T">类型</typeparam>
-        /// <returns></returns>
-        public static List<T> DataPageRefresh<T>() where T : class, new()
-        {
-            List<T> list = GetDBData<T>(string.Empty);
-            foreach (KeyValuePair<String, IItemDetail> kvp in itemDetailList)
-            {
-                kvp.Value.BindData(list);
-            }
-            return list;
-        }
-
-        public static void SetQueryPageGridColumn(DevExpress.XtraGrid.Views.Grid.GridView gv, DBML.MainMenu menu)
+        
+        public static void SetQueryPageGridColumn(DevExpress.XtraGrid.Views.Grid.GridView gv, MainMenu menu)
         {
             ////gv.BestFitColumns();
             foreach (DevExpress.XtraGrid.Columns.GridColumn col in gv.Columns)
@@ -1956,29 +1873,9 @@ namespace USL
                 if ((MainForm.Company.Contains("大正") || MainForm.Company.Contains("纸")) && (col.FieldName == "仓库类型" || col.FieldName == "客户类型"))
                     col.Visible = false;
 
-                if (menu.Name.Equals(MainMenuConstants.Department))
-                {
-                    setCaptionOfColumns<DeptEnum>(col);
-                }
-                if (menu.Name.Equals(MainMenuConstants.Goods))
-                {
-                    setCaptionOfColumns<GoodsEnum>(col);
-                }
-                if (menu.Name.Equals(MainMenuConstants.Stocktaking))
-                {
-                    setCaptionOfColumns<StocktakingEnum>( col);
-                }
-                if (menu.Name.Equals(MainMenuConstants.StocktakingLogHd))
-                {
-                    setCaptionOfColumns<StocktakingLogEnum>(col);
-                }
-                if (menu.Name.Equals(MainMenuConstants.UsersInfo))
-                {
-                    setCaptionOfColumns<UserEnum>(col);
-                }
+                SetColumnCaption(menu.Name, col);
                 if (menu.Name.Equals(MainMenuConstants.VProfitAndLossLog))
                 {
-                    setCaptionOfColumns<ProfitAndLossEnum>(col);
                     if (col.FieldName.Equals("BillNo"))
                     {
                         col.GroupIndex = 0;
@@ -1988,7 +1885,6 @@ namespace USL
                 }
                 if (menu.Name.Equals(MainMenuConstants.VUnlistedGoodsLog))
                 {
-                    setCaptionOfColumns<UnlistedGoodsEnum>(col);
                     if (col.FieldName.Equals("BillNo"))
                     {
                         col.GroupIndex = 0;
@@ -2010,17 +1906,16 @@ namespace USL
                         col.FieldName.Equals("ScrapQty") ||
                         col.FieldName.Equals("Reason"))
                     {
-                        col.AppearanceHeader.ForeColor = Color.Green;                        
+                        col.AppearanceHeader.ForeColor = Color.Green;
                         col.OptionsColumn.AllowEdit = true;
                     }
                     else
                         col.OptionsColumn.AllowEdit = false;
                     // 列冻结--品名之前冻结
-                    EnumHelper.GetEnumValues<ProfitAndLossEnum>(true).ForEach(o => {
-                        if (o.Name.Equals(col.FieldName) && o.Value <= ProfitAndLossEnum.GoodsName)
+                    EnumHelper.GetEnumValues<VProfitAndLossLogEnum>(true).ForEach(o => {
+                        if (o.Name.Equals(col.FieldName) && o.Value <= VProfitAndLossLogEnum.GoodsName)
                             col.Fixed = FixedStyle.Left;
                     });
-                    setCaptionOfColumns<ProfitAndLossEnum>(col);
 
                 }
                 if (menu.Name.Equals(MainMenuConstants.UnlistedGoods))
@@ -2039,11 +1934,11 @@ namespace USL
                     //    if (o.Name.Equals(col.FieldName) && o.Value <= UnlistedGoodsEnum.GoodsName)
                     //        col.Fixed = FixedStyle.Left;
                     //});
-                    setCaptionOfColumns<UnlistedGoodsEnum>(col);
 
                 }
                 col.BestFit();
             }
+
             //设置合计列
             SetSummaryItemColumns(gv);
 
@@ -2054,7 +1949,7 @@ namespace USL
                 gv.GroupSummary.AddRange(new DevExpress.XtraGrid.GridSummaryItem[] {
                     new DevExpress.XtraGrid.GridGroupSummaryItem(DevExpress.Data.SummaryItemType.Min, "客户名称", null, "客户名称:{0}")});
                 gv.GroupSummary.AddRange(new DevExpress.XtraGrid.GridSummaryItem[] {
-                    new DevExpress.XtraGrid.GridGroupSummaryItem(DevExpress.Data.SummaryItemType.Min, "客户类型", null, "客户类型:"+MainForm.GetData<TypesList>().FirstOrDefault(o => o.Type == TypesListConstants.CustomerType && o.No == Convert.ToInt32(DevExpress.Data.SummaryItemType.Min)).Name.Trim())});
+                    new DevExpress.XtraGrid.GridGroupSummaryItem(DevExpress.Data.SummaryItemType.Min, "客户类型", null, "客户类型:"+MainForm.TypesList.FirstOrDefault(o => o.Type == TypesListConstants.CustomerType && o.No == Convert.ToInt32(DevExpress.Data.SummaryItemType.Min)).Name.Trim())});
                 gv.GroupSummary.AddRange(new DevExpress.XtraGrid.GridSummaryItem[] {
                     new DevExpress.XtraGrid.GridGroupSummaryItem(DevExpress.Data.SummaryItemType.Min, "出库日期", null, "开始日期:{0:d}")});
                 gv.GroupSummary.AddRange(new DevExpress.XtraGrid.GridSummaryItem[] {
@@ -2109,14 +2004,24 @@ namespace USL
             ////    gv.BestFitColumns();
         }
 
-        static void setCaptionOfColumns<T>(DevExpress.XtraGrid.Columns.GridColumn col)
+        static void SetColumnCaption(string typeName, GridColumn col)
         {
-            ListItem<T> st = EnumHelper.GetEnumValues<T>(false).FirstOrDefault(o => o.Value.ToString().Equals(col.FieldName));
+            string enumTypeName = typeName + "Enum";
+            ListItem st = EnumHelper.GetEnumValues(enumTypeName, false).FirstOrDefault(o => o.Value.ToString().Equals(col.FieldName));
             if (st != null)
                 col.Caption = st.Name;
             else
                 col.Visible = false;
         }
+
+        public static void SetColumnCaption(string typeName, FilterColumn col)
+        {
+            string enumTypeName = typeName + "Enum";
+            ListItem st = EnumHelper.GetEnumValues(enumTypeName, false).FirstOrDefault(o => o.Value.ToString().Equals(col.FieldName));
+            if (st != null)
+                col.SetColumnCaption(st.Name);
+        }
+
         public static void SetSummaryItemColumns(DevExpress.XtraGrid.Views.Grid.GridView gv)
         {
             gv.GroupSummary.Clear();
@@ -2270,21 +2175,10 @@ namespace USL
             dockPanel1.Show();
         }
 
-        public ErrorInfoControl ErrorListControl
-        {
-            get
-            {
-                return this.errorInfoControl1;
-            }
-        }
-
-        public static Dictionary<String, DBML.MainMenu> mainMenuList = new Dictionary<String, DBML.MainMenu>();
-        public static Dictionary<String, ItemDetailPage> itemDetailPageList = new Dictionary<String, ItemDetailPage>();
-        public static Hashtable hasItemDetailPage = new Hashtable();
         void CreateLayout()
         {
             //foreach (SampleDataGroup group in dataSource.Data.Groups)
-            foreach (DBML.MainMenu group in menuList.FindAll(o => o.ParentID == null))
+            foreach (MainMenu group in userMenuList.FindAll(o => o.ParentID == null))
             {
                 //根据用户权限控制是否显示Tile
                 ////if (MainForm.userPermissions.Count > 0 && MainForm.userPermissions.Find(o => o.Caption.Trim() == group.Caption.Trim()).CheckBoxState)
@@ -2294,19 +2188,19 @@ namespace USL
                 //pageGroup.Caption = group.Title;
                 pageGroup.Caption = group.Caption;
                 windowsUIView.ContentContainers.Add(pageGroup);
-                List<DBML.MainMenu> dataItemList = menuList.FindAll(o => o.ID == group.ID || o.ParentID == group.ID);
+                List<MainMenu> dataItemList = userMenuList.FindAll(o => o.ID == group.ID || o.ParentID == group.ID);
                 if (dataItemList != null)
                 {
                     groupsItemDetailPage.Add(group, CreateGroupItemDetailPage(dataItemList, pageGroup));
                     groupsItemDetailList.Add(group.ID, pageGroup);
                 }
-                foreach (DBML.MainMenu item in menuList.FindAll(o => o.ParentID == group.ID))
+                foreach (MainMenu item in userMenuList.FindAll(o => o.ParentID == group.ID))
                 {
                     //ItemDetailPage itemDetailPage = new ItemDetailPage(item, pageGroup, groupsItemDetailList, menuList, itemDetailButtonList);
                     //itemDetailPage.Dock = System.Windows.Forms.DockStyle.Fill;
                     //BaseDocument document = windowsUIView.AddDocument(itemDetailPage);
                     //BaseDocument document = windowsUIView.AddDocument(item.Caption, item.Name);
-                    ItemDetailPage itemDetailPage = new ItemDetailPage(item, pageGroup, menuList, itemDetailButtonList);
+                    ItemDetailPage itemDetailPage = new ItemDetailPage(item, pageGroup, itemDetailButtonList);
                     itemDetailPage.Dock = System.Windows.Forms.DockStyle.Fill;
                     itemDetailPageList.Add(item.Name, itemDetailPage);
                     mainMenuList.Add(item.Name, item);
@@ -2320,12 +2214,12 @@ namespace USL
             windowsUIView.ActivateContainer(tileContainer);
             //tileContainer.ButtonClick += new DevExpress.XtraBars.Docking2010.ButtonEventHandler(buttonClick);
         }
-        Tile CreateTile(Document document, DBML.MainMenu item)
+        Tile CreateTile(Document document, MainMenu item)
         {
             Tile tile = new Tile();
             tile.Document = document;
             //tile.Group = item.GroupName;
-            tile.Group = menuList.Find(o => o.ID == item.ParentID).Caption;
+            tile.Group = userMenuList.Find(o => o.ID == item.ParentID).Caption;
             tile.Tag = item;
             //if (item.Name == "GoodsType")
             //根据用户权限控制是否显示Tile
@@ -2397,8 +2291,8 @@ namespace USL
                 PageGroup page = ((e.Tile as Tile).ActivationTarget as PageGroup);
                 if (page != null)
                 {
-                    DBML.MainMenu menu = e.Tile.Tag as DBML.MainMenu;
-                    foreach (DBML.MainMenu item in menuList.FindAll(o => o.ParentID == menu.ParentID))
+                    MainMenu menu = e.Tile.Tag as MainMenu;
+                    foreach (MainMenu item in userMenuList.FindAll(o => o.ParentID == menu.ParentID))
                     {
                         if (hasItemDetailPage[item.Name] == null)
                         {
@@ -2432,7 +2326,7 @@ namespace USL
         }
 
         //PageGroup CreateGroupItemDetailPage(SampleDataGroup group, PageGroup child)
-        PageGroup CreateGroupItemDetailPage(List<DBML.MainMenu> group, PageGroup child)
+        PageGroup CreateGroupItemDetailPage(List<MainMenu> group, PageGroup child)
         {
             GroupDetailPage page = new GroupDetailPage(group, child);
             PageGroup pageGroup = page.PageGroup;
@@ -2446,7 +2340,7 @@ namespace USL
         void buttonClick(object sender, DevExpress.XtraBars.Docking2010.ButtonEventArgs e)
         {
             //SampleDataGroup tileGroup = (e.Button.Properties.Tag as SampleDataGroup);
-            DBML.MainMenu tileGroup = (e.Button.Properties.Tag as DBML.MainMenu);
+            MainMenu tileGroup = (e.Button.Properties.Tag as MainMenu);
             if (tileGroup != null)
             {
                 windowsUIView.ActivateContainer(groupsItemDetailPage[tileGroup]);
@@ -2618,7 +2512,7 @@ namespace USL
                     if (page.btnImportCheck != null)
                     {
                         int status = 0;
-                        SystemStatus systemStatus = MainForm.GetData<SystemStatus>().FirstOrDefault(o => o.MainMenuName.Equals(MainMenuConstants.Stocktaking));
+                        SystemStatus systemStatus = BLLFty.Create<BaseBLL>().GetListBy<SystemStatus>(o => o.MainMenuName.Equals(MainMenuConstants.Stocktaking)).FirstOrDefault();
                         if (systemStatus != null)
                             status = systemStatus.Status;
                         page.btnImportCheck.Caption = string.Format("盘点导入【{0}】", EnumHelper.GetDescription<StocktakingStatusEnum>((StocktakingStatusEnum)status, false));
@@ -2643,7 +2537,7 @@ namespace USL
         /// </summary>
         public static List<ProfitAndLoss> calcFinalDiff()
         {
-            List<ProfitAndLoss> plList = (List<ProfitAndLoss>)dataSourceList[typeof(ProfitAndLoss)];
+            List<ProfitAndLoss> plList = BLLFty.Create<BaseBLL>().GetListBy<ProfitAndLoss>(null);
             if (plList != null && plList.Count > 0)
             {
                 plList.ForEach(entity => {

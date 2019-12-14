@@ -9,18 +9,20 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using DevExpress.XtraEditors;
 using IBase;
-using DBML;
+using EDMX;
 using Utility;
 using CommonLibrary;
 using Factory;
 using BLL;
 using DevExpress.XtraTreeList.Nodes;
 using System.Collections;
+using Utility.Interceptor;
 
 namespace USL
 {
     public partial class PermissionSettingPage : DevExpress.XtraEditors.XtraUserControl, IItemDetail
     {
+        private static ClientFactory clientFactory = LoggerInterceptor.CreateProxy<ClientFactory>();
         List<ButtonPermission> btnPermissionList;
         DataSet dsPermission;
         public PermissionSettingPage()
@@ -32,8 +34,8 @@ namespace USL
         }
         public void BindData(object list)
         {
-            vUsersInfoBindingSource.DataSource = BLLFty.Create<UsersInfoBLL>().GetLoginUsersInfo();// MainForm.dataSourceList[typeof(VUsersInfo)];
-            dsPermission = IListDataSet.ToDataSet<Permission>(((List<Permission>)MainForm.dataSourceList[typeof(Permission)]).FindAll(o => o.UserID == MainForm.usersInfo.ID));
+            usersInfoBindingSource.DataSource = BLLFty.Create<BaseBLL>().GetListByNoTracking<UsersInfo>(o => o.IsDel == false && !string.IsNullOrEmpty(o.Password));
+            dsPermission = IListDataSet.ToDataSet<Permission>(BLLFty.Create<BaseBLL>().GetListBy<Permission>(o => o.UserID == MainForm.usersInfo.ID));
             if (dsPermission.Tables[0].Rows.Count > 0)
             {
                 cuTreeListPermission.DataSource = dsPermission.Tables[0];
@@ -81,7 +83,7 @@ namespace USL
                 BLLFty.Create<PermissionBLL>().Update(IListDataSet.DataSetToIList<Permission>(dsPermission, 0).ToList(), btnPermissionList);
                 //vStockOutBillDtlForPrintBindingSource.DataSource = BLLFty.Create<StockOutBillBLL>().GetStockOutBillDtlForPrint(hd.ID);
                 //gvBillDtlForPrint.BestFitColumns();
-                MainForm.DataPageRefresh<Permission>().OrderBy(o=>o.SerialNo);
+                clientFactory.DataPageRefresh<Permission>().OrderBy(o=>o.SerialNo);
                 CommonServices.ErrorTrace.SetSuccessfullyInfo(this.FindForm(), "保存成功");
                 return true;
             }
@@ -118,10 +120,10 @@ namespace USL
 
         void GetPermission(object sender)
         {
-            VUsersInfo user = ((DevExpress.XtraGrid.Views.Layout.LayoutView)sender).GetFocusedRow() as VUsersInfo;
+            UsersInfo user = ((DevExpress.XtraGrid.Views.Layout.LayoutView)sender).GetFocusedRow() as UsersInfo;
             if (user != null)
             {
-                dsPermission = IListDataSet.ToDataSet<Permission>(MainForm.GetData<Permission>().FindAll(o => o.UserID == user.ID));
+                dsPermission = IListDataSet.ToDataSet<Permission>(BLLFty.Create<BaseBLL>().GetListBy<Permission>(o => o.UserID == user.ID));
                 cuTreeListPermission.DataSource = dsPermission.Tables[0];
                 cuTreeListPermission.ExpandAll();
                 foreach (TreeListNode node in cuTreeListPermission.GetNodeList())
@@ -132,7 +134,7 @@ namespace USL
                         node.Checked = (bool)drv["CheckBoxState"];
                     }
                 }
-                buttonPermissionBindingSource.DataSource = btnPermissionList = MainForm.GetData<ButtonPermission>().FindAll(o => o.UserID == user.ID);
+                buttonPermissionBindingSource.DataSource = btnPermissionList = BLLFty.Create<BaseBLL>().GetListBy<ButtonPermission>(o => o.UserID == user.ID);
             }
         }
 

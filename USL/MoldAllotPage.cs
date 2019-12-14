@@ -11,16 +11,18 @@ using DevExpress.XtraEditors;
 using IBase;
 using Factory;
 using BLL;
-using DBML;
+using EDMX;
 using CommonLibrary;
 using Utility;
 using DevExpress.XtraGrid.Views.Grid;
 using System.Collections;
+using Utility.Interceptor;
 
 namespace USL
 {
     public partial class MoldAllotPage : DevExpress.XtraEditors.XtraUserControl, IItemDetail
     {
+        private static ClientFactory clientFactory = LoggerInterceptor.CreateProxy<ClientFactory>();
         List<MoldAllot> moldAllotList;
         List<MoldAllot> supplierMoldAllotList;
         Guid focusedID;
@@ -39,9 +41,9 @@ namespace USL
 
         public void BindData(object obj)
         {
-            vSupplierBindingSource.DataSource = MainForm.dataSourceList[typeof(VSupplier)];
-            goodsBindingSource.DataSource = ((List<Goods>)MainForm.dataSourceList[typeof(Goods)]).FindAll(o => o.Type == (int)GoodsBigType.Mold);
-            moldAllotList = ((List<MoldAllot>)MainForm.dataSourceList[typeof(MoldAllot)]);
+            //vSupplierBindingSource.DataSource = clientFactory.GetData<VSupplier>();
+            goodsBindingSource.DataSource = BLLFty.Create<BaseBLL>().GetListBy<Goods>(o => o.Type == (int)GoodsBigType.Mold);
+            moldAllotList = BLLFty.Create<BaseBLL>().GetListBy<MoldAllot>(null);
             GetMoldAllotDataSource();
         }
 
@@ -60,7 +62,7 @@ namespace USL
             if (winExplorerView.GetFocusedRowCellValue(colID) != null)
             {
                 focusedID = new Guid(winExplorerView.GetFocusedRowCellValue(colID).ToString());
-                moldAllotList = ((List<MoldAllot>)MainForm.dataSourceList[typeof(MoldAllot)]);
+                moldAllotList = BLLFty.Create<BaseBLL>().GetListBy<MoldAllot>(null);
                 if (moldAllotList != null)
                 {
                     bOMBindingSource.DataSource = supplierMoldAllotList = moldAllotList.FindAll(o => o.SupplierID == focusedID);
@@ -92,58 +94,59 @@ namespace USL
         
         public bool Save()
         {
-            try
-            {
-                this.Cursor = System.Windows.Forms.Cursors.WaitCursor;
-                Hashtable hasGoods = new Hashtable();
-                if (supplierMoldAllotList == null)
-                {
-                    CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), string.Format("请完整填写{0}", dpBOM.Text.Trim()));
-                    return false;
-                }
-                //foreach (MoldAllot item in supplierMoldAllotList)
-                //{
-                //    item.SupplierID = focusedID;
-                //}
-                for (int i = supplierMoldAllotList.Count - 1; i >= 0; i--)
-                {
-                    if (supplierMoldAllotList[i].GoodsID == Guid.Empty || supplierMoldAllotList[i].Qty == 0)
-                    {
-                        supplierMoldAllotList.RemoveAt(i);
-                        continue;
-                    }
-                    if (hasGoods[supplierMoldAllotList[i].GoodsID] == null)
-                        hasGoods.Add(supplierMoldAllotList[i].GoodsID, supplierMoldAllotList[i]);
-                    else
-                    {
-                        CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "不能重复选择货品。");
-                        return false;
-                    }
-                    supplierMoldAllotList[i].SupplierID = focusedID;
-                    if (supplierMoldAllotList[i].PCS == 0)
-                        supplierMoldAllotList[i].PCS = 1;
-                }
-                //添加
-                if (addNew)
-                {
-                    BLLFty.Create<MoldAllotBLL>().Insert(supplierMoldAllotList);
-                }
-                else//修改
-                    BLLFty.Create<MoldAllotBLL>().Update(focusedID, supplierMoldAllotList);
-                addNew = false;
-                //DataQueryPageRefresh();
-                CommonServices.ErrorTrace.SetSuccessfullyInfo(this.FindForm(), "保存成功");
-                return true;
-            }
-            catch (Exception ex)
-            {
-                CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), ex.Message);
-                return false;
-            }
-            finally
-            {
-                this.Cursor = System.Windows.Forms.Cursors.Default;
-            }
+            throw new NotImplementedException();
+            //try
+            //{
+            //    this.Cursor = System.Windows.Forms.Cursors.WaitCursor;
+            //    Hashtable hasGoods = new Hashtable();
+            //    if (supplierMoldAllotList == null)
+            //    {
+            //        CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), string.Format("请完整填写{0}", dpBOM.Text.Trim()));
+            //        return false;
+            //    }
+            //    //foreach (MoldAllot item in supplierMoldAllotList)
+            //    //{
+            //    //    item.SupplierID = focusedID;
+            //    //}
+            //    for (int i = supplierMoldAllotList.Count - 1; i >= 0; i--)
+            //    {
+            //        if (supplierMoldAllotList[i].GoodsID == Guid.Empty || supplierMoldAllotList[i].Qty == 0)
+            //        {
+            //            supplierMoldAllotList.RemoveAt(i);
+            //            continue;
+            //        }
+            //        if (hasGoods[supplierMoldAllotList[i].GoodsID] == null)
+            //            hasGoods.Add(supplierMoldAllotList[i].GoodsID, supplierMoldAllotList[i]);
+            //        else
+            //        {
+            //            CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "不能重复选择货品。");
+            //            return false;
+            //        }
+            //        supplierMoldAllotList[i].SupplierID = focusedID;
+            //        if (supplierMoldAllotList[i].PCS == 0)
+            //            supplierMoldAllotList[i].PCS = 1;
+            //    }
+            //    //添加
+            //    if (addNew)
+            //    {
+            //        BLLFty.Create<MoldAllotBLL>().Insert(supplierMoldAllotList);
+            //    }
+            //    else//修改
+            //        BLLFty.Create<MoldAllotBLL>().Update(focusedID, supplierMoldAllotList);
+            //    addNew = false;
+            //    //DataQueryPageRefresh();
+            //    CommonServices.ErrorTrace.SetSuccessfullyInfo(this.FindForm(), "保存成功");
+            //    return true;
+            //}
+            //catch (Exception ex)
+            //{
+            //    CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), ex.Message);
+            //    return false;
+            //}
+            //finally
+            //{
+            //    this.Cursor = System.Windows.Forms.Cursors.Default;
+            ////}
         }
 
         public bool Audit()
@@ -201,7 +204,7 @@ namespace USL
             List<MoldAllot> list = ((BindingSource)view.DataSource).DataSource as List<MoldAllot>;
             if (e.IsGetData && list != null && list.Count > 0)
             {
-                Goods goods = ((List<Goods>)MainForm.dataSourceList[typeof(Goods)]).Find(o => o.ID == list[e.ListSourceRowIndex].GoodsID);
+                Goods goods = BLLFty.Create<BaseBLL>().GetListBy<Goods>(o => o.ID == list[e.ListSourceRowIndex].GoodsID).FirstOrDefault();
                 if (goods != null)
                 {
                     if (e.Column == colName)
@@ -219,13 +222,13 @@ namespace USL
         private void gridView_RowUpdated(object sender, DevExpress.XtraGrid.Views.Base.RowObjectEventArgs e)
         {
             Save();
-            MainForm.DataPageRefresh<MoldAllot>();
+            clientFactory.DataPageRefresh<MoldAllot>();
         }
 
         private void gridView_RowDeleted(object sender, DevExpress.Data.RowDeletedEventArgs e)
         {
             Save();
-            MainForm.DataPageRefresh<MoldAllot>();
+            clientFactory.DataPageRefresh<MoldAllot>();
         }
     }
 }

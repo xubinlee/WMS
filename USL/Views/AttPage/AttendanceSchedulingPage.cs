@@ -11,7 +11,7 @@ using DevExpress.XtraEditors;
 using IBase;
 using Factory;
 using BLL;
-using DBML;
+using EDMX;
 using CommonLibrary;
 using Utility;
 using DevExpress.XtraGrid.Views.Grid;
@@ -23,11 +23,13 @@ using DevExpress.XtraScheduler;
 using SchedulerReportingExample;
 using DevExpress.XtraScheduler.Reporting;
 using DevExpress.XtraReports.UI;
+using Utility.Interceptor;
 
 namespace USL
 {
     public partial class AttendanceSchedulingPage : DevExpress.XtraEditors.XtraUserControl, IItemDetail
     {
+        private static ClientFactory clientFactory = LoggerInterceptor.CreateProxy<ClientFactory>();
         Guid focusedID;
         Guid focusedDeptID;
         //bool addNew = false;  //是否新增
@@ -48,8 +50,8 @@ namespace USL
         public void BindData(object obj)
         {
             schedulerStorage.BeginUpdate();
-            vUsersInfoBindingSource.DataSource = ((List<VUsersInfo>)MainForm.dataSourceList[typeof(VUsersInfo)]).FindAll(o =>
-               o.已删除==false && o.部门 != "注塑机");
+            //vUsersInfoBindingSource.DataSource = ((List<VUsersInfo>)MainForm.dataSourceList[typeof(VUsersInfo)]).FindAll(o =>
+               //o.已删除==false && o.部门 != "注塑机");
             GetStatus();
             GetLabels();
             GetASDataSource();
@@ -59,14 +61,14 @@ namespace USL
 
         void GetStatus()
         {
-            //List<SchClass> schList = MainForm.dataSourceList[typeof(SchClass)] as List<SchClass>;
-            List<VStaffSchClass> schList = ((List<VStaffSchClass>)MainForm.dataSourceList[typeof(VStaffSchClass)]).FindAll(o =>
-                o.DeptID == focusedDeptID).OrderBy(o => o.SchSerialNo).ToList();
-            schedulerStorage.Appointments.Statuses.Clear();
-            foreach (VStaffSchClass sch in schList)
-            {
-                schedulerStorage.Appointments.Statuses.Add(Color.FromArgb(sch.Color.GetValueOrDefault()), sch.Name, sch.Name);
-            }
+            ////List<SchClass> schList = MainForm.dataSourceList[typeof(SchClass)] as List<SchClass>;
+            //List<VStaffSchClass> schList = ((List<VStaffSchClass>)MainForm.dataSourceList[typeof(VStaffSchClass)]).FindAll(o =>
+            //    o.DeptID == focusedDeptID).OrderBy(o => o.SchSerialNo).ToList();
+            //schedulerStorage.Appointments.Statuses.Clear();
+            //foreach (VStaffSchClass sch in schList)
+            //{
+            //    schedulerStorage.Appointments.Statuses.Add(Color.FromArgb(sch.Color.GetValueOrDefault()), sch.Name, sch.Name);
+            //}
         }
 
         void GetLabels()
@@ -91,23 +93,24 @@ namespace USL
         
         void GetASDataSource()
         {
-            if (winExplorerView.GetFocusedRowCellValue(colID) != null)
-            {
-                focusedID = new Guid(winExplorerView.GetFocusedRowCellValue(colID).ToString());
-                focusedDeptID = GetDeptID(focusedID);
-                attAppointmentsBindingSource.DataSource = ((List<AttAppointments>)MainForm.dataSourceList[typeof(AttAppointments)]).FindAll(o => o.UserID == focusedID);
-                GetStatus();
-                picStatus.Visible = false;
-                //DataView dv = erpToysDataSet.Appointments.DefaultView;
-                //dv.RowFilter = string.Format("UserID='{0}'", focusedID);
-                //appointmentsBindingSource.DataSource = dv.ToTable();
-            }
+            //if (winExplorerView.GetFocusedRowCellValue(colID) != null)
+            //{
+            //    focusedID = new Guid(winExplorerView.GetFocusedRowCellValue(colID).ToString());
+            //    focusedDeptID = GetDeptID(focusedID);
+            //    attAppointmentsBindingSource.DataSource = ((List<AttAppointments>)MainForm.dataSourceList[typeof(AttAppointments)]).FindAll(o => o.UserID == focusedID);
+            //    GetStatus();
+            //    picStatus.Visible = false;
+            //    //DataView dv = erpToysDataSet.Appointments.DefaultView;
+            //    //dv.RowFilter = string.Format("UserID='{0}'", focusedID);
+            //    //appointmentsBindingSource.DataSource = dv.ToTable();
+            //}
         }
 
         Guid GetDeptID(Guid? userID)
         {
-            return ((List<UsersInfo>)MainForm.dataSourceList[typeof(UsersInfo)]).FirstOrDefault(o =>
-                o.ID == userID).DeptID.GetValueOrDefault();
+            throw new NotImplementedException();
+            //return ((List<UsersInfo>)MainForm.dataSourceList[typeof(UsersInfo)]).FirstOrDefault(o =>
+            //o.ID == userID).DeptID.GetValueOrDefault();
         }
         public void Add()
         {
@@ -140,59 +143,60 @@ namespace USL
         public void Print()
         {
             #region #showreport
-            XtraSchedulerReport1 xr = new XtraSchedulerReport1();
-            SchedulerControlPrintAdapter scPrintAdapter =
-                new SchedulerControlPrintAdapter(this.schedulerControl1);
-            xr.SchedulerAdapter = scPrintAdapter;
-            xr.CreateDocument(true);
-            xr.paramUserName.Value = ((List<UsersInfo>)MainForm.dataSourceList[typeof(UsersInfo)]).FirstOrDefault(o =>
-                o.ID == focusedID).Name;
-            //xr.paramAMT.Value = ((List<VAppointments>)MainForm.dataSourceList[typeof(VAppointments)]).FindAll(o =>
-            //    o.UserID == focusedID && o.日期.Value.Month == dateNavigator.DateTime.Month).Sum(o => o.当班金额);
+            //XtraSchedulerReport1 xr = new XtraSchedulerReport1();
+            //SchedulerControlPrintAdapter scPrintAdapter =
+            //    new SchedulerControlPrintAdapter(this.schedulerControl1);
+            //xr.SchedulerAdapter = scPrintAdapter;
+            //xr.CreateDocument(true);
+            //xr.paramUserName.Value = ((List<UsersInfo>)MainForm.dataSourceList[typeof(UsersInfo)]).FirstOrDefault(o =>
+            //    o.ID == focusedID).Name;
+            ////xr.paramAMT.Value = ((List<VAppointments>)MainForm.dataSourceList[typeof(VAppointments)]).FindAll(o =>
+            ////    o.UserID == focusedID && o.日期.Value.Month == dateNavigator.DateTime.Month).Sum(o => o.当班金额);
 
-            using (ReportPrintTool printTool = new ReportPrintTool(xr))
-            {
-                printTool.ShowRibbonPreviewDialog();
-            }
+            //using (ReportPrintTool printTool = new ReportPrintTool(xr))
+            //{
+            //    printTool.ShowRibbonPreviewDialog();
+            //}
             #endregion #showreport
         }
 
         List<AttAppointments> GetAttAppointmentsList(IList list)
         {
-            List<AttAppointments> aptList = new List<AttAppointments>();
-            foreach (Appointment apt in list)
-            {
-                AttAppointments dbApt = (AttAppointments)apt.GetSourceObject(this.schedulerStorage);
-                if (dbApt == null || dbApt.UserID == null || dbApt.UserID == Guid.Empty)
-                    continue;
-                VStaffSchClass vssc = ((List<VStaffSchClass>)MainForm.dataSourceList[typeof(VStaffSchClass)]).FirstOrDefault(o =>
-                    o.SchClassID == dbApt.SchClassID && o.DeptID ==  GetDeptID(dbApt.UserID));
-                if (dbApt.AttStatus < (int)AttStatusType.Absent)
-                {
-                    int late = (int)(dbApt.CheckInTime.Value.TimeOfDay - vssc.StartTime.Value.TimeOfDay).TotalMinutes;
-                    if (late > vssc.LateMinutes)
-                        dbApt.LateMinutes = late;
-                    else
-                        dbApt.LateMinutes = null;
-                    int early = (int)(vssc.EndTime.Value.TimeOfDay - dbApt.CheckOutTime.Value.TimeOfDay).TotalMinutes;
-                    if (early > vssc.EarlyMinutes)
-                        dbApt.EarlyMinutes = early;
-                    else
-                        dbApt.EarlyMinutes = null;
-                    if ((dbApt.LateMinutes != null && dbApt.LateMinutes > 0) || (dbApt.EarlyMinutes != null && dbApt.EarlyMinutes > 0))
-                        dbApt.Location = string.Format("{0} {1}", dbApt.LateMinutes, dbApt.EarlyMinutes);
-                    dbApt.AttStatus = SetAttStaus(dbApt.CheckInTime, dbApt.CheckOutTime, late, early);
-                }
-                else
-                {
-                    dbApt.LateMinutes = null;
-                    dbApt.EarlyMinutes = null;
-                    dbApt.Location = string.Empty;
-                }
-                dbApt.Subject = EnumHelper.GetDescription<AttStatusType>((AttStatusType)dbApt.AttStatus, false);
-                aptList.Add(dbApt);
-            }
-            return aptList;
+            throw new NotImplementedException();
+            //List<AttAppointments> aptList = new List<AttAppointments>();
+            //foreach (Appointment apt in list)
+            //{
+            //    AttAppointments dbApt = (AttAppointments)apt.GetSourceObject(this.schedulerStorage);
+            //    if (dbApt == null || dbApt.UserID == null || dbApt.UserID == Guid.Empty)
+            //        continue;
+            //    VStaffSchClass vssc = ((List<VStaffSchClass>)MainForm.dataSourceList[typeof(VStaffSchClass)]).FirstOrDefault(o =>
+            //        o.SchClassID == dbApt.SchClassID && o.DeptID ==  GetDeptID(dbApt.UserID));
+            //    if (dbApt.AttStatus < (int)AttStatusType.Absent)
+            //    {
+            //        int late = (int)(dbApt.CheckInTime.Value.TimeOfDay - vssc.StartTime.Value.TimeOfDay).TotalMinutes;
+            //        if (late > vssc.LateMinutes)
+            //            dbApt.LateMinutes = late;
+            //        else
+            //            dbApt.LateMinutes = null;
+            //        int early = (int)(vssc.EndTime.Value.TimeOfDay - dbApt.CheckOutTime.Value.TimeOfDay).TotalMinutes;
+            //        if (early > vssc.EarlyMinutes)
+            //            dbApt.EarlyMinutes = early;
+            //        else
+            //            dbApt.EarlyMinutes = null;
+            //        if ((dbApt.LateMinutes != null && dbApt.LateMinutes > 0) || (dbApt.EarlyMinutes != null && dbApt.EarlyMinutes > 0))
+            //            dbApt.Location = string.Format("{0} {1}", dbApt.LateMinutes, dbApt.EarlyMinutes);
+            //        dbApt.AttStatus = SetAttStaus(dbApt.CheckInTime, dbApt.CheckOutTime, late, early);
+            //    }
+            //    else
+            //    {
+            //        dbApt.LateMinutes = null;
+            //        dbApt.EarlyMinutes = null;
+            //        dbApt.Location = string.Empty;
+            //    }
+            //    dbApt.Subject = EnumHelper.GetDescription<AttStatusType>((AttStatusType)dbApt.AttStatus, false);
+            //    aptList.Add(dbApt);
+            //}
+            //return aptList;
         }
 
         //List<AttGeneralLog> GetAppointmentsList(IList list)
@@ -228,103 +232,87 @@ namespace USL
         //    return logList;
         //}
 
-        /// <summary>
-        /// 刷新查询界面
-        /// </summary>
-        public void PageRefresh()
-        {
-            //MainForm.dataSourceList[typeof(AttGeneralLog)] = BLLFty.Create<AttGeneralLogBLL>().GetAttGeneralLog();
-            //MainForm.GetAttAppointments();
-            MainForm.dataSourceList[typeof(AttAppointments)] = BLLFty.Create<AttAppointmentsBLL>().GetAttAppointments();
-            BindData(null);
-            if (MainForm.itemDetailList.ContainsKey(MainMenuConstants.AttendanceQuery))
-            {
-                DataQueryPage page = MainForm.itemDetailList[MainMenuConstants.AttendanceQuery] as DataQueryPage;
-                //刷新数据
-                MainForm.dataSourceList[typeof(VAttAppointments)] = BLLFty.Create<AttAppointmentsBLL>().GetVAttAppointments();
-                page.BindData((IList)MainForm.dataSourceList[typeof(VAttAppointments)]);
-            }
-        }
-
         private void schedulerStorage_AppointmentsChanged(object sender, PersistentObjectsEventArgs e)
         {
-            BLLFty.Create<AttAppointmentsBLL>().Update(GetAttAppointmentsList(e.Objects));
+            //BLLFty.Create<AttAppointmentsBLL>().Update(GetAttAppointmentsList(e.Objects));
             //刷新数据
-            PageRefresh();
+            clientFactory.DataPageRefresh<AttAppointments>();
+            //clientFactory.DataPageRefresh<VAttAppointments>();
         }
 
         private void schedulerStorage_AppointmentsInserted(object sender, PersistentObjectsEventArgs e)
         {
-            //List<AttGeneralLog> logList = new List<AttGeneralLog>();
-            List<AttAppointments> attAptList = new List<AttAppointments>();
-            foreach (Appointment apt in e.Objects)
-            {
-                AttAppointments dbApt = (AttAppointments)apt.GetSourceObject(this.schedulerStorage);
-                if (dbApt == null || dbApt.UserID == null || dbApt.UserID == Guid.Empty)
-                {
-                    CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "添加失败，请刷新数据后重试。");
-                    break;
-                }
-                //UsersInfo user = ((List<UsersInfo>)MainForm.dataSourceList[typeof(UsersInfo)]).FirstOrDefault(o => o.ID == dbApt.UserID);
-                //AttGeneralLog dbLogStart = new AttGeneralLog();
-                //dbLogStart.ID = Guid.NewGuid();
-                //dbLogStart.AttFlag = true;
-                //dbLogStart.EnrollNumber = user == null ? string.Empty : user.Code;
-                //dbLogStart.AttTime = dbApt.CheckInTime.GetValueOrDefault();
-                //dbLogStart.AttStatus = dbApt.AttStatus;
-                //dbLogStart.Description = dbApt.Description;
-                //dbLogStart.SchClassID = dbApt.SchClassID;
-                //logList.Add(dbLogStart);
-                //AttGeneralLog dbLogEnd = new AttGeneralLog();
-                //dbLogEnd.ID = Guid.NewGuid();
-                //dbLogEnd.AttFlag = false;
-                //dbLogEnd.EnrollNumber = user == null ? string.Empty : user.Code;
-                //dbLogEnd.AttTime = dbApt.CheckOutTime.GetValueOrDefault();
-                //dbLogEnd.AttStatus = dbApt.AttStatus;
-                //dbLogEnd.Description = dbApt.Description;
-                //dbLogEnd.SchClassID = dbApt.SchClassID;
-                //logList.Add(dbLogEnd);
-                VStaffSchClass vssc=((List<VStaffSchClass>)MainForm.dataSourceList[typeof(VStaffSchClass)]).FirstOrDefault(o =>
-                    o.SchClassID == dbApt.SchClassID && o.DeptID == GetDeptID(dbApt.UserID));
-                AttAppointments attApt = new AttAppointments();
-                attApt.GLogStartID = Guid.NewGuid();
-                attApt.GLogEndID = Guid.NewGuid();
-                attApt.UserID = dbApt.UserID;
-                attApt.SchClassID = dbApt.SchClassID;
-                attApt.SchClassName = dbApt.SchClassName;
-                attApt.SchSerialNo = vssc.SchSerialNo;
-                attApt.SchStartTime = vssc.StartTime;
-                attApt.SchEndTime = vssc.EndTime;
-                attApt.CheckInTime = dbApt.CheckInTime.Value.Date;
-                attApt.CheckOutTime = dbApt.CheckInTime.Value.Date;
-                attApt.AttStatus = dbApt.AttStatus;
-                if (attApt.AttStatus == (int)AttStatusType.Valid)
-                {
-                    attApt.CheckInTime += attApt.SchStartTime.Value.TimeOfDay;
-                    attApt.CheckOutTime += attApt.SchEndTime.Value.TimeOfDay;
-                }
-                //if (attApt.AttStatus < (int)AttStatusType.Absent)
-                //{
-                //    int late = (int)(attApt.CheckInTime.Value.TimeOfDay - vssc.StartTime.Value.TimeOfDay).TotalMinutes;
-                //    if (late > vssc.LateMinutes)
-                //        attApt.LateMinutes = late;
-                //    int early = (int)(vssc.EndTime.Value.TimeOfDay - attApt.CheckOutTime.Value.TimeOfDay).TotalMinutes;
-                //    if (early > vssc.EarlyMinutes)
-                //        attApt.EarlyMinutes = early;
-                //    if ((dbApt.LateMinutes != null && dbApt.LateMinutes > 0) || (dbApt.EarlyMinutes != null && dbApt.EarlyMinutes > 0))
-                //        dbApt.Location = string.Format("{0} {1}", dbApt.LateMinutes, dbApt.EarlyMinutes);
-                //    attApt.AttStatus = SetAttStaus(attApt.CheckInTime, attApt.CheckOutTime, late, early);
-                //}
-                attApt.Subject = EnumHelper.GetDescription<AttStatusType>((AttStatusType)attApt.AttStatus, false);
-                attApt.Description = dbApt.Description;
-                attApt.WageStatus = 0;
-                attAptList.Add(attApt);
-                break;
-            }
-            BLLFty.Create<AttAppointmentsBLL>().Insert(attAptList);
-            //BLLFty.Create<AttGeneralLogBLL>().Insert(logList);
-            //刷新数据
-            PageRefresh();
+            ////List<AttGeneralLog> logList = new List<AttGeneralLog>();
+            //List<AttAppointments> attAptList = new List<AttAppointments>();
+            //foreach (Appointment apt in e.Objects)
+            //{
+            //    AttAppointments dbApt = (AttAppointments)apt.GetSourceObject(this.schedulerStorage);
+            //    if (dbApt == null || dbApt.UserID == null || dbApt.UserID == Guid.Empty)
+            //    {
+            //        CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "添加失败，请刷新数据后重试。");
+            //        break;
+            //    }
+            //    //UsersInfo user = ((List<UsersInfo>)MainForm.dataSourceList[typeof(UsersInfo)]).FirstOrDefault(o => o.ID == dbApt.UserID);
+            //    //AttGeneralLog dbLogStart = new AttGeneralLog();
+            //    //dbLogStart.ID = Guid.NewGuid();
+            //    //dbLogStart.AttFlag = true;
+            //    //dbLogStart.EnrollNumber = user == null ? string.Empty : user.Code;
+            //    //dbLogStart.AttTime = dbApt.CheckInTime.GetValueOrDefault();
+            //    //dbLogStart.AttStatus = dbApt.AttStatus;
+            //    //dbLogStart.Description = dbApt.Description;
+            //    //dbLogStart.SchClassID = dbApt.SchClassID;
+            //    //logList.Add(dbLogStart);
+            //    //AttGeneralLog dbLogEnd = new AttGeneralLog();
+            //    //dbLogEnd.ID = Guid.NewGuid();
+            //    //dbLogEnd.AttFlag = false;
+            //    //dbLogEnd.EnrollNumber = user == null ? string.Empty : user.Code;
+            //    //dbLogEnd.AttTime = dbApt.CheckOutTime.GetValueOrDefault();
+            //    //dbLogEnd.AttStatus = dbApt.AttStatus;
+            //    //dbLogEnd.Description = dbApt.Description;
+            //    //dbLogEnd.SchClassID = dbApt.SchClassID;
+            //    //logList.Add(dbLogEnd);
+            //    VStaffSchClass vssc= clientFactory.GetData<VStaffSchClass>().FirstOrDefault(o =>
+            //        o.SchClassID == dbApt.SchClassID && o.DeptID == GetDeptID(dbApt.UserID));
+            //    AttAppointments attApt = new AttAppointments();
+            //    attApt.GLogStartID = Guid.NewGuid();
+            //    attApt.GLogEndID = Guid.NewGuid();
+            //    attApt.UserID = dbApt.UserID;
+            //    attApt.SchClassID = dbApt.SchClassID;
+            //    attApt.SchClassName = dbApt.SchClassName;
+            //    attApt.SchSerialNo = vssc.SchSerialNo;
+            //    attApt.SchStartTime = vssc.StartTime;
+            //    attApt.SchEndTime = vssc.EndTime;
+            //    attApt.CheckInTime = dbApt.CheckInTime.Value.Date;
+            //    attApt.CheckOutTime = dbApt.CheckInTime.Value.Date;
+            //    attApt.AttStatus = dbApt.AttStatus;
+            //    if (attApt.AttStatus == (int)AttStatusType.Valid)
+            //    {
+            //        attApt.CheckInTime += attApt.SchStartTime.Value.TimeOfDay;
+            //        attApt.CheckOutTime += attApt.SchEndTime.Value.TimeOfDay;
+            //    }
+            //    //if (attApt.AttStatus < (int)AttStatusType.Absent)
+            //    //{
+            //    //    int late = (int)(attApt.CheckInTime.Value.TimeOfDay - vssc.StartTime.Value.TimeOfDay).TotalMinutes;
+            //    //    if (late > vssc.LateMinutes)
+            //    //        attApt.LateMinutes = late;
+            //    //    int early = (int)(vssc.EndTime.Value.TimeOfDay - attApt.CheckOutTime.Value.TimeOfDay).TotalMinutes;
+            //    //    if (early > vssc.EarlyMinutes)
+            //    //        attApt.EarlyMinutes = early;
+            //    //    if ((dbApt.LateMinutes != null && dbApt.LateMinutes > 0) || (dbApt.EarlyMinutes != null && dbApt.EarlyMinutes > 0))
+            //    //        dbApt.Location = string.Format("{0} {1}", dbApt.LateMinutes, dbApt.EarlyMinutes);
+            //    //    attApt.AttStatus = SetAttStaus(attApt.CheckInTime, attApt.CheckOutTime, late, early);
+            //    //}
+            //    attApt.Subject = EnumHelper.GetDescription<AttStatusType>((AttStatusType)attApt.AttStatus, false);
+            //    attApt.Description = dbApt.Description;
+            //    attApt.WageStatus = 0;
+            //    attAptList.Add(attApt);
+            //    break;
+            //}
+            //BLLFty.Create<AttAppointmentsBLL>().Insert(attAptList);
+            ////BLLFty.Create<AttGeneralLogBLL>().Insert(logList);
+            ////刷新数据
+            //clientFactory.UpdateCache<AttAppointments>();
+            //clientFactory.DataPageRefresh<VAttAppointments>();
         }
 
         int SetAttStaus( DateTime? checkinTime, DateTime? checkOutTime,int late, int early)
@@ -364,17 +352,18 @@ namespace USL
             //    //    o.ID == dbApt.GLogStartID || o.ID == dbApt.GLogEndID);
             //    BLLFty.Create<AttGeneralLogBLL>().Delete(dbApt);
             //}
-            foreach (Appointment apt in e.Objects)
-            {
-                if (apt.Id == null)
-                {
-                    CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "删除失败。");
-                    break;
-                }
-                BLLFty.Create<AttAppointmentsBLL>().Delete((Int64)apt.Id);
-            }
-            //刷新数据
-            PageRefresh();
+            //foreach (Appointment apt in e.Objects)
+            //{
+            //    if (apt.Id == null)
+            //    {
+            //        CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "删除失败。");
+            //        break;
+            //    }
+            //    BLLFty.Create<AttAppointmentsBLL>().Delete((Int64)apt.Id);
+            //}
+            ////刷新数据
+            //clientFactory.DataPageRefresh<AttAppointments>();
+            ////clientFactory.DataPageRefresh<VAttAppointments>();
         }
 
         private void schedulerStorage_AppointmentDeleting(object sender, PersistentObjectCancelEventArgs e)
@@ -405,28 +394,28 @@ namespace USL
 
         private void schedulerControl1_SelectionChanged(object sender, EventArgs e)
         {
-            VAttWageBill wage = ((List<VAttWageBill>)MainForm.dataSourceList[typeof(VAttWageBill)]).FirstOrDefault(o => o.UserID==focusedID &&
-                o.年月 == Convert.ToString(((SchedulerControl)sender).SelectedInterval.Start.Year + "-" + ((SchedulerControl)sender).SelectedInterval.Start.Month.ToString().PadLeft(2,'0')));
-            if (wage != null && wage.状态 == (int)BillStatus.Audited)
-            {
-                schedulerControl1.OptionsCustomization.AllowAppointmentConflicts = AppointmentConflictsMode.Forbidden;
-                schedulerControl1.OptionsCustomization.AllowAppointmentCopy = UsedAppointmentType.None;
-                schedulerControl1.OptionsCustomization.AllowAppointmentCreate = UsedAppointmentType.None;
-                schedulerControl1.OptionsCustomization.AllowAppointmentDelete = UsedAppointmentType.None;
-                schedulerControl1.OptionsCustomization.AllowAppointmentDrag = UsedAppointmentType.None;
-                schedulerControl1.OptionsCustomization.AllowAppointmentEdit = UsedAppointmentType.None;
-                picStatus.Visible = true;
-            }
-            else
-            {
-                schedulerControl1.OptionsCustomization.AllowAppointmentConflicts = AppointmentConflictsMode.Allowed;
-                schedulerControl1.OptionsCustomization.AllowAppointmentCopy = UsedAppointmentType.All;
-                schedulerControl1.OptionsCustomization.AllowAppointmentCreate = UsedAppointmentType.All;
-                schedulerControl1.OptionsCustomization.AllowAppointmentDelete = UsedAppointmentType.All;
-                schedulerControl1.OptionsCustomization.AllowAppointmentDrag = UsedAppointmentType.All;
-                schedulerControl1.OptionsCustomization.AllowAppointmentEdit = UsedAppointmentType.All;
-                picStatus.Visible = false;
-            }
+            //VAttWageBill wage = ((List<VAttWageBill>)MainForm.dataSourceList[typeof(VAttWageBill)]).FirstOrDefault(o => o.UserID==focusedID &&
+            //    o.年月 == Convert.ToString(((SchedulerControl)sender).SelectedInterval.Start.Year + "-" + ((SchedulerControl)sender).SelectedInterval.Start.Month.ToString().PadLeft(2,'0')));
+            //if (wage != null && wage.状态 == (int)BillStatus.Audited)
+            //{
+            //    schedulerControl1.OptionsCustomization.AllowAppointmentConflicts = AppointmentConflictsMode.Forbidden;
+            //    schedulerControl1.OptionsCustomization.AllowAppointmentCopy = UsedAppointmentType.None;
+            //    schedulerControl1.OptionsCustomization.AllowAppointmentCreate = UsedAppointmentType.None;
+            //    schedulerControl1.OptionsCustomization.AllowAppointmentDelete = UsedAppointmentType.None;
+            //    schedulerControl1.OptionsCustomization.AllowAppointmentDrag = UsedAppointmentType.None;
+            //    schedulerControl1.OptionsCustomization.AllowAppointmentEdit = UsedAppointmentType.None;
+            //    picStatus.Visible = true;
+            //}
+            //else
+            //{
+            //    schedulerControl1.OptionsCustomization.AllowAppointmentConflicts = AppointmentConflictsMode.Allowed;
+            //    schedulerControl1.OptionsCustomization.AllowAppointmentCopy = UsedAppointmentType.All;
+            //    schedulerControl1.OptionsCustomization.AllowAppointmentCreate = UsedAppointmentType.All;
+            //    schedulerControl1.OptionsCustomization.AllowAppointmentDelete = UsedAppointmentType.All;
+            //    schedulerControl1.OptionsCustomization.AllowAppointmentDrag = UsedAppointmentType.All;
+            //    schedulerControl1.OptionsCustomization.AllowAppointmentEdit = UsedAppointmentType.All;
+            //    picStatus.Visible = false;
+            //}
         }
 
         private void schedulerControl1_EditAppointmentFormShowing(object sender, AppointmentFormEventArgs e)

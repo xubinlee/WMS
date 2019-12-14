@@ -9,23 +9,25 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using DevExpress.XtraEditors;
 using IBase;
-using DBML;
+using EDMX;
 using System.Collections;
 using CommonLibrary;
 using Factory;
 using BLL;
 using Utility;
+using Utility.Interceptor;
 
 namespace USL
 {
     public partial class SchClassPage : DevExpress.XtraEditors.XtraUserControl, IItemDetail
     {
+        private static ClientFactory clientFactory = LoggerInterceptor.CreateProxy<ClientFactory>();
         //bool addNew = false;
         List<SchClass> schClassList;
         public SchClassPage()
         {
             InitializeComponent();
-            schClassBindingSource.DataSource = schClassList = MainForm.dataSourceList[typeof(SchClass)] as List<SchClass>;
+            schClassBindingSource.DataSource = schClassList = BLLFty.Create<BaseBLL>().GetListBy<SchClass>(null);
         }
 
         public void Add()
@@ -88,7 +90,7 @@ namespace USL
                 //    BLLFty.Create<SchClassBLL>().Insert(schClassList);
                 //}
                 //else//修改
-                    BLLFty.Create<SchClassBLL>().Update(schClassList);
+                    //BLLFty.Create<SchClassBLL>().Update(schClassList);
                 //addNew = false;
                 //DataQueryPageRefresh();
                 CommonServices.ErrorTrace.SetSuccessfullyInfo(this.FindForm(), "保存成功");
@@ -118,13 +120,13 @@ namespace USL
         private void layoutView_RowUpdated(object sender, DevExpress.XtraGrid.Views.Base.RowObjectEventArgs e)
         {
             Save();
-            MainForm.DataPageRefresh<SchClass>();
+            clientFactory.DataPageRefresh<SchClass>();
         }
 
         private void layoutView_RowDeleted(object sender, DevExpress.Data.RowDeletedEventArgs e)
         {
             Save();
-            MainForm.DataPageRefresh<SchClass>();
+            clientFactory.DataPageRefresh<SchClass>();
         }
 
         public void BindData(object obj)

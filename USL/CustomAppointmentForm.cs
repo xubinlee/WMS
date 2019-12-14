@@ -22,7 +22,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using DevExpress.XtraScheduler;
-using DBML;
+using EDMX;
 using Utility;
 using DevExpress.XtraEditors;
 using DevExpress.XtraGrid.Views.Grid;
@@ -32,11 +32,13 @@ using System.IO;
 using System.Linq;
 using Factory;
 using BLL;
+using Utility.Interceptor;
 
 namespace USL
 {
     public partial class CustomAppointmentForm : DevExpress.XtraScheduler.UI.AppointmentForm
     {
+        private static ClientFactory clientFactory = LoggerInterceptor.CreateProxy<ClientFactory>();
         private int PrevCheckedRow; // this is the selected row's handle
         object CheckedRow; // this is a DataRowView instance
         int CheckedRowIndex = -1;
@@ -67,8 +69,8 @@ namespace USL
         /// </summary>
         public override void LoadFormData(DevExpress.XtraScheduler.Appointment appointment)
         {
-            goodsBindingSource.DataSource = ((List<Goods>)MainForm.dataSourceList[typeof(Goods)]).FindAll(o => o.Type == (int)GoodsBigType.Mold);
-            wageDesignBindingSource.DataSource = MainForm.dataSourceList[typeof(WageDesign)];
+            goodsBindingSource.DataSource =BLLFty.Create<BaseBLL>().GetListBy<Goods>(o => o.Type == (int)GoodsBigType.Mold);
+            wageDesignBindingSource.DataSource = BLLFty.Create<BaseBLL>().GetListBy<WageDesign>(null);
             //if (appointment.CustomFields["UniqueID"] != null)
             //    prevApt = ((List<Appointments>)MainForm.dataSourceList[typeof(Appointments)]).FirstOrDefault(o => o.UniqueID == (Int64)appointment.CustomFields["UniqueID"]);
             if (appointment.CustomFields["GoodsID"] == null)
@@ -114,7 +116,7 @@ namespace USL
             else
             {
                 WageDesignID = appointment.CustomFields["WageDesignID"].ToString();
-                CheckedRow = ((List<WageDesign>)MainForm.dataSourceList[typeof(WageDesign)]).Find(o => o.ID == new Guid(WageDesignID));
+                CheckedRow = BLLFty.Create<BaseBLL>().GetListBy<WageDesign>(o => o.ID == new Guid(WageDesignID)).FirstOrDefault();
             }
             GetTotal();
             if (!string.IsNullOrEmpty(appointment.Location))
@@ -146,15 +148,15 @@ namespace USL
             appointment.CustomFields["AMT"] = tbLocation.EditValue;
             if (lueGoods.EditValue != null)  //修改净重和计算周期
             {
-                Goods goods = ((List<Goods>)MainForm.dataSourceList[typeof(Goods)]).FirstOrDefault(o =>
-                    o.ID == new Guid(lueGoods.EditValue.ToString()));
+                Goods goods = BLLFty.Create<BaseBLL>().GetListBy<Goods>(o =>
+                    o.ID == new Guid(lueGoods.EditValue.ToString())).FirstOrDefault();
                 if (goods != null && 
                     ((!string.IsNullOrEmpty(txtNWeight.Text) && goods.NWeight != decimal.Parse(txtNWeight.Text)) ||
                     (!string.IsNullOrEmpty(txtCycle.Text) && goods.Cycle != decimal.Parse(txtCycle.Text))))
                 {
                     goods.NWeight = decimal.Parse(txtNWeight.Text);
                     goods.Cycle = decimal.Parse(txtCycle.Text);
-                    BLLFty.Create<GoodsBLL>().Update(goods);
+                    BLLFty.Create<BaseBLL>().Modify(goods);
                 }
             }
             return base.SaveFormData(appointment);
@@ -254,7 +256,7 @@ namespace USL
                 else
                 {
                     //一班工时小于6（比如停电），工价按公班价格算
-                    WageDesign obj = ((List<WageDesign>)MainForm.dataSourceList[typeof(WageDesign)]).Find(o => o.Name.Contains("公班"));
+                    WageDesign obj = BLLFty.Create<BaseBLL>().GetListBy<WageDesign>(o => o.Name.Contains("公班")).FirstOrDefault();
                     if (obj != null)
                         wages = obj.Wages.Value;
                 }

@@ -233,7 +233,7 @@
             // 
             // warehouseBindingSource
             // 
-            this.warehouseBindingSource.DataSource = typeof(DBML.Warehouse);
+            this.warehouseBindingSource.DataSource = typeof(EDMX.Warehouse);
             // 
             // lueDept
             // 
@@ -261,7 +261,7 @@
             // 
             // deptBindingSource
             // 
-            this.deptBindingSource.DataSource = typeof(DBML.Department);
+            this.deptBindingSource.DataSource = typeof(EDMX.Department);
             // 
             // btnOK
             // 
@@ -303,6 +303,7 @@
             this.lciDept.Text = "门店";
             this.lciDept.TextLocation = DevExpress.Utils.Locations.Left;
             this.lciDept.TextSize = new System.Drawing.Size(24, 14);
+            this.lciDept.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Never;
             // 
             // lciWarehouse
             // 

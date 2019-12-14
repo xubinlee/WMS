@@ -10,22 +10,23 @@ using System.Windows.Forms;
 using DevExpress.XtraEditors;
 using System.Data.Linq;
 using IBase;
-using DBML;
+using EDMX;
 using BLL;
 using Factory;
 using Utility;
 using CommonLibrary;
 using System.IO;
+using Utility.Interceptor;
 
 namespace USL
 {
     public partial class GoodsEditPage : DevExpress.XtraEditors.XtraUserControl, IDataEdit
     {
-        DBML.MainMenu mainMenu;
+        EDMX.MainMenu mainMenu;
         Goods goods = null;
         //string filePath = Application.StartupPath+"\\PicFile\\";//"D:\\ERPToysPic\\";
 
-        public GoodsEditPage(DBML.MainMenu menu, Object obj)
+        public GoodsEditPage(EDMX.MainMenu menu, Object obj)
         {
             InitializeComponent();
             mainMenu = menu;
@@ -121,8 +122,8 @@ namespace USL
 
         public void BindData()
         {
-            goodsTypeBindingSource.DataSource = MainForm.dataSourceList[typeof(GoodsType)];
-            packagingBindingSource.DataSource = MainForm.dataSourceList[typeof(Packaging)];
+            goodsTypeBindingSource.DataSource = BLLFty.Create<BaseBLL>().GetListBy<GoodsType>(null);
+            packagingBindingSource.DataSource = BLLFty.Create<BaseBLL>().GetListBy<Packaging>(null);
         }
         public void Add()
         {
@@ -178,7 +179,8 @@ namespace USL
                     obj.PackagingID = Guid.Empty;
                     obj.PCS = 1;
                 }
-                if (BLLFty.Create<GoodsBLL>().IsExist(obj))
+                bool exists = BLLFty.Create<BaseBLL>().GetListByNoTracking<Goods>(o => o.ID != obj.ID && o.Code.Equals(obj.Code)).Any();
+                if (exists)
                 {
                     XtraMessageBox.Show(string.Format("货号：{0}已经存在，不允许添加重复货号。", obj.Code), "操作提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return false;
@@ -199,11 +201,11 @@ namespace USL
                     goods = obj;
                     goods.ID = Guid.NewGuid();
                     goods.AddTime = DateTime.Now;
-                    BLLFty.Create<GoodsBLL>().Insert(goods);
+                    BLLFty.Create<BaseBLL>().Add<Goods>(goods);
 
                 }
                 else
-                    BLLFty.Create<GoodsBLL>().Update(obj);
+                    BLLFty.Create<BaseBLL>().Modify<Goods>(obj);
                 //CommonServices.ErrorTrace.SetSuccessfullyInfo(this.FindForm(), "保存成功");
                 //保存成功后，显示原来清晰的图片
                 if (goods.Pic != null && File.Exists(fileName))

@@ -11,18 +11,19 @@ using DevExpress.XtraEditors;
 using IBase;
 using System.Collections;
 using Utility;
-using DBML;
+using EDMX;
 using DevExpress.XtraCharts;
+using MainMenu = EDMX.MainMenu;
 
 namespace USL
 {
     public partial class ChartPage : DevExpress.XtraEditors.XtraUserControl, IItemDetail
     {
-        public DBML.MainMenu mainMenu;
+        public MainMenu mainMenu;
         IList dataSource;
         List<Company> customers;
         List<Goods> goodsList;
-        public ChartPage(DBML.MainMenu menu)
+        public ChartPage(MainMenu menu)
         {
             InitializeComponent();
             mainMenu = menu;
@@ -35,48 +36,26 @@ namespace USL
             //    dataSource = MainForm.dataSourceList[typeof(AnnualSalesSummaryByCustomerReport)] as IList;
             //else if (mainMenu.Name == MainMenuConstants.AnnualSalesSummaryByGoodsReport)
             //    dataSource = MainForm.dataSourceList[typeof(AnnualSalesSummaryByGoodsReport)] as IList;
-            customers = MainForm.dataSourceList[typeof(Company)] as List<Company>;
-            goodsList = MainForm.dataSourceList[typeof(Goods)] as List<Goods>;
+            //customers = MainForm.dataSourceList[typeof(Company)] as List<Company>;
+            //goodsList = MainForm.dataSourceList[typeof(Goods)] as List<Goods>;
             BindChart();
         }
 
         void BindChart()
         {
-            chartControl1.Series.Clear();
-            if (mainMenu.Name == MainMenuConstants.AnnualSalesSummaryByCustomerReport)
-            {
-                foreach (Company item in customers)
-                {
-                    // 柱状图里的第一个柱 
-                    Series series = new Series(item.Name, ViewType.Bar3D);
-                    dataSource = ((List<AnnualSalesSummaryByCustomerReport>)MainForm.dataSourceList[typeof(AnnualSalesSummaryByCustomerReport)]).FindAll(o =>
-                        o.客户代码 == item.Code);
-                    series.DataSource = dataSource;
-                    series.ArgumentScaleType = ScaleType.Qualitative;
-                    series.LabelsVisibility = DevExpress.Utils.DefaultBoolean.True;
-                    series.CheckedInLegend = false;
-
-                    // 以哪个字段进行显示 
-                    series.ArgumentDataMember = "年份";
-                    series.ValueScaleType = ScaleType.Numerical;
-
-                    // 柱状图里的柱的取值字段 
-                    series.ValueDataMembers.AddRange(new string[] { "金额" });
-                    chartControl1.Series.Add(series);
-                }
-            }
-            //else if (mainMenu.Name == MainMenuConstants.AnnualSalesSummaryByGoodsReport)
+            //chartControl1.Series.Clear();
+            //if (mainMenu.Name == MainMenuConstants.AnnualSalesSummaryByCustomerReport)
             //{
-            //    foreach (Goods item in goodsList)
+            //    foreach (Company item in customers)
             //    {
             //        // 柱状图里的第一个柱 
             //        Series series = new Series(item.Name, ViewType.Bar3D);
-            //        dataSource = ((List<AnnualSalesSummaryByGoodsReport>)MainForm.dataSourceList[typeof(AnnualSalesSummaryByGoodsReport)]).FindAll(o =>
-            //            o.货号 == item.Code);
+            //        dataSource = ((List<AnnualSalesSummaryByCustomerReport>)MainForm.dataSourceList[typeof(AnnualSalesSummaryByCustomerReport)]).FindAll(o =>
+            //            o.客户代码 == item.Code);
             //        series.DataSource = dataSource;
             //        series.ArgumentScaleType = ScaleType.Qualitative;
             //        series.LabelsVisibility = DevExpress.Utils.DefaultBoolean.True;
-            //        //series.CheckedInLegend = false;
+            //        series.CheckedInLegend = false;
 
             //        // 以哪个字段进行显示 
             //        series.ArgumentDataMember = "年份";

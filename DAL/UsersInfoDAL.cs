@@ -1,99 +1,48 @@
-﻿using DBML;
+﻿using EDMX;
+using Factory;
 using IBase;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
+using Z.EntityFramework.Plus;
 
 namespace DAL
 {
     public class UsersInfoDAL : IDALBase
     {
-        public List<VUsersInfo> GetVUsersInfo(DCC dcc)
-        {
-            return dcc.VUsersInfo.ToList();
-        }
-
-        public List<VUsersInfo> GetLoginUsersInfo(DCC dcc)
-        {
-            return dcc.VUsersInfo.Where(o => o.已删除==false && o.Password != null && o.Password != "").ToList();
-        }
-
-        public List<UsersInfo> GetUsersInfo(DCC dcc)
-        {
-            return dcc.UsersInfo.ToList();
-        }
-
-        public UsersInfo GetUsersInfo(DCC dcc,Guid id)
-        {
-            return dcc.UsersInfo.FirstOrDefault(o => o.ID == id);
-        }
-
-        public UsersInfo GetUsersInfo(DCC dcc,String code)
-        {
-            return dcc.UsersInfo.FirstOrDefault(o => o.Code == code);
-        }
-
-        public bool IsExistAttCardnumber(DCC dcc, UsersInfo user)
-        {
-            return dcc.UsersInfo.Where(o => o.ID != user.ID && o.AttCardnumber == user.AttCardnumber && o.AttCardnumber != "" && o.IsDel==false).Count() > 0;
-        }
-
-        public void Insert(DCC dcc, UsersInfo obj, List<Permission> pList, List<ButtonPermission> btnList)
+        public void Insert(WmsContext db, UsersInfo obj, List<Permission> pList, List<ButtonPermission> btnList)
         {
             using (TransactionScope ts = new TransactionScope())
             {
-                dcc.UsersInfo.InsertOnSubmit(obj);
+                // 让使用nameof(T)标签的所有缓存过期
+                QueryCacheManager.ExpireTag(nameof(UsersInfo));
+                QueryCacheManager.ExpireTag(nameof(Permission));
+                QueryCacheManager.ExpireTag(nameof(ButtonPermission));
+                BaseDAL baseDAL = DALFty.Create<BaseDAL>();
+                db.Set<UsersInfo>().Add(obj);
                 if (pList.Count > 0)
-                    dcc.Permission.InsertAllOnSubmit(pList);
+                    baseDAL.AddByBulkCopy<Permission>(db, pList);
                 if (btnList.Count > 0)
-                    dcc.ButtonPermission.InsertAllOnSubmit(btnList);
-                dcc.SubmitChanges();
+                    baseDAL.AddByBulkCopy<ButtonPermission>(db, btnList);
                 ts.Complete();
             }
         }
 
-        public void Update(DCC dcc, UsersInfo obj)
-        {
-            dcc.UsersInfo.Attach(obj);
-            dcc.Refresh(System.Data.Linq.RefreshMode.KeepCurrentValues, obj);
-        }
+        //public void Delete(WmsContext db, UsersInfo user)
+        //{
+        //    using (TransactionScope ts = new TransactionScope())
+        //    {
+        //        db.Entry(user).State = EntityState.Modified;
+        //        db.SaveChanges();
 
-        public void Delete(DCC dcc, UsersInfo obj)
-        {
-            using (TransactionScope ts = new TransactionScope())
-            {
-                dcc.UsersInfo.Attach(obj);
-                dcc.Refresh(System.Data.Linq.RefreshMode.KeepCurrentValues, obj);
-                var pList = dcc.Permission.Where(o => o.UserID == obj.ID);
-                    dcc.Permission.DeleteAllOnSubmit(pList);
-                var btnPList = dcc.ButtonPermission.Where(o => o.UserID == obj.ID);
-                    dcc.ButtonPermission.DeleteAllOnSubmit(btnPList);
-                dcc.SubmitChanges();
-                ts.Complete();
-            }
-        }
-
-        public void Delete(DCC dcc, Guid id)
-        {
-            //using (TransactionScope ts = new TransactionScope())
-            //{
-                UsersInfo user = dcc.UsersInfo.FirstOrDefault(o => o.ID == id);
-            if (user != null)
-            {
-                user.IsDel = user.IsDel ? false : true;
-                dcc.UsersInfo.Attach(user);
-                dcc.Refresh(System.Data.Linq.RefreshMode.KeepCurrentValues, user);
-            }
-                //var pList = dcc.Permission.Where(o => o.UserID == id);
-                //dcc.Permission.DeleteAllOnSubmit(pList);
-                //var btnPList = dcc.ButtonPermission.Where(o => o.UserID == id);
-                //dcc.ButtonPermission.DeleteAllOnSubmit(btnPList);
-                //dcc.SubmitChanges();
-                //ts.Complete();
-            //}
-        }
+        //        db.Set<Permission>().Where(o => o.UserID == user.ID).DeleteFromQuery();
+        //        db.Set<ButtonPermission>().Where(o => o.UserID == user.ID).DeleteFromQuery();
+        //        ts.Complete();
+        //    }
+        //}
     }
 }

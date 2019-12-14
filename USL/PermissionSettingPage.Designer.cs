@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             this.gridControl = new DevExpress.XtraGrid.GridControl();
-            this.vUsersInfoBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.usersInfoBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.layoutView = new DevExpress.XtraGrid.Views.Layout.LayoutView();
             this.colID = new DevExpress.XtraGrid.Columns.LayoutViewColumn();
             this.layoutViewField_colID = new DevExpress.XtraGrid.Views.Layout.LayoutViewField();
@@ -67,7 +67,7 @@
             this.colCaption = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colCheckBoxState = new DevExpress.XtraGrid.Columns.GridColumn();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.vUsersInfoBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.usersInfoBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutViewField_colID)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutViewField_col照片)).BeginInit();
@@ -94,7 +94,7 @@
             // gridControl
             // 
             this.gridControl.Cursor = System.Windows.Forms.Cursors.Default;
-            this.gridControl.DataSource = this.vUsersInfoBindingSource;
+            this.gridControl.DataSource = this.usersInfoBindingSource;
             this.gridControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridControl.EmbeddedNavigator.Buttons.Append.Visible = false;
             this.gridControl.EmbeddedNavigator.Buttons.CancelEdit.Visible = false;
@@ -110,9 +110,9 @@
             this.gridControl.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.layoutView});
             // 
-            // vUsersInfoBindingSource
+            // usersInfoBindingSource
             // 
-            this.vUsersInfoBindingSource.DataSource = typeof(DBML.VUsersInfo);
+            this.usersInfoBindingSource.DataSource = typeof(EDMX.UsersInfo);
             // 
             // layoutView
             // 
@@ -160,27 +160,25 @@
             this.layoutViewField_colID.Name = "layoutViewField_colID";
             this.layoutViewField_colID.Size = new System.Drawing.Size(264, 168);
             this.layoutViewField_colID.TextSize = new System.Drawing.Size(28, 20);
-            this.layoutViewField_colID.TextToControlDistance = 5;
             // 
             // col照片
             // 
-            this.col照片.FieldName = "照片";
+            this.col照片.FieldName = "Photo";
             this.col照片.LayoutViewField = this.layoutViewField_col照片;
             this.col照片.Name = "col照片";
             // 
             // layoutViewField_col照片
             // 
             this.layoutViewField_col照片.EditorPreferredWidth = 116;
-            this.layoutViewField_col照片.Location = new System.Drawing.Point(144, 0);
+            this.layoutViewField_col照片.Location = new System.Drawing.Point(154, 0);
             this.layoutViewField_col照片.Name = "layoutViewField_col照片";
-            this.layoutViewField_col照片.Size = new System.Drawing.Size(120, 120);
+            this.layoutViewField_col照片.Size = new System.Drawing.Size(129, 104);
             this.layoutViewField_col照片.TextSize = new System.Drawing.Size(0, 0);
-            this.layoutViewField_col照片.TextToControlDistance = 0;
             this.layoutViewField_col照片.TextVisible = false;
             // 
             // col姓名
             // 
-            this.col姓名.FieldName = "姓名";
+            this.col姓名.FieldName = "Name";
             this.col姓名.LayoutViewField = this.layoutViewField_col姓名;
             this.col姓名.Name = "col姓名";
             // 
@@ -189,88 +187,80 @@
             this.layoutViewField_col姓名.EditorPreferredWidth = 83;
             this.layoutViewField_col姓名.Location = new System.Drawing.Point(0, 0);
             this.layoutViewField_col姓名.Name = "layoutViewField_col姓名";
-            this.layoutViewField_col姓名.Size = new System.Drawing.Size(120, 24);
-            this.layoutViewField_col姓名.TextSize = new System.Drawing.Size(28, 14);
-            this.layoutViewField_col姓名.TextToControlDistance = 5;
+            this.layoutViewField_col姓名.Size = new System.Drawing.Size(130, 20);
+            this.layoutViewField_col姓名.TextSize = new System.Drawing.Size(35, 14);
             // 
             // col账号
             // 
-            this.col账号.FieldName = "账号";
+            this.col账号.FieldName = "Code";
             this.col账号.LayoutViewField = this.layoutViewField_col账号;
             this.col账号.Name = "col账号";
             // 
             // layoutViewField_col账号
             // 
             this.layoutViewField_col账号.EditorPreferredWidth = 83;
-            this.layoutViewField_col账号.Location = new System.Drawing.Point(0, 24);
+            this.layoutViewField_col账号.Location = new System.Drawing.Point(0, 20);
             this.layoutViewField_col账号.Name = "layoutViewField_col账号";
-            this.layoutViewField_col账号.Size = new System.Drawing.Size(120, 24);
-            this.layoutViewField_col账号.TextSize = new System.Drawing.Size(28, 14);
-            this.layoutViewField_col账号.TextToControlDistance = 5;
+            this.layoutViewField_col账号.Size = new System.Drawing.Size(130, 20);
+            this.layoutViewField_col账号.TextSize = new System.Drawing.Size(35, 14);
             // 
             // col部门
             // 
-            this.col部门.FieldName = "部门";
             this.col部门.LayoutViewField = this.layoutViewField_col部门;
             this.col部门.Name = "col部门";
             // 
             // layoutViewField_col部门
             // 
             this.layoutViewField_col部门.EditorPreferredWidth = 83;
-            this.layoutViewField_col部门.Location = new System.Drawing.Point(0, 48);
+            this.layoutViewField_col部门.Location = new System.Drawing.Point(0, 40);
             this.layoutViewField_col部门.Name = "layoutViewField_col部门";
-            this.layoutViewField_col部门.Size = new System.Drawing.Size(120, 24);
-            this.layoutViewField_col部门.TextSize = new System.Drawing.Size(28, 14);
-            this.layoutViewField_col部门.TextToControlDistance = 5;
+            this.layoutViewField_col部门.Size = new System.Drawing.Size(130, 20);
+            this.layoutViewField_col部门.TextSize = new System.Drawing.Size(35, 14);
             // 
             // col职位
             // 
-            this.col职位.FieldName = "职位";
             this.col职位.LayoutViewField = this.layoutViewField_col职位;
             this.col职位.Name = "col职位";
             // 
             // layoutViewField_col职位
             // 
             this.layoutViewField_col职位.EditorPreferredWidth = 83;
-            this.layoutViewField_col职位.Location = new System.Drawing.Point(0, 72);
+            this.layoutViewField_col职位.Location = new System.Drawing.Point(0, 60);
             this.layoutViewField_col职位.Name = "layoutViewField_col职位";
-            this.layoutViewField_col职位.Size = new System.Drawing.Size(120, 24);
-            this.layoutViewField_col职位.TextSize = new System.Drawing.Size(28, 14);
-            this.layoutViewField_col职位.TextToControlDistance = 5;
+            this.layoutViewField_col职位.Size = new System.Drawing.Size(130, 20);
+            this.layoutViewField_col职位.TextSize = new System.Drawing.Size(35, 14);
             // 
             // col电话
             // 
-            this.col电话.FieldName = "电话";
+            this.col电话.FieldName = "Tel";
             this.col电话.LayoutViewField = this.layoutViewField_col电话;
             this.col电话.Name = "col电话";
             // 
             // layoutViewField_col电话
             // 
             this.layoutViewField_col电话.EditorPreferredWidth = 227;
-            this.layoutViewField_col电话.Location = new System.Drawing.Point(0, 120);
+            this.layoutViewField_col电话.Location = new System.Drawing.Point(0, 104);
             this.layoutViewField_col电话.Name = "layoutViewField_col电话";
-            this.layoutViewField_col电话.Size = new System.Drawing.Size(264, 24);
-            this.layoutViewField_col电话.TextSize = new System.Drawing.Size(28, 14);
-            this.layoutViewField_col电话.TextToControlDistance = 5;
+            this.layoutViewField_col电话.Size = new System.Drawing.Size(283, 20);
+            this.layoutViewField_col电话.TextSize = new System.Drawing.Size(47, 14);
             // 
             // col地址
             // 
-            this.col地址.FieldName = "地址";
+            this.col地址.FieldName = "Address";
             this.col地址.LayoutViewField = this.layoutViewField_col地址;
             this.col地址.Name = "col地址";
             // 
             // layoutViewField_col地址
             // 
             this.layoutViewField_col地址.EditorPreferredWidth = 227;
-            this.layoutViewField_col地址.Location = new System.Drawing.Point(0, 144);
+            this.layoutViewField_col地址.Location = new System.Drawing.Point(0, 124);
             this.layoutViewField_col地址.Name = "layoutViewField_col地址";
-            this.layoutViewField_col地址.Size = new System.Drawing.Size(264, 24);
-            this.layoutViewField_col地址.TextSize = new System.Drawing.Size(28, 14);
-            this.layoutViewField_col地址.TextToControlDistance = 5;
+            this.layoutViewField_col地址.Size = new System.Drawing.Size(283, 20);
+            this.layoutViewField_col地址.TextSize = new System.Drawing.Size(47, 14);
             // 
             // col备注
             // 
-            this.col备注.FieldName = "备注";
+            this.col备注.FieldName = "Remark";
             this.col备注.LayoutViewField = this.layoutViewField_col备注;
             this.col备注.Name = "col备注";
             // 
@@ -281,13 +271,12 @@
             this.layoutViewField_col备注.Name = "layoutViewField_col备注";
             this.layoutViewField_col备注.Size = new System.Drawing.Size(264, 168);
             this.layoutViewField_col备注.TextSize = new System.Drawing.Size(28, 20);
-            this.layoutViewField_col备注.TextToControlDistance = 5;
             // 
             // layoutViewCard1
             // 
             this.layoutViewCard1.CustomizationFormText = "TemplateCard";
-            this.layoutViewCard1.ExpandButtonLocation = DevExpress.Utils.GroupElementLocation.AfterText;
             this.layoutViewCard1.GroupBordersVisible = false;
+            this.layoutViewCard1.HeaderButtonsLocation = DevExpress.Utils.GroupElementLocation.AfterText;
             this.layoutViewCard1.Items.AddRange(new DevExpress.XtraLayout.BaseLayoutItem[] {
             this.layoutViewField_col电话,
             this.layoutViewField_col地址,
@@ -308,8 +297,7 @@
             this.layoutViewField_col职位});
             this.Group1.Location = new System.Drawing.Point(0, 0);
             this.Group1.Name = "Group1";
-            this.Group1.Size = new System.Drawing.Size(144, 120);
-            this.Group1.Text = "Group1";
+            this.Group1.Size = new System.Drawing.Size(154, 104);
             this.Group1.TextVisible = false;
             // 
             // dockManager
@@ -337,15 +325,16 @@
             this.dpPermissions.Name = "dpPermissions";
             this.dpPermissions.Options.ShowCloseButton = false;
             this.dpPermissions.OriginalSize = new System.Drawing.Size(200, 200);
+            this.dpPermissions.SavedSizeFactor = 0D;
             this.dpPermissions.Size = new System.Drawing.Size(200, 480);
             this.dpPermissions.Text = "功能权限";
             // 
             // dockPanel1_Container
             // 
             this.dockPanel1_Container.Controls.Add(this.cuTreeListPermission);
-            this.dockPanel1_Container.Location = new System.Drawing.Point(4, 23);
+            this.dockPanel1_Container.Location = new System.Drawing.Point(5, 23);
             this.dockPanel1_Container.Name = "dockPanel1_Container";
-            this.dockPanel1_Container.Size = new System.Drawing.Size(192, 453);
+            this.dockPanel1_Container.Size = new System.Drawing.Size(191, 453);
             this.dockPanel1_Container.TabIndex = 0;
             // 
             // cuTreeListPermission
@@ -358,7 +347,7 @@
             this.cuTreeListPermission.OptionsView.EnableAppearanceEvenRow = true;
             this.cuTreeListPermission.OptionsView.EnableAppearanceOddRow = true;
             this.cuTreeListPermission.OptionsView.ShowCheckBoxes = true;
-            this.cuTreeListPermission.Size = new System.Drawing.Size(192, 453);
+            this.cuTreeListPermission.Size = new System.Drawing.Size(191, 453);
             this.cuTreeListPermission.TabIndex = 0;
             this.cuTreeListPermission.BeforeCheckNode += new DevExpress.XtraTreeList.CheckNodeEventHandler(this.cuTreeListPermission_BeforeCheckNode);
             this.cuTreeListPermission.CustomDrawNodeCell += new DevExpress.XtraTreeList.CustomDrawNodeCellEventHandler(this.cuTreeListPermission_CustomDrawNodeCell);
@@ -373,15 +362,16 @@
             this.dpButtonPermission.Name = "dpButtonPermission";
             this.dpButtonPermission.Options.ShowCloseButton = false;
             this.dpButtonPermission.OriginalSize = new System.Drawing.Size(200, 80);
+            this.dpButtonPermission.SavedSizeFactor = 0D;
             this.dpButtonPermission.Size = new System.Drawing.Size(440, 80);
             this.dpButtonPermission.Text = "按钮权限";
             // 
             // controlContainer1
             // 
             this.controlContainer1.Controls.Add(this.gcButtonPermission);
-            this.controlContainer1.Location = new System.Drawing.Point(4, 23);
+            this.controlContainer1.Location = new System.Drawing.Point(4, 24);
             this.controlContainer1.Name = "controlContainer1";
-            this.controlContainer1.Size = new System.Drawing.Size(432, 53);
+            this.controlContainer1.Size = new System.Drawing.Size(432, 52);
             this.controlContainer1.TabIndex = 0;
             // 
             // gcButtonPermission
@@ -397,14 +387,14 @@
             this.gcButtonPermission.Location = new System.Drawing.Point(0, 0);
             this.gcButtonPermission.MainView = this.winevButtonPermission;
             this.gcButtonPermission.Name = "gcButtonPermission";
-            this.gcButtonPermission.Size = new System.Drawing.Size(432, 53);
+            this.gcButtonPermission.Size = new System.Drawing.Size(432, 52);
             this.gcButtonPermission.TabIndex = 4;
             this.gcButtonPermission.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.winevButtonPermission});
             // 
             // buttonPermissionBindingSource
             // 
-            this.buttonPermissionBindingSource.DataSource = typeof(DBML.ButtonPermission);
+            this.buttonPermissionBindingSource.DataSource = typeof(EDMX.ButtonPermission);
             // 
             // winevButtonPermission
             // 
@@ -468,7 +458,7 @@
             this.Name = "PermissionSettingPage";
             this.Size = new System.Drawing.Size(640, 480);
             ((System.ComponentModel.ISupportInitialize)(this.gridControl)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.vUsersInfoBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.usersInfoBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutViewField_colID)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutViewField_col照片)).EndInit();
@@ -501,7 +491,7 @@
         private DevExpress.XtraBars.Docking.DockPanel dpPermissions;
         private DevExpress.XtraBars.Docking.ControlContainer dockPanel1_Container;
         private DevExpress.XtraGrid.Views.Layout.LayoutView layoutView;
-        private System.Windows.Forms.BindingSource vUsersInfoBindingSource;
+        private System.Windows.Forms.BindingSource usersInfoBindingSource;
         private DevExpress.XtraGrid.Columns.LayoutViewColumn colID;
         private DevExpress.XtraGrid.Columns.LayoutViewColumn col照片;
         private DevExpress.XtraGrid.Columns.LayoutViewColumn col姓名;

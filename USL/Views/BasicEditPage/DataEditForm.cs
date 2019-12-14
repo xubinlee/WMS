@@ -16,23 +16,26 @@ using DevExpress.XtraBars.Docking2010.Views;
 using System.Collections;
 using Factory;
 using BLL;
-using DBML;
+using EDMX;
 using DevExpress.XtraGrid.Columns;
 using CommonLibrary;
+using Utility.Interceptor;
+using MainMenu = EDMX.MainMenu;
 
 namespace USL
 {
     public partial class DataEditForm : DevExpress.XtraEditors.XtraForm
     {
-        Dictionary<DBML.MainMenu, Object> editPage;
-        DBML.MainMenu mainMenu;
+        private static ClientFactory clientFactory = LoggerInterceptor.CreateProxy<ClientFactory>();
+        Dictionary<MainMenu, Object> editPage;
+        MainMenu mainMenu;
         PageGroup pageGroupCore;
         IDataEdit dataEditPage;
 
-        public DataEditForm(DBML.MainMenu menu, Object obj, PageGroup child)
+        public DataEditForm(MainMenu menu, Object obj, PageGroup child)
         {
             InitializeComponent();
-            editPage = new Dictionary<DBML.MainMenu, object>();
+            editPage = new Dictionary<EDMX.MainMenu, object>();
             mainMenu = menu;
             pageGroupCore = child;
             this.Text = mainMenu.Caption;
@@ -40,37 +43,37 @@ namespace USL
                 this.Text += "—添加";
             CreateToolsButton();
             dataEditPage = CreateEditPage(obj);
-            if (obj != null && obj is VSupplier)
-            {
-                dpMoldAllot.Enabled = true;
-                vGoodsByMoldAllotBindingSource.DataSource = MainForm.GetData<VGoodsByMoldAllot>().FindAll(o => o.SupplierID == ((VSupplier)obj).ID);
-                gridView.BestFitColumns();
-                foreach (GridColumn col in gridView.Columns)
-                {
-                    if (col.Name.ToUpper().Contains("ID".ToUpper()))
-                        col.Visible = false;
-                    if (col.ColumnType.Equals(typeof(System.Data.Linq.Binary)))
-                    {
-                        col.Width = 50;  //调整图片的列宽度
-                    }
-                    if (col.FieldName == "单价" || col.FieldName == "售价")
-                    {
-                        col.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
-                        col.DisplayFormat.FormatString = "c5";
-                    }
-                    if (col.FieldName.Contains("金额") || col.FieldName == "额外费用")
-                    {
-                        col.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
-                        col.DisplayFormat.FormatString = "c";
-                    }
-                    if (col.FieldName == "去税单价")
-                    {
-                        col.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
-                        col.DisplayFormat.FormatString = "c6";
-                    }
-                }
-            }
-            else
+            //if (obj != null && obj is VSupplier)
+            //{
+            //    dpMoldAllot.Enabled = true;
+            //    vGoodsByMoldAllotBindingSource.DataSource = clientFactory.GetData<VGoodsByMoldAllot>().FindAll(o => o.SupplierID == ((VSupplier)obj).ID);
+            //    gridView.BestFitColumns();
+            //    foreach (GridColumn col in gridView.Columns)
+            //    {
+            //        if (col.Name.ToUpper().Contains("ID".ToUpper()))
+            //            col.Visible = false;
+            //        if (col.ColumnType.Equals(typeof(System.Data.Linq.Binary)))
+            //        {
+            //            col.Width = 50;  //调整图片的列宽度
+            //        }
+            //        if (col.FieldName == "单价" || col.FieldName == "售价")
+            //        {
+            //            col.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            //            col.DisplayFormat.FormatString = "c5";
+            //        }
+            //        if (col.FieldName.Contains("金额") || col.FieldName == "额外费用")
+            //        {
+            //            col.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            //            col.DisplayFormat.FormatString = "c";
+            //        }
+            //        if (col.FieldName == "去税单价")
+            //        {
+            //            col.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            //            col.DisplayFormat.FormatString = "c6";
+            //        }
+            //    }
+            //}
+            //else
                 dpMoldAllot.Enabled = false;
         }
 
@@ -85,20 +88,20 @@ namespace USL
                     ((DeptEditPage)de).Dock = DockStyle.Fill;
                     panelControl.Controls.Add((DeptEditPage)de);
                     break;
-                case MainMenuConstants.Company:
-                    if (obj != null)
-                        obj = MainForm.GetData<Company>().FirstOrDefault(o => o.ID == ((VCompany)obj).ID);
-                    de = new CompanyEditPage(obj);
-                    ((CompanyEditPage)de).Dock = DockStyle.Fill;
-                    panelControl.Controls.Add((CompanyEditPage)de);
-                    break;
-                case MainMenuConstants.Supplier:
-                    if (obj != null)
-                        obj = MainForm.GetData<Supplier>().FirstOrDefault(o => o.ID == ((VSupplier)obj).ID);
-                    de = new SupplierEditPage(obj);
-                    ((SupplierEditPage)de).Dock = DockStyle.Fill;
-                    panelControl.Controls.Add((SupplierEditPage)de);
-                    break;
+                //case MainMenuConstants.Company:
+                //    if (obj != null)
+                //        obj = clientFactory.GetData<Company>().FirstOrDefault(o => o.ID == ((VCompany)obj).ID);
+                //    de = new CompanyEditPage(obj);
+                //    ((CompanyEditPage)de).Dock = DockStyle.Fill;
+                //    panelControl.Controls.Add((CompanyEditPage)de);
+                //    break;
+                //case MainMenuConstants.Supplier:
+                //    if (obj != null)
+                //        obj = clientFactory.GetData<Supplier>().FirstOrDefault(o => o.ID == ((VSupplier)obj).ID);
+                //    de = new SupplierEditPage(obj);
+                //    ((SupplierEditPage)de).Dock = DockStyle.Fill;
+                //    panelControl.Controls.Add((SupplierEditPage)de);
+                //    break;
                 case MainMenuConstants.UsersInfo:
                     de = new UsersEditPage(obj);
                     ((UsersEditPage)de).Dock = DockStyle.Fill;
@@ -110,20 +113,20 @@ namespace USL
                     ((GoodsEditPage)de).Dock = DockStyle.Fill;
                     panelControl.Controls.Add((GoodsEditPage)de);
                     break;
-                case MainMenuConstants.GoodsType:
-                    if (obj != null)
-                        obj = MainForm.GetData<GoodsType>().FirstOrDefault(o => o.ID == ((VGoodsType)obj).ID);
-                    de = new GoodsTypeEditPage(obj);
-                    ((GoodsTypeEditPage)de).Dock = DockStyle.Fill;
-                    panelControl.Controls.Add((GoodsTypeEditPage)de);
-                    break;
-                case MainMenuConstants.Packaging:
-                    if (obj != null)
-                        obj = MainForm.GetData<Packaging>().FirstOrDefault(o => o.ID == ((VPackaging)obj).ID);
-                    de = new PackagingEditPage(obj);
-                    ((PackagingEditPage)de).Dock = DockStyle.Fill;
-                    panelControl.Controls.Add((PackagingEditPage)de);
-                    break;
+                //case MainMenuConstants.GoodsType:
+                //    if (obj != null)
+                //        obj = clientFactory.GetData<GoodsType>().FirstOrDefault(o => o.ID == ((VGoodsType)obj).ID);
+                //    de = new GoodsTypeEditPage(obj);
+                //    ((GoodsTypeEditPage)de).Dock = DockStyle.Fill;
+                //    panelControl.Controls.Add((GoodsTypeEditPage)de);
+                //    break;
+                //case MainMenuConstants.Packaging:
+                //    if (obj != null)
+                //        obj = clientFactory.GetData<Packaging>().FirstOrDefault(o => o.ID == ((VPackaging)obj).ID);
+                //    de = new PackagingEditPage(obj);
+                //    ((PackagingEditPage)de).Dock = DockStyle.Fill;
+                //    panelControl.Controls.Add((PackagingEditPage)de);
+                //    break;
             }
             return de;
         }
@@ -186,7 +189,7 @@ namespace USL
                         //    default:
                         //        break;
                         //}
-                        MainForm.DataPageRefresh(mainMenu.Name, string.Empty);
+                        clientFactory.DataPageRefresh(mainMenu.Name, string.Empty);
                         CommonServices.ErrorTrace.SetSuccessfullyInfo(this.FindForm(), "保存成功");
                     }
                 }

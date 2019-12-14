@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using DevExpress.XtraEditors;
 using IBase;
-using DBML;
+using EDMX;
 using Factory;
 using BLL;
 using CommonLibrary;
@@ -24,7 +24,7 @@ namespace USL
         public SupplierEditPage(Object obj)
         {
             InitializeComponent();
-            types = MainForm.dataSourceList[typeof(TypesList)] as List<TypesList>;
+            types = MainForm.TypesList;
             //单据类型
             if (MainForm.ISnowSoftVersion == ISnowSoftVersion.Procurement || MainForm.ISnowSoftVersion == ISnowSoftVersion.PurchaseSellStock)
                 typesListBindingSource.DataSource = types.FindAll(o => o.Type == TypesListConstants.SupplierType && o.No == 0);
@@ -59,15 +59,16 @@ namespace USL
                     supplier = obj;
                     supplier.ID = Guid.NewGuid();
                     supplier.AddTime = DateTime.Now;
-                    if (((List<Supplier>)MainForm.dataSourceList[typeof(Supplier)]).Exists(o => o.Name == supplier.Name))
+                    bool exists = BLLFty.Create<BaseBLL>().GetListByNoTracking<Supplier>(o => o.ID != obj.ID && o.Name.Equals(supplier.Name)).Any();
+                    if (exists)
                     {
                         XtraMessageBox.Show("该供应商已经存在，不能重复添加。", "操作提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return false;
                     }
-                    BLLFty.Create<SupplierBLL>().Insert(supplier);
+                    BLLFty.Create<BaseBLL>().Add<Supplier>(supplier);
                 }
                 else//修改
-                    BLLFty.Create<SupplierBLL>().Update(obj);
+                    BLLFty.Create<BaseBLL>().Modify<Supplier>(obj);
                 //CommonServices.ErrorTrace.SetSuccessfullyInfo(this.FindForm(), "保存成功");
                 return true;
             }

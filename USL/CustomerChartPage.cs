@@ -11,7 +11,7 @@ using DevExpress.XtraEditors;
 using IBase;
 using Factory;
 using BLL;
-using DBML;
+using EDMX;
 using CommonLibrary;
 using Utility;
 using DevExpress.XtraGrid.Views.Grid;
@@ -20,11 +20,14 @@ using DevExpress.XtraGrid.Views.Grid.ViewInfo;
 using System.Data.Linq;
 using DevExpress.XtraCharts;
 using DevExpress.XtraEditors.Controls;
+using Utility.Interceptor;
+using MainMenu = EDMX.MainMenu;
 
 namespace USL
 {
     public partial class CustomerChartPage : DevExpress.XtraEditors.XtraUserControl, IItemDetail
     {
+        private static ClientFactory clientFactory = LoggerInterceptor.CreateProxy<ClientFactory>();
         IList dataSource;
         Hashtable hasSeries = new Hashtable();
         public CustomerChartPage()
@@ -52,24 +55,24 @@ namespace USL
 
         public void BindData(object obj)
         {
-            vBusinessContactBindingSource.DataSource = ((List<VCompany>)MainForm.dataSourceList[typeof(VCompany)]);
+            //vBusinessContactBindingSource.DataSource = clientFactory.GetData<VCompany>();
             GetYearMonthList();
             GetDataSource(winExplorerView.GetFocusedDataSourceRowIndex());
         }
 
         void GetYearMonthList()
         {
-            List<AnnualSalesSummaryByCustomerReport> report = ((List<AnnualSalesSummaryByCustomerReport>)MainForm.dataSourceList[typeof(AnnualSalesSummaryByCustomerReport)]).OrderBy(o => o.年月).ToList();
-            Hashtable ht = new Hashtable();
-            clbYearMonth.Items.Clear();
-            foreach (AnnualSalesSummaryByCustomerReport item in report)
-            {
-                if (ht[item.年月] == null)
-                {
-                    ht.Add(item.年月, item.年月);
-                    clbYearMonth.Items.Add(item.年月);
-                }
-            }
+            //List<AnnualSalesSummaryByCustomerReport> report = clientFactory.GetData<AnnualSalesSummaryByCustomerReport>().OrderBy(o => o.年月).ToList();
+            //Hashtable ht = new Hashtable();
+            //clbYearMonth.Items.Clear();
+            //foreach (AnnualSalesSummaryByCustomerReport item in report)
+            //{
+            //    if (ht[item.年月] == null)
+            //    {
+            //        ht.Add(item.年月, item.年月);
+            //        clbYearMonth.Items.Add(item.年月);
+            //    }
+            //}
         }
 
         private void winExplorerView_FocusedRowChanged(object sender, DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventArgs e)
@@ -119,37 +122,38 @@ namespace USL
 
         Series AddChartSeries(string customer)
         {
-            // 柱状图里的第一个柱 
-            Series series = null;
-            if (MainForm.Company.Contains("镇阳"))
-                series = new Series(customer, ViewType.Bar);
-            else
-                series = new Series(customer, ViewType.Bar3D);
-            List<AnnualSalesSummaryByCustomerReport> dsList = new List<AnnualSalesSummaryByCustomerReport>();
-            dataSource = null;
-            foreach (CheckedListBoxItem item in clbYearMonth.Items)
-            {
-                if (item.CheckState == CheckState.Checked)
-                {
-                    AnnualSalesSummaryByCustomerReport obj = ((List<AnnualSalesSummaryByCustomerReport>)MainForm.dataSourceList[typeof(AnnualSalesSummaryByCustomerReport)]).FirstOrDefault(o =>
-                        o.客户名称 == customer && o.年月 == item.Value.ToString());
-                    dsList.Add(obj);
-                }
-            }
-            dataSource = dsList;
-            series.DataSource = dataSource;
-            series.ArgumentScaleType = ScaleType.Qualitative;
-            series.LabelsVisibility = DevExpress.Utils.DefaultBoolean.True;
-            series.CheckedInLegend = false;
+            throw new NotImplementedException();
+            //// 柱状图里的第一个柱 
+            //Series series = null;
+            //if (MainForm.Company.Contains("镇阳"))
+            //    series = new Series(customer, ViewType.Bar);
+            //else
+            //    series = new Series(customer, ViewType.Bar3D);
+            //List<AnnualSalesSummaryByCustomerReport> dsList = new List<AnnualSalesSummaryByCustomerReport>();
+            //dataSource = null;
+            //foreach (CheckedListBoxItem item in clbYearMonth.Items)
+            //{
+            //    if (item.CheckState == CheckState.Checked)
+            //    {
+            //        AnnualSalesSummaryByCustomerReport obj = clientFactory.GetData<AnnualSalesSummaryByCustomerReport>().FirstOrDefault(o =>
+            //            o.客户名称 == customer && o.年月 == item.Value.ToString());
+            //        dsList.Add(obj);
+            //    }
+            //}
+            //dataSource = dsList;
+            //series.DataSource = dataSource;
+            //series.ArgumentScaleType = ScaleType.Qualitative;
+            //series.LabelsVisibility = DevExpress.Utils.DefaultBoolean.True;
+            //series.CheckedInLegend = false;
 
-            // 以哪个字段进行显示 
-            series.ArgumentDataMember = "年月";
-            series.ValueScaleType = ScaleType.Numerical;
+            //// 以哪个字段进行显示 
+            //series.ArgumentDataMember = "年月";
+            //series.ValueScaleType = ScaleType.Numerical;
 
-            // 柱状图里的柱的取值字段 
-            series.ValueDataMembers.AddRange(new string[] { "金额" });
-            chartControl1.Series.Add(series);
-            return series;
+            //// 柱状图里的柱的取值字段 
+            //series.ValueDataMembers.AddRange(new string[] { "金额" });
+            //chartControl1.Series.Add(series);
+            //return series;
         }
 
         public void Add()
@@ -185,7 +189,7 @@ namespace USL
                 PrintSettingController psc = new PrintSettingController(chartControl1);
                 //页眉 
                 psc.PrintCompany = MainForm.Company;
-                DBML.MainMenu mm = ((List<DBML.MainMenu>)MainForm.dataSourceList[typeof(DBML.MainMenu)]).FirstOrDefault(o =>
+                MainMenu mm = MainForm.AllMainMenuList.FirstOrDefault(o =>
                     o.Name == MainMenuConstants.AnnualSalesSummaryByCustomerReport);
                 if (mm != null)
                     psc.PrintHeader = mm.Caption;

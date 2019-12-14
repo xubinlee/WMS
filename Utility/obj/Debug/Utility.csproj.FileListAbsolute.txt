@@ -11,4 +11,5 @@ D:\Project\WMS\Utility\obj\Debug\Utility.dll
 D:\Project\WMS\Utility\obj\Debug\Utility.pdb
 D:\WMS\Utility.dll
 D:\WMS\Utility.pdb
+D:\Project\WMS\Utility\obj\Debug\Utility.csproj.CopyComplete
 D:\Project\WMS\Utility\obj\Debug\Utility.csprojAssemblyReference.cache

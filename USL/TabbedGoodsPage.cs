@@ -12,27 +12,29 @@ using IBase;
 using DevExpress.XtraBars.Docking;
 using System.Collections;
 using DevExpress.XtraBars.Docking2010.Views.WindowsUI;
-using DBML;
+using EDMX;
 using Utility;
+using Utility.Interceptor;
 
 namespace USL
 {
     public partial class TabbedGoodsPage : DevExpress.XtraEditors.XtraUserControl, IItemDetail, IExtensions
     {
+        private static ClientFactory clientFactory = LoggerInterceptor.CreateProxy<ClientFactory>();
         //Object currentObj;
-        DBML.MainMenu mainMenu;
+        EDMX.MainMenu mainMenu;
         PageGroup pageGroupCore;
         IList list;
         List<TypesList> types;   //类型列表
         Dictionary<String, DataQueryPage> queryPageList;
-        public TabbedGoodsPage(DBML.MainMenu menu, PageGroup child, Dictionary<String, int> childButtonList)
+        public TabbedGoodsPage(EDMX.MainMenu menu, PageGroup child, Dictionary<String, int> childButtonList)
         {
             InitializeComponent();
             mainMenu = menu;
             pageGroupCore = child;
             queryPageList = new Dictionary<String, DataQueryPage>();
             DataQueryPage queryPage = null;
-            types = MainForm.GetData<TypesList>();
+            types = MainForm.TypesList;
             //单据类型
             int i = 0;
             List<DockPanel> dpList;
@@ -45,7 +47,7 @@ namespace USL
             foreach (DockPanel panel in dpList)
             {
                 i = types.Find(o => o.Type == TypesListConstants.GoodsType && o.Name == panel.Text.Trim()).No;
-                list = ((List<VMaterial>)MainForm.dataSourceList[typeof(VMaterial)]).FindAll(o => o.Type == i);
+                //list = clientFactory.GetData<VMaterial>().FindAll(o => o.Type == i);
                 queryPage = new DataQueryPage(menu, list, child, childButtonList);
                 queryPage.Dock = DockStyle.Fill;
                 panel.Controls.Add(queryPage);
@@ -61,7 +63,7 @@ namespace USL
         public void DataRefresh()
         {
             int i = types.Find(o => o.Type == TypesListConstants.GoodsType && o.Name == MainForm.GoodsBigTypeName).No;
-            list = ((List<VMaterial>)MainForm.dataSourceList[typeof(VMaterial)]).FindAll(o => o.Type == i);
+            //list = clientFactory.GetData<VMaterial>().FindAll(o => o.Type == i);
             queryPageList[MainForm.GoodsBigTypeName].BindData(list);
         }
 

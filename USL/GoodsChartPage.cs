@@ -11,7 +11,7 @@ using DevExpress.XtraEditors;
 using IBase;
 using Factory;
 using BLL;
-using DBML;
+using EDMX;
 using CommonLibrary;
 using Utility;
 using DevExpress.XtraGrid.Views.Grid;
@@ -20,6 +20,7 @@ using DevExpress.XtraGrid.Views.Grid.ViewInfo;
 using System.Data.Linq;
 using DevExpress.XtraCharts;
 using DevExpress.XtraEditors.Controls;
+using MainMenu = EDMX.MainMenu;
 
 namespace USL
 {
@@ -52,24 +53,24 @@ namespace USL
 
         public void BindData(object obj)
         {
-            vGoodsBindingSource.DataSource = ((List<Goods>)MainForm.dataSourceList[typeof(Goods)]);
-            GetYearMonthList();
-            GetDataSource(winExplorerView.GetFocusedDataSourceRowIndex());
+            //vGoodsBindingSource.DataSource = ((List<Goods>)MainForm.dataSourceList[typeof(Goods)]);
+            //GetYearMonthList();
+            //GetDataSource(winExplorerView.GetFocusedDataSourceRowIndex());
         }
 
         void GetYearMonthList()
         {
-            List<AnnualSalesSummaryByGoodsReport> report = ((List<AnnualSalesSummaryByGoodsReport>)MainForm.dataSourceList[typeof(AnnualSalesSummaryByGoodsReport)]).OrderBy(o => o.年月).ToList();
-            Hashtable ht = new Hashtable();
-            clbYearMonth.Items.Clear();
-            foreach (AnnualSalesSummaryByGoodsReport item in report)
-            {
-                if (ht[item.年月] == null)
-                {
-                    ht.Add(item.年月, item.年月);
-                    clbYearMonth.Items.Add(item.年月);
-                }
-            }
+            //List<AnnualSalesSummaryByGoodsReport> report = ((List<AnnualSalesSummaryByGoodsReport>)MainForm.dataSourceList[typeof(AnnualSalesSummaryByGoodsReport)]).OrderBy(o => o.年月).ToList();
+            //Hashtable ht = new Hashtable();
+            //clbYearMonth.Items.Clear();
+            //foreach (AnnualSalesSummaryByGoodsReport item in report)
+            //{
+            //    if (ht[item.年月] == null)
+            //    {
+            //        ht.Add(item.年月, item.年月);
+            //        clbYearMonth.Items.Add(item.年月);
+            //    }
+            //}
         }
 
         private void winExplorerView_FocusedRowChanged(object sender, DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventArgs e)
@@ -116,36 +117,37 @@ namespace USL
 
         Series AddChartSeries(string goods)
         {
-            // 柱状图里的第一个柱 
-            Series series = null;
-            if (MainForm.Company.Contains("镇阳"))
-                series = new Series(goods, ViewType.Bar);
-            else
-                series = new Series(goods, ViewType.Bar3D);
-            List<AnnualSalesSummaryByGoodsReport> dsList = new List<AnnualSalesSummaryByGoodsReport>();
-            foreach (CheckedListBoxItem item in clbYearMonth.Items)
-            {
-                if (item.CheckState == CheckState.Checked)
-                {
-                    AnnualSalesSummaryByGoodsReport obj = ((List<AnnualSalesSummaryByGoodsReport>)MainForm.dataSourceList[typeof(AnnualSalesSummaryByGoodsReport)]).FirstOrDefault(o =>
-                        o.货号 == goods && o.年月 == item.Value.ToString());
-                    dsList.Add(obj);
-                }
-            }
-            dataSource = dsList;
-            series.DataSource = dataSource;
-            series.ArgumentScaleType = ScaleType.Qualitative;
-            series.LabelsVisibility = DevExpress.Utils.DefaultBoolean.True;
-            series.CheckedInLegend = false;
+            throw new NotImplementedException();
+            //// 柱状图里的第一个柱 
+            //Series series = null;
+            //if (MainForm.Company.Contains("镇阳"))
+            //    series = new Series(goods, ViewType.Bar);
+            //else
+            //    series = new Series(goods, ViewType.Bar3D);
+            //List<AnnualSalesSummaryByGoodsReport> dsList = new List<AnnualSalesSummaryByGoodsReport>();
+            //foreach (CheckedListBoxItem item in clbYearMonth.Items)
+            //{
+            //    if (item.CheckState == CheckState.Checked)
+            //    {
+            //        AnnualSalesSummaryByGoodsReport obj = ((List<AnnualSalesSummaryByGoodsReport>)MainForm.dataSourceList[typeof(AnnualSalesSummaryByGoodsReport)]).FirstOrDefault(o =>
+            //            o.货号 == goods && o.年月 == item.Value.ToString());
+            //        dsList.Add(obj);
+            //    }
+            //}
+            //dataSource = dsList;
+            //series.DataSource = dataSource;
+            //series.ArgumentScaleType = ScaleType.Qualitative;
+            //series.LabelsVisibility = DevExpress.Utils.DefaultBoolean.True;
+            //series.CheckedInLegend = false;
 
-            // 以哪个字段进行显示 
-            series.ArgumentDataMember = "年月";
-            series.ValueScaleType = ScaleType.Numerical;
+            //// 以哪个字段进行显示 
+            //series.ArgumentDataMember = "年月";
+            //series.ValueScaleType = ScaleType.Numerical;
 
-            // 柱状图里的柱的取值字段 
-            series.ValueDataMembers.AddRange(new string[] { "金额" });
-            chartControl1.Series.Add(series);
-            return series;
+            //// 柱状图里的柱的取值字段 
+            //series.ValueDataMembers.AddRange(new string[] { "金额" });
+            //chartControl1.Series.Add(series);
+            //return series;
         }
 
         public void Add()
@@ -175,39 +177,39 @@ namespace USL
 
         public void Print()
         {
-            try
-            {
-                PrintSettingController psc = new PrintSettingController(chartControl1);
-                //页眉 
-                psc.PrintCompany = MainForm.Company;
-                DBML.MainMenu mm = ((List<DBML.MainMenu>)MainForm.dataSourceList[typeof(DBML.MainMenu)]).FirstOrDefault(o =>
-                    o.Name == MainMenuConstants.AnnualSalesSummaryByGoodsReport);
-                if (mm != null)
-                    psc.PrintHeader = mm.Caption;
-                psc.PrintSubTitle = MainForm.Contacts.Replace("\\r\\n", "\r\n");
-                //页脚 
-                //psc.PrintRightFooter = "打印日期：" + DateTime.Now.ToString();
+            //try
+            //{
+            //    PrintSettingController psc = new PrintSettingController(chartControl1);
+            //    //页眉 
+            //    psc.PrintCompany = MainForm.Company;
+            //    MainMenu mm = ((List<MainMenu>)MainForm.dataSourceList[typeof(MainMenu)]).FirstOrDefault(o =>
+            //        o.Name == MainMenuConstants.AnnualSalesSummaryByGoodsReport);
+            //    if (mm != null)
+            //        psc.PrintHeader = mm.Caption;
+            //    psc.PrintSubTitle = MainForm.Contacts.Replace("\\r\\n", "\r\n");
+            //    //页脚 
+            //    //psc.PrintRightFooter = "打印日期：" + DateTime.Now.ToString();
 
-                psc.IsBill = false;
+            //    psc.IsBill = false;
 
-                //横纵向 
-                //psc.LandScape = this.rbtnHorizon.Checked;
-                psc.LandScape = true;
-                //纸型 
-                psc.PaperKind = System.Drawing.Printing.PaperKind.A4;
-                //加载页面设置信息 
-                psc.LoadPageSetting();
+            //    //横纵向 
+            //    //psc.LandScape = this.rbtnHorizon.Checked;
+            //    psc.LandScape = true;
+            //    //纸型 
+            //    psc.PaperKind = System.Drawing.Printing.PaperKind.A4;
+            //    //加载页面设置信息 
+            //    psc.LoadPageSetting();
 
-                psc.Preview();
-            }
-            catch (Exception ex)
-            {
-                CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "没有可打印的数据。\r\n错误信息：" + ex.Message);
-            }
-            finally
-            {
-                this.Cursor = System.Windows.Forms.Cursors.Default;
-            }
+            //    psc.Preview();
+            //}
+            //catch (Exception ex)
+            //{
+            //    CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "没有可打印的数据。\r\n错误信息：" + ex.Message);
+            //}
+            //finally
+            //{
+            //    this.Cursor = System.Windows.Forms.Cursors.Default;
+            ////}
         }
 
         protected virtual void UpdateRotationAngles(Diagram3D diagram)

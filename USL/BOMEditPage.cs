@@ -11,7 +11,7 @@ using DevExpress.XtraEditors;
 using IBase;
 using Factory;
 using BLL;
-using DBML;
+using EDMX;
 using CommonLibrary;
 using Utility;
 using DevExpress.XtraGrid.Views.Grid;
@@ -19,11 +19,13 @@ using System.Collections;
 using DevExpress.XtraGrid.Views.Grid.ViewInfo;
 using System.Data.Linq;
 using DevExpress.XtraGrid.Views.WinExplorer;
+using Utility.Interceptor;
 
 namespace USL
 {
     public partial class BOMEditPage : DevExpress.XtraEditors.XtraUserControl, IItemDetail
     {
+        private static ClientFactory clientFactory = LoggerInterceptor.CreateProxy<ClientFactory>();
         List<BOM> bomList;
         List<BOM> goodsBOMList;
         Guid focusedGoodsID;
@@ -75,31 +77,31 @@ namespace USL
 
         public void BindData(object obj)
         {
-            if (bomType == BOMType.Assemble)
-            {
-                Guid bzID = Guid.Empty;
-                Guid pjID = Guid.Empty;
-                GoodsType bz = ((List<GoodsType>)MainForm.dataSourceList[typeof(GoodsType)]).Find(t => t.Name.Contains("包装"));
-                if (bz != null)
-                    bzID = bz.ID;
-                GoodsType pj = ((List<GoodsType>)MainForm.dataSourceList[typeof(GoodsType)]).Find(t => t.Name.Contains("配件"));
-                if (pj != null)
-                    pjID = pj.ID;
-                goodsBindingSource.DataSource = ((List<Goods>)MainForm.dataSourceList[typeof(Goods)]).FindAll(o =>
-                (o.Type == (int)GoodsBigType.SFGoods && o.GoodsTypeID != bzID) || (o.Type == (int)GoodsBigType.Stuff && o.GoodsTypeID != pjID));
-            }
-            else
-                goodsBindingSource.DataSource = ((List<Goods>)MainForm.dataSourceList[typeof(Goods)]).FindAll(o => o.Type == (int)goodsBigType);
-            if (bomType == BOMType.BOM)
-                lueGoodsBindingSource.DataSource = ((List<Goods>)MainForm.dataSourceList[typeof(Goods)]).FindAll(o =>
-                    o.Type == (int)GoodsBigType.SFGoods || o.Type == (int)GoodsBigType.Stuff);  //一些自动机生产的材料可以直接用来包装成成品
-            else if (bomType==BOMType.Assemble)
-                lueGoodsBindingSource.DataSource = ((List<Goods>)MainForm.dataSourceList[typeof(Goods)]).FindAll(o =>
-                    o.Type == (int)GoodsBigType.Stuff || o.Type == (int)GoodsBigType.Material || o.Type == (int)GoodsBigType.Mold);  //外加工装配，自动机材料按损耗率扣减原料
-            else
-                lueGoodsBindingSource.DataSource = ((List<Goods>)MainForm.dataSourceList[typeof(Goods)]).FindAll(o => o.Type == (int)lueGoodsBigType);
-            bomList = ((List<BOM>)MainForm.dataSourceList[typeof(BOM)]).FindAll(o => o.Type == (int)bomType);
-            GetBOMDataSource();
+            //if (bomType == BOMType.Assemble)
+            //{
+            //    Guid bzID = Guid.Empty;
+            //    Guid pjID = Guid.Empty;
+            //    GoodsType bz = clientFactory.GetData<GoodsType>().FirstOrDefault(t => t.Name.Contains("包装"));
+            //    if (bz != null)
+            //        bzID = bz.ID;
+            //    GoodsType pj = clientFactory.GetData<GoodsType>().FirstOrDefault(t => t.Name.Contains("配件"));
+            //    if (pj != null)
+            //        pjID = pj.ID;
+            //    goodsBindingSource.DataSource = clientFactory.GetData<Goods>().FindAll(o =>
+            //    (o.Type == (int)GoodsBigType.SFGoods && o.GoodsTypeID != bzID) || (o.Type == (int)GoodsBigType.Stuff && o.GoodsTypeID != pjID));
+            //}
+            //else
+            //    goodsBindingSource.DataSource = clientFactory.GetData<Goods>().FindAll(o => o.Type == (int)goodsBigType);
+            //if (bomType == BOMType.BOM)
+            //    lueGoodsBindingSource.DataSource = clientFactory.GetData<Goods>().FindAll(o =>
+            //        o.Type == (int)GoodsBigType.SFGoods || o.Type == (int)GoodsBigType.Stuff);  //一些自动机生产的材料可以直接用来包装成成品
+            //else if (bomType==BOMType.Assemble)
+            //    lueGoodsBindingSource.DataSource = clientFactory.GetData<Goods>().FindAll(o =>
+            //        o.Type == (int)GoodsBigType.Stuff || o.Type == (int)GoodsBigType.Material || o.Type == (int)GoodsBigType.Mold);  //外加工装配，自动机材料按损耗率扣减原料
+            //else
+            //    lueGoodsBindingSource.DataSource = clientFactory.GetData<Goods>().FindAll(o => o.Type == (int)lueGoodsBigType);
+            //bomList = clientFactory.GetData<BOM>().FindAll(o => o.Type == (int)bomType);
+            //GetBOMDataSource();
         }
 
         private void winExplorerView_FocusedRowChanged(object sender, DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventArgs e)
@@ -117,7 +119,7 @@ namespace USL
             if (winExplorerView.GetFocusedRowCellValue(colID) != null)
             {
                 focusedGoodsID = new Guid(winExplorerView.GetFocusedRowCellValue(colID).ToString());
-                bomList = ((List<BOM>)MainForm.dataSourceList[typeof(BOM)]).FindAll(o => o.Type == (int)bomType);
+                //bomList = ((List<BOM>)MainForm.dataSourceList[typeof(BOM)]).FindAll(o => o.Type == (int)bomType);
                 if (bomList != null)
                 {
                     bOMBindingSource.DataSource = goodsBOMList = bomList.FindAll(o => o.ParentGoodsID == focusedGoodsID);
@@ -149,60 +151,61 @@ namespace USL
         
         public bool Save()
         {
-            try
-            {
-                this.Cursor = System.Windows.Forms.Cursors.WaitCursor;
-                Hashtable hasGoods = new Hashtable();
-                if (goodsBOMList == null)
-                {
-                    CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), string.Format("请完整填写{0}", dpBOM.Text.Trim()));
-                    return false;
-                }
-                //foreach (BOM item in goodsBOMList)
-                //{
-                //    item.ParentGoodsID = focusedGoodsID;
-                //    item.Type = (int)bomType;
-                //}
-                for (int i = goodsBOMList.Count - 1; i >= 0; i--)
-                {
-                    if (goodsBOMList[i].GoodsID == Guid.Empty || goodsBOMList[i].Qty == 0)
-                    {
-                        goodsBOMList.RemoveAt(i);
-                        continue;
-                    }
-                    if (hasGoods[goodsBOMList[i].GoodsID] == null)
-                        hasGoods.Add(goodsBOMList[i].GoodsID, goodsBOMList[i]);
-                    else
-                    {
-                        CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "不能重复选择货品。");
-                        return false;
-                    }
-                    goodsBOMList[i].ParentGoodsID = focusedGoodsID;
-                    goodsBOMList[i].Type = (int)bomType;
-                    if (goodsBOMList[i].PCS == 0)
-                        goodsBOMList[i].PCS = 1;
-                }
-                //添加
-                if (addNew)
-                {
-                    BLLFty.Create<BOMBLL>().Insert(goodsBOMList);
-                }
-                else//修改
-                    BLLFty.Create<BOMBLL>().Update((int)bomType, focusedGoodsID, goodsBOMList);
-                addNew = false;
-                //DataQueryPageRefresh();
-                CommonServices.ErrorTrace.SetSuccessfullyInfo(this.FindForm(), "保存成功");
-                return true;
-            }
-            catch (Exception ex)
-            {
-                CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), ex.Message);
-                return false;
-            }
-            finally
-            {
-                this.Cursor = System.Windows.Forms.Cursors.Default;
-            }
+            throw new NotImplementedException();
+            //try
+            //{
+            //    this.Cursor = System.Windows.Forms.Cursors.WaitCursor;
+            //    Hashtable hasGoods = new Hashtable();
+            //    if (goodsBOMList == null)
+            //    {
+            //        CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), string.Format("请完整填写{0}", dpBOM.Text.Trim()));
+            //        return false;
+            //    }
+            //    //foreach (BOM item in goodsBOMList)
+            //    //{
+            //    //    item.ParentGoodsID = focusedGoodsID;
+            //    //    item.Type = (int)bomType;
+            //    //}
+            //    for (int i = goodsBOMList.Count - 1; i >= 0; i--)
+            //    {
+            //        if (goodsBOMList[i].GoodsID == Guid.Empty || goodsBOMList[i].Qty == 0)
+            //        {
+            //            goodsBOMList.RemoveAt(i);
+            //            continue;
+            //        }
+            //        if (hasGoods[goodsBOMList[i].GoodsID] == null)
+            //            hasGoods.Add(goodsBOMList[i].GoodsID, goodsBOMList[i]);
+            //        else
+            //        {
+            //            CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "不能重复选择货品。");
+            //            return false;
+            //        }
+            //        goodsBOMList[i].ParentGoodsID = focusedGoodsID;
+            //        goodsBOMList[i].Type = (int)bomType;
+            //        if (goodsBOMList[i].PCS == 0)
+            //            goodsBOMList[i].PCS = 1;
+            //    }
+            //    //添加
+            //    if (addNew)
+            //    {
+            //        BLLFty.Create<BOMBLL>().Insert(goodsBOMList);
+            //    }
+            //    else//修改
+            //        BLLFty.Create<BOMBLL>().Update((int)bomType, focusedGoodsID, goodsBOMList);
+            //    addNew = false;
+            //    //DataQueryPageRefresh();
+            //    CommonServices.ErrorTrace.SetSuccessfullyInfo(this.FindForm(), "保存成功");
+            //    return true;
+            //}
+            //catch (Exception ex)
+            //{
+            //    CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), ex.Message);
+            //    return false;
+            //}
+            //finally
+            //{
+            //    this.Cursor = System.Windows.Forms.Cursors.Default;
+            ////}
         }
 
         public bool Audit()
@@ -227,55 +230,55 @@ namespace USL
 
         private void repositoryItemLueGoods_EditValueChanged(object sender, EventArgs e)
         {
-            Goods goods = ((LookUpEdit)sender).GetSelectedDataRow() as Goods;
-            if (goods != null)
-            {
-                bool flag = false;
-                if (focusedGoodsID == goods.ID)
-                {
-                    gridView.DeleteSelectedRows();
-                    CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), string.Format("{0}不能和{1}信息重复。", dpBOM.Text.Trim(), dpGoods.Text.Trim()));
-                    flag = true;
-                }
-                //if (goodsBOMList != null && goodsBOMList.Any(o => o.GoodsID == goods.ID))
-                //{
-                //    //gridView.SetRowCellValue(gridView.FocusedRowHandle, colGoodsID, null);
-                //    gridView.DeleteSelectedRows();
-                //    CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), string.Format("不能重复选择{0}", dpBOM.Text.Trim()));
-                //    flag = true;
+            //Goods goods = ((LookUpEdit)sender).GetSelectedDataRow() as Goods;
+            //if (goods != null)
+            //{
+            //    bool flag = false;
+            //    if (focusedGoodsID == goods.ID)
+            //    {
+            //        gridView.DeleteSelectedRows();
+            //        CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), string.Format("{0}不能和{1}信息重复。", dpBOM.Text.Trim(), dpGoods.Text.Trim()));
+            //        flag = true;
+            //    }
+            //    //if (goodsBOMList != null && goodsBOMList.Any(o => o.GoodsID == goods.ID))
+            //    //{
+            //    //    //gridView.SetRowCellValue(gridView.FocusedRowHandle, colGoodsID, null);
+            //    //    gridView.DeleteSelectedRows();
+            //    //    CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), string.Format("不能重复选择{0}", dpBOM.Text.Trim()));
+            //    //    flag = true;
 
-                //}
-                if (flag)
-                    return;
-                Goods parentGoods = ((List<Goods>)MainForm.dataSourceList[typeof(Goods)]).Find(o => o.ID == focusedGoodsID);
-                gridView.SetRowCellValue(gridView.FocusedRowHandle, colPCS, parentGoods.PCS);
-                gridView.SetRowCellValue(gridView.FocusedRowHandle, colInnerBox, goods.InnerBox);
-                gridView.SetRowCellValue(gridView.FocusedRowHandle, colPrice, goods.Price);
-                gridView.SetRowCellValue(gridView.FocusedRowHandle, colPriceNoTax, goods.PriceNoTax);
-            }
+            //    //}
+            //    if (flag)
+            //        return;
+            //    Goods parentGoods = ((List<Goods>)MainForm.dataSourceList[typeof(Goods)]).Find(o => o.ID == focusedGoodsID);
+            //    gridView.SetRowCellValue(gridView.FocusedRowHandle, colPCS, parentGoods.PCS);
+            //    gridView.SetRowCellValue(gridView.FocusedRowHandle, colInnerBox, goods.InnerBox);
+            //    gridView.SetRowCellValue(gridView.FocusedRowHandle, colPrice, goods.Price);
+            //    gridView.SetRowCellValue(gridView.FocusedRowHandle, colPriceNoTax, goods.PriceNoTax);
+            //}
         }
 
         private void gridView_CustomUnboundColumnData(object sender, DevExpress.XtraGrid.Views.Base.CustomColumnDataEventArgs e)
         {
-            GridView view = sender as GridView;
-            List<BOM> list = ((BindingSource)view.DataSource).DataSource as List<BOM>;
-            if (e.IsGetData && list != null && list.Count > 0)
-            {
-                Goods goods = ((List<Goods>)MainForm.dataSourceList[typeof(Goods)]).Find(o => o.ID == list[e.ListSourceRowIndex].GoodsID);
-                if (goods != null)
-                {
-                    if (e.Column == colPic1)
-                        e.Value = goods.Pic;
-                    if (e.Column == colName1)
-                        e.Value = goods.Name;
-                    if (e.Column == colSPEC1)
-                        e.Value = goods.SPEC;
-                    if (e.Column == colUnit1)
-                        e.Value = goods.Unit;
-                    if (e.Column == colRemark1)
-                        e.Value = goods.Remark;
-                }
-            }
+            //GridView view = sender as GridView;
+            //List<BOM> list = ((BindingSource)view.DataSource).DataSource as List<BOM>;
+            //if (e.IsGetData && list != null && list.Count > 0)
+            //{
+            //    Goods goods = ((List<Goods>)MainForm.dataSourceList[typeof(Goods)]).Find(o => o.ID == list[e.ListSourceRowIndex].GoodsID);
+            //    if (goods != null)
+            //    {
+            //        if (e.Column == colPic1)
+            //            e.Value = goods.Pic;
+            //        if (e.Column == colName1)
+            //            e.Value = goods.Name;
+            //        if (e.Column == colSPEC1)
+            //            e.Value = goods.SPEC;
+            //        if (e.Column == colUnit1)
+            //            e.Value = goods.Unit;
+            //        if (e.Column == colRemark1)
+            //            e.Value = goods.Remark;
+            //    }
+            //}
         }
 
         private void gridView_MouseDown(object sender, MouseEventArgs e)
@@ -330,29 +333,29 @@ namespace USL
 
         private void winExplorerView_CustomUnboundColumnData(object sender, DevExpress.XtraGrid.Views.Base.CustomColumnDataEventArgs e)
         {
-            WinExplorerView view = sender as WinExplorerView;
-            List<Goods> list = ((BindingSource)view.DataSource).DataSource as List<Goods>;
-            if (e.IsGetData && list != null && list.Count > 0)
-            {
-                GoodsType goodsType = ((List<GoodsType>)MainForm.dataSourceList[typeof(GoodsType)]).FirstOrDefault(o => o.ID == list[e.ListSourceRowIndex].GoodsTypeID);
-                if (goodsType != null)
-                {
-                    if (e.Column == colGoodsType)
-                        e.Value = goodsType.Name;
-                }
-            }
+            //WinExplorerView view = sender as WinExplorerView;
+            //List<Goods> list = ((BindingSource)view.DataSource).DataSource as List<Goods>;
+            //if (e.IsGetData && list != null && list.Count > 0)
+            //{
+            //    GoodsType goodsType = ((List<GoodsType>)MainForm.dataSourceList[typeof(GoodsType)]).FirstOrDefault(o => o.ID == list[e.ListSourceRowIndex].GoodsTypeID);
+            //    if (goodsType != null)
+            //    {
+            //        if (e.Column == colGoodsType)
+            //            e.Value = goodsType.Name;
+            //    }
+            //}
         }
 
         private void gridView_RowUpdated(object sender, DevExpress.XtraGrid.Views.Base.RowObjectEventArgs e)
         {
             Save();
-            MainForm.DataPageRefresh<BOM>();
+            clientFactory.DataPageRefresh<BOM>();
         }
 
         private void gridView_RowDeleted(object sender, DevExpress.Data.RowDeletedEventArgs e)
         {
             this.Save();
-            MainForm.DataPageRefresh<BOM>();
+            clientFactory.DataPageRefresh<BOM>();
         }
     }
 }

@@ -783,9 +783,134 @@ namespace Utility
     }
 
     /// <summary>
+    /// 账面库存表
+    /// </summary>
+    public enum InventoryEnum
+    {
+        [MemberDescription("商品编码", "GoodsCode")]
+        GoodsCode,
+        [MemberDescription("商品名称", "GoodsName")]
+        GoodsName,
+        [MemberDescription("规格", "SPEC")]
+        SPEC,
+        [MemberDescription("单位", "Unit")]
+        Unit,
+        [MemberDescription("条形码", "Barcode")]
+        Barcode,
+        [MemberDescription("库存数量", "StockQty")]
+        StockQty,
+    }
+
+    /// <summary>
+    /// 账面库存日志表
+    /// </summary>
+    public enum InventoryLogEnum
+    {
+        [MemberDescription("门店编码", "DeptCode")]
+        DeptCode,
+        [MemberDescription("门店名称", "DeptName")]
+        DeptName,
+        [MemberDescription("商品编码", "GoodsCode")]
+        GoodsCode,
+        [MemberDescription("商品名称", "GoodsName")]
+        GoodsName,
+        [MemberDescription("条形码", "Barcode")]
+        Barcode,
+        [MemberDescription("规格", "SPEC")]
+        SPEC,
+        [MemberDescription("单位", "Unit")]
+        Unit,
+        [MemberDescription("库存数量", "StockQty")]
+        StockQty,
+    }
+
+    /// <summary>
     /// 盘点差异表
     /// </summary>
     public enum ProfitAndLossEnum
+    {
+        [MemberDescription("单据编号", "BillNo")]
+        BillNo,
+        [MemberDescription("单据日期", "BillDate")]
+        BillDate,
+        [MemberDescription("门店编码", "DeptCode")]
+        DeptCode,
+        [MemberDescription("门店名称", "DeptName")]
+        DeptName,
+        [MemberDescription("仓位", "WarehouseName")]
+        WarehouseName,
+        [MemberDescription("商品品类", "Category")]
+        Category,
+        [MemberDescription("商品编码", "GoodsCode")]
+        GoodsCode,
+        [MemberDescription("商品名称", "GoodsName")]
+        GoodsName,
+        //[MemberDescription("条码", "Barcode")]
+        //Barcode,
+        //[MemberDescription("规格", "SPEC")]
+        //SPEC,
+        //[MemberDescription("单位", "Unit")]
+        //Unit,
+        [MemberDescription("价格", "Price")]
+        Price,
+        [MemberDescription("账面数量", "StockQty")]
+        StockQty,
+        [MemberDescription("账面金额", "StockAMT")]
+        StockAMT,
+        [MemberDescription("实盘数量", "CheckQty")]
+        CheckQty,
+        [MemberDescription("实盘金额", "CheckAMT")]
+        CheckAMT,
+        [MemberDescription("实盘差异数量", "DiffQty")]
+        DiffQty,
+        [MemberDescription("实盘差异金额", "DiffAMT")]
+        DiffAMT,
+        [MemberDescription("在途商品数量", "TransitQty")]
+        TransitQty,
+        [MemberDescription("在途商品金额", "TransitAMT")]
+        TransitAMT,
+        [MemberDescription("已调入未到店数量", "NonArrivalQty")]
+        NonArrivalQty,
+        [MemberDescription("已调入未到店金额", "NonArrivalAMT")]
+        NonArrivalAMT,
+        [MemberDescription("已到货未加库存数量", "NonInStoreQty")]
+        NonInStoreQty,
+        [MemberDescription("已到货未加库存金额", "NonInStoreAMT")]
+        NonInStoreAMT,
+        [MemberDescription("已售未提商品数量", "SoldQty")]
+        SoldQty,
+        [MemberDescription("已售未提商品金额", "SoldAMT")]
+        SoldAMT,
+        [MemberDescription("已调出未销账数量", "NonChargeOffQty")]
+        NonChargeOffQty,
+        [MemberDescription("已调出未销账金额", "NonChargeOffAMT")]
+        NonChargeOffAMT,
+        [MemberDescription("已退货未减库存数量", "ReturnedQty")]
+        ReturnedQty,
+        [MemberDescription("已退货未减库存金额", "ReturnedAMT")]
+        ReturnedAMT,
+        [MemberDescription("团购数量", "GroupBuyingQty")]
+        GroupBuyingQty,
+        [MemberDescription("团购金额", "GroupBuyingAMT")]
+        GroupBuyingAMT,
+        [MemberDescription("其他数量", "OtherQty")]
+        OtherQty,
+        [MemberDescription("其他金额", "OtherAMT")]
+        OtherAMT,
+        [MemberDescription("实际差异数量", "FinalDiffQty")]
+        FinalDiffQty,
+        [MemberDescription("实际差异金额", "FinalDiffAMT")]
+        FinalDiffAMT,
+        [MemberDescription("废弃数量", "ScrapQty")]
+        ScrapQty,
+        [MemberDescription("备注", "Reason")]
+        Reason,
+    }
+
+    /// <summary>
+    /// 盘点差异日志表
+    /// </summary>
+    public enum VProfitAndLossLogEnum
     {
         [MemberDescription("单据编号", "BillNo")]
         BillNo,
@@ -936,9 +1061,44 @@ namespace Utility
     }
 
     /// <summary>
+    /// 未上架商品日志表
+    /// </summary>
+    public enum VUnlistedGoodsLogEnum
+    {
+        [MemberDescription("单据编号", "BillNo")]
+        BillNo,
+        [MemberDescription("单据日期", "BillDate")]
+        BillDate,
+        [MemberDescription("门店编码", "DeptCode")]
+        DeptCode,
+        [MemberDescription("门店名称", "DeptName")]
+        DeptName,
+        [MemberDescription("商品品类", "Category")]
+        Category,
+        [MemberDescription("商品编码", "GoodsCode")]
+        GoodsCode,
+        [MemberDescription("商品名称", "GoodsName")]
+        GoodsName,
+        [MemberDescription("价格", "Price")]
+        Price,
+        [MemberDescription("库存数量", "StockQty")]
+        StockQty,
+        [MemberDescription("库存金额", "StockAMT")]
+        StockAMT,
+        [MemberDescription("未上架商品数量", "UnlistedQty")]
+        UnlistedQty,
+        [MemberDescription("未上架商品金额", "UnlistedAMT")]
+        UnlistedAMT,
+        [MemberDescription("废弃数量", "ScrapQty")]
+        ScrapQty,
+        [MemberDescription("原因", "Reason")]
+        Reason,
+    }
+
+    /// <summary>
     /// 盘点日志表
     /// </summary>
-    public enum StocktakingLogEnum
+    public enum StocktakingLogHdEnum
     {
         [MemberDescription("单据编号", "BillNo")]
         BillNo,
@@ -973,8 +1133,8 @@ namespace Utility
         SPEC,
         [MemberDescription("单位", "Unit")]
         Unit,
-        [MemberDescription("库存数量", "Qty")]
-        Qty,
+        //[MemberDescription("库存数量", "Qty")]
+        //Qty,
         [MemberDescription("备注", "Remark")]
         Remark,
         [MemberDescription("已删除", "IsDel")]
@@ -984,7 +1144,7 @@ namespace Utility
     /// <summary>
     /// 门店资料
     /// </summary>
-    public enum DeptEnum
+    public enum DepartmentEnum
     {
         [MemberDescription("门店编码", "Code")]
         Code,
@@ -992,16 +1152,20 @@ namespace Utility
         Name,
         [MemberDescription("加油站标准编码", "StationCode")]
         StationCode,
-        [MemberDescription("所属省市", "Province")]
+        [MemberDescription("省份", "Province")]
         Province,
-        [MemberDescription("地市", "City")]
+        [MemberDescription("城市", "City")]
         City,
-        [MemberDescription("县公司", "County")]
+        [MemberDescription("片区", "County")]
         County,
-        [MemberDescription("门店类别", "Type")]
-        Type,
+        [MemberDescription("门店定级", "Level")]
+        Level,
         [MemberDescription("地理位置", "Address")]
         Address,
+        [MemberDescription("BW系统中地理位置", "BWAddress")]
+        BWAddress,
+        [MemberDescription("商圈分类", "Category")]
+        Category,
         [MemberDescription("备注", "Remark")]
         Remark,
         [MemberDescription("已删除", "IsDel")]
@@ -1011,7 +1175,7 @@ namespace Utility
     /// <summary>
     /// 用户资料
     /// </summary>
-    public enum UserEnum
+    public enum UsersInfoEnum
     {
         [MemberDescription("照片", "Photo")]
         Photo,
@@ -1032,15 +1196,33 @@ namespace Utility
     }
 
     /// <summary>
-    /// 在途商品
+    /// 差异原因
     /// </summary>
-    public enum TransitEnum
+    public enum ReasonEnum
     {
-        [MemberDescription("商品编码", "Code")]
+        [MemberDescription("编码", "Code")]
         Code,
-        [MemberDescription("商品名称", "Name")]
+        [MemberDescription("名称", "Name")]
         Name,
-        [MemberDescription("进货数量", "Qty")]
-        Qty,
+        [MemberDescription("在途数量", "TransitQty")]
+        TransitQty,
+        [MemberDescription("已调入未到店", "NonArrivalQty")]
+        NonArrivalQty,
+        //[MemberDescription("已到货未加库存", "NonInStoreQty")]
+        //NonInStoreQty,
+        //[MemberDescription("已售未提商品", "SoldQty")]
+        //SoldQty,
+        //[MemberDescription("已调出未销账", "NonChargeOffQty")]
+        //NonChargeOffQty,
+        //[MemberDescription("已退货未减库存", "ReturnedQty")]
+        //ReturnedQty,
+        //[MemberDescription("团购", "GroupBuyingQty")]
+        //GroupBuyingQty,
+        //[MemberDescription("其他", "OtherQty")]
+        //OtherQty,
+        //[MemberDescription("实际差异", "FinalDiffQty")]
+        //FinalDiffQty,
+        //[MemberDescription("废弃", "ScrapQty")]
+        //ScrapQty,
     }
 }

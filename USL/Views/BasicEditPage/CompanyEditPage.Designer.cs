@@ -670,11 +670,11 @@
             // 
             // companyBindingSource
             // 
-            this.companyBindingSource.DataSource = typeof(DBML.Company);
+            this.companyBindingSource.DataSource = typeof(EDMX.Company);
             // 
             // typesListBindingSource
             // 
-            this.typesListBindingSource.DataSource = typeof(DBML.TypesList);
+            this.typesListBindingSource.DataSource = typeof(EDMX.TypesList);
             // 
             // CompanyEditPage
             // 

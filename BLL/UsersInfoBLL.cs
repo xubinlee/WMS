@@ -1,5 +1,5 @@
 ﻿using DAL;
-using DBML;
+using EDMX;
 using Factory;
 using IBase;
 using System;
@@ -12,87 +12,11 @@ namespace BLL
 {
     public class UsersInfoBLL : IBLLBase
     {
-        public List<VUsersInfo> GetVUsersInfo()
-        {
-            using (DCC dcc = DBMLFty.Dcc)
-            {
-                return DALFty.Create<UsersInfoDAL>().GetVUsersInfo(dcc);
-            }
-        }
-
-        public List<VUsersInfo> GetLoginUsersInfo()
-        {
-            using (DCC dcc = DBMLFty.Dcc)
-            {
-                return DALFty.Create<UsersInfoDAL>().GetLoginUsersInfo(dcc);
-            }
-        }
-
-        public List<UsersInfo> GetUsersInfo()
-        {
-            using (DCC dcc = DBMLFty.Dcc)
-            {
-                return DALFty.Create<UsersInfoDAL>().GetUsersInfo(dcc);
-            }
-        }
-
-        public UsersInfo GetUsersInfo(Guid id)
-        {
-            using (DCC dcc = DBMLFty.Dcc)
-            {
-                return DALFty.Create<UsersInfoDAL>().GetUsersInfo(dcc, id);
-            }
-        }
-
-        public UsersInfo GetUsersInfo(String code)
-        {
-            using (DCC dcc = DBMLFty.Dcc)
-            {
-                return DALFty.Create<UsersInfoDAL>().GetUsersInfo(dcc, code);
-            }
-        }
-
-        public bool IsExistAttCardnumber(UsersInfo user)
-        {
-            using (DCC dcc = DBMLFty.Dcc)
-            {
-                return DALFty.Create<UsersInfoDAL>().IsExistAttCardnumber(dcc, user);
-            }
-        }
-
         public void Insert(UsersInfo obj, List<Permission> pList, List<ButtonPermission> btnList)
         {
-            using (DCC dcc = DBMLFty.Dcc)
+            using (WmsContext db = EDMXFty.Dc)
             {
-                DALFty.Create<UsersInfoDAL>().Insert(dcc, obj, pList, btnList);
-                dcc.Save();
-            }
-        }
-
-        public void Update(UsersInfo obj)
-        {
-            using (DCC dcc = DBMLFty.Dcc)
-            {
-                DALFty.Create<UsersInfoDAL>().Update(dcc, obj);
-                dcc.Save();
-            }
-        }
-
-        public void Delete(UsersInfo obj)
-        {
-            using (DCC dcc = DBMLFty.Dcc)
-            {
-                DALFty.Create<UsersInfoDAL>().Delete(dcc, obj);
-                dcc.Save();
-            }
-        }
-
-        public void Delete(Guid id)
-        {
-            using (DCC dcc = DBMLFty.Dcc)
-            {
-                DALFty.Create<UsersInfoDAL>().Delete(dcc, id);
-                dcc.Save();
+                DALFty.Create<UsersInfoDAL>().Insert(db, obj, pList, btnList);
             }
         }
     }

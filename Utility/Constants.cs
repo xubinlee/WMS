@@ -237,6 +237,10 @@ namespace Utility
         /// </summary>
         public const string AccountBookQuery = "AccountBookQuery";
         /// <summary>
+        /// 账面库存
+        /// </summary>
+        public const string Inventory = "Inventory";
+        /// <summary>
         /// 库存盘点
         /// </summary>
         public const string Stocktaking = "Stocktaking";

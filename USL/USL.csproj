@@ -41,6 +41,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\ERPToys\CABDevExpress.ExtensionKit.dll</HintPath>
     </Reference>
+    <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc" />
     <Reference Include="DevExpress.BonusSkins.v18.1">
       <Private>True</Private>
     </Reference>
@@ -174,6 +175,7 @@
     <Compile Include="ChartPage.Designer.cs">
       <DependentUpon>ChartPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="ClientFactory.cs" />
     <Compile Include="MonthlyChartPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -277,12 +279,6 @@
     <Compile Include="TabbedGoodsPage.Designer.cs">
       <DependentUpon>TabbedGoodsPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Views\BillEditPage\PaymentBillPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Views\BillEditPage\PaymentBillPage.Designer.cs">
-      <DependentUpon>PaymentBillPage.cs</DependentUpon>
-    </Compile>
     <Compile Include="PermissionSettingPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -295,30 +291,6 @@
     </Compile>
     <Compile Include="Views\AttPage\AttWageBillPage.Designer.cs">
       <DependentUpon>AttWageBillPage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\BillEditPage\WageBillPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Views\BillEditPage\WageBillPage.Designer.cs">
-      <DependentUpon>WageBillPage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\BillEditPage\ReceiptBillPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Views\BillEditPage\ReceiptBillPage.Designer.cs">
-      <DependentUpon>ReceiptBillPage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\BillEditPage\StockInBillPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Views\BillEditPage\StockInBillPage.Designer.cs">
-      <DependentUpon>StockInBillPage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\BillEditPage\StockOutBillPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Views\BillEditPage\StockOutBillPage.Designer.cs">
-      <DependentUpon>StockOutBillPage.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\BasicEditPage\SupplierEditPage.cs">
       <SubType>UserControl</SubType>
@@ -337,12 +309,6 @@
     </Compile>
     <Compile Include="Views\BasicEditPage\GoodsTypeEditPage.Designer.cs">
       <DependentUpon>GoodsTypeEditPage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\BillEditPage\OrderEditPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Views\BillEditPage\OrderEditPage.Designer.cs">
-      <DependentUpon>OrderEditPage.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\BasicEditPage\UsersEditPage.cs">
       <SubType>UserControl</SubType>
@@ -493,27 +459,12 @@
     <EmbeddedResource Include="TabbedGoodsPage.resx">
       <DependentUpon>TabbedGoodsPage.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Views\BillEditPage\PaymentBillPage.resx">
-      <DependentUpon>PaymentBillPage.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="PermissionSettingPage.resx">
       <DependentUpon>PermissionSettingPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\AttPage\AttWageBillPage.resx">
       <DependentUpon>AttWageBillPage.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\BillEditPage\WageBillPage.resx">
-      <DependentUpon>WageBillPage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\BillEditPage\ReceiptBillPage.resx">
-      <DependentUpon>ReceiptBillPage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\BillEditPage\StockInBillPage.resx">
-      <DependentUpon>StockInBillPage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\BillEditPage\StockOutBillPage.resx">
-      <DependentUpon>StockOutBillPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\BasicEditPage\SupplierEditPage.resx">
       <DependentUpon>SupplierEditPage.cs</DependentUpon>
@@ -523,9 +474,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Views\BasicEditPage\GoodsTypeEditPage.resx">
       <DependentUpon>GoodsTypeEditPage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\BillEditPage\OrderEditPage.resx">
-      <DependentUpon>OrderEditPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\BasicEditPage\UsersEditPage.resx">
       <DependentUpon>UsersEditPage.cs</DependentUpon>
@@ -676,9 +624,9 @@
       <Project>{DF90DCBB-5E18-4918-BAE5-5551C1897DA2}</Project>
       <Name>CustomComponent</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DBML\DBML.csproj">
-      <Project>{12d0e7f3-e5ff-45c6-be29-13f7e7569bb3}</Project>
-      <Name>DBML</Name>
+    <ProjectReference Include="..\EDMX\EDMX.csproj">
+      <Project>{b1aa6433-39a7-47fe-a404-1bcd2cbdd6e9}</Project>
+      <Name>EDMX</Name>
     </ProjectReference>
     <ProjectReference Include="..\Factory\Factory.csproj">
       <Project>{0943627b-01fe-40cd-ad12-72c5287621dd}</Project>
@@ -709,6 +657,8 @@
     <None Include="Resources\Picture_Save_32px.png" />
     <None Include="Resources\assignment_return_32px.png" />
     <None Include="Resources\Down_32x32.png" />
+    <None Include="Resources\Home_16x16.png" />
+    <None Include="Resources\Home_32x32.png" />
     <Content Include="snow.ico" />
     <None Include="Resources\phone_32.png" />
     <None Include="Resources\SaveAndNew_32x32.png" />

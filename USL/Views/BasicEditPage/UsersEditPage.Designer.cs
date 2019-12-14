@@ -562,19 +562,19 @@
             // 
             // usersInfoBindingSource
             // 
-            this.usersInfoBindingSource.DataSource = typeof(DBML.UsersInfo);
+            this.usersInfoBindingSource.DataSource = typeof(EDMX.UsersInfo);
             // 
             // wageTypeBindingSource
             // 
-            this.wageTypeBindingSource.DataSource = typeof(DBML.TypesList);
+            this.wageTypeBindingSource.DataSource = typeof(EDMX.TypesList);
             // 
             // typesListBindingSource
             // 
-            this.typesListBindingSource.DataSource = typeof(DBML.TypesList);
+            this.typesListBindingSource.DataSource = typeof(EDMX.TypesList);
             // 
             // departmentBindingSource
             // 
-            this.departmentBindingSource.DataSource = typeof(DBML.Department);
+            this.departmentBindingSource.DataSource = typeof(EDMX.Department);
             // 
             // UsersEditPage
             // 
