@@ -44,6 +44,10 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Utility, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\WMS\Utility.dll</HintPath>
+    </Reference>
     <Reference Include="Z.EntityFramework.Plus.EF6, Version=1.12.4.0, Culture=neutral, PublicKeyToken=59b66d028979105b, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\WMS\Z.EntityFramework.Plus.EF6.dll</HintPath>
@@ -65,10 +69,6 @@
     <ProjectReference Include="..\IBase\IBase.csproj">
       <Project>{3c92250c-d012-4eb2-ae24-229583721d2d}</Project>
       <Name>IBase</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Utility\Utility.csproj">
-      <Project>{0ada4080-1884-44d2-a0ad-c91e5c96cfc0}</Project>
-      <Name>Utility</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

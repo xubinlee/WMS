@@ -38,7 +38,7 @@ namespace EDMX
         [StringLength(50)]
         public string DeptName { get; set; }
 
-        [StringLength(20)]
+        [StringLength(50)]
         public string Category { get; set; }
 
         [Key]
@@ -76,7 +76,7 @@ namespace EDMX
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int ScrapQty { get; set; }
 
-        [StringLength(50)]
-        public string Reason { get; set; }
+        [StringLength(100)]
+        public string Remark { get; set; }
     }
 }

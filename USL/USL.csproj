@@ -161,6 +161,10 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="Utility, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\WMS\Utility.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AboutBox.cs">
@@ -176,6 +180,7 @@
       <DependentUpon>ChartPage.cs</DependentUpon>
     </Compile>
     <Compile Include="ClientFactory.cs" />
+    <Compile Include="Enum\Enumeration.cs" />
     <Compile Include="MonthlyChartPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -399,6 +404,7 @@
     </Compile>
     <EmbeddedResource Include="AboutBox.resx">
       <DependentUpon>AboutBox.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ChartPage.resx">
       <DependentUpon>ChartPage.cs</DependentUpon>
@@ -636,10 +642,6 @@
       <Project>{3c92250c-d012-4eb2-ae24-229583721d2d}</Project>
       <Name>IBase</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Utility\Utility.csproj">
-      <Project>{0ada4080-1884-44d2-a0ad-c91e5c96cfc0}</Project>
-      <Name>Utility</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="pr.ico" />
@@ -689,6 +691,7 @@
     <Content Include="Resources\del.png" />
     <Content Include="Resources\edit.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -19,8 +19,8 @@ namespace DAL
         /// <param name="list"></param>
         public virtual void AddByBulk<T>(DbContext db, List<T> list) where T : class, new()
         {
-            // 让使用nameof(T)标签的所有缓存过期
-            QueryCacheManager.ExpireTag(nameof(T));
+            // 让使用typeof(T).Name标签的所有缓存过期
+            QueryCacheManager.ExpireTag(typeof(T).Name);
             db.Set<T>().BulkInsert(list);
         }
 
@@ -31,8 +31,8 @@ namespace DAL
         /// <param name="list"></param>
         public virtual void UpdateByBulk<T>(DbContext db, List<T> list) where T : class, new()
         {
-            // 让使用nameof(T)标签的所有缓存过期
-            QueryCacheManager.ExpireTag(nameof(T));
+            // 让使用typeof(T).Name标签的所有缓存过期
+            QueryCacheManager.ExpireTag(typeof(T).Name);
             db.Set<T>().BulkUpdate(list);
         }
 
@@ -46,8 +46,8 @@ namespace DAL
         {
             using (DbContextTransaction trans = db.Database.BeginTransaction())
             {
-                // 让使用nameof(T)标签的所有缓存过期
-                QueryCacheManager.ExpireTag(nameof(T));
+                // 让使用typeof(T).Name标签的所有缓存过期
+                QueryCacheManager.ExpireTag(typeof(T).Name);
                 db.Set<T>().BulkInsert(insertList);
                 db.Set<T>().BulkUpdate(updateList);
                 trans.Commit();
@@ -64,9 +64,10 @@ namespace DAL
         {
             using (DbContextTransaction trans = db.Database.BeginTransaction())
             {
-                // 让使用nameof(T)标签的所有缓存过期
-                QueryCacheManager.ExpireTag(nameof(T));
+                // 让使用typeof(T).Name标签的所有缓存过期
+                QueryCacheManager.ExpireTag(typeof(T).Name);
                 db.Set<H>().Add(hd);
+                db.SaveChanges();
                 db.Set<T>().BulkInsert(dtlList);
                 trans.Commit();
             }
@@ -79,8 +80,8 @@ namespace DAL
         /// <returns></returns>
         public virtual int DeleteByBulk<T>(DbContext db, Expression<Func<T, bool>> delWhere) where T : class, new()
         {
-            // 让使用nameof(T)标签的所有缓存过期
-            QueryCacheManager.ExpireTag(nameof(T));
+            // 让使用typeof(T).Name标签的所有缓存过期
+            QueryCacheManager.ExpireTag(typeof(T).Name);
             if (delWhere == null)
                 return db.Set<T>().DeleteFromQuery();
             else
@@ -97,8 +98,8 @@ namespace DAL
         {
             using (DbContextTransaction trans = db.Database.BeginTransaction())
             {
-                // 让使用nameof(T)标签的所有缓存过期
-                QueryCacheManager.ExpireTag(nameof(T));
+                // 让使用typeof(T).Name标签的所有缓存过期
+                QueryCacheManager.ExpireTag(typeof(T).Name);
                 db.Set<T>().Where(delWhere).DeleteFromQuery();
                 db.Set<T>().BulkInsert(insertList);
                 trans.Commit();

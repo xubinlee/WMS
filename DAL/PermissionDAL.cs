@@ -16,7 +16,7 @@ namespace DAL
         {
             using (TransactionScope ts = new TransactionScope())
             {
-                // 让使用nameof(T)标签的所有缓存过期
+                // 让使用typeof(T).Name标签的所有缓存过期
                 QueryCacheManager.ExpireTag(nameof(Permission));
                 QueryCacheManager.ExpireTag(nameof(ButtonPermission));
                 db.Set<Permission>().BulkUpdate(opList);

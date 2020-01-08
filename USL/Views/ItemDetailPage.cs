@@ -162,7 +162,7 @@ namespace USL
         /// <returns></returns>
         int GetStocktakingStatus()
         {
-            SystemStatus systemStatus = BLLFty.Create<BaseBLL>().GetListBy<SystemStatus>(o => o.MainMenuName.Equals(MainMenuConstants.Stocktaking)).FirstOrDefault();
+            SystemStatus systemStatus = BLLFty.Create<BaseBLL>().GetListBy<SystemStatus>(null).FirstOrDefault(o => o.MainMenuName.Equals(MainMenuEnum.Stocktaking.ToString()));
             int status = 0;
             if (systemStatus != null)
                 status = systemStatus.Status;
@@ -201,8 +201,8 @@ namespace USL
                     btnEdit.ElementClick += btnEdit_ElementClick;
                     tileNavPane.Buttons.Add(btnEdit);
                 }
-                //部门导入
-                if (menu.Name == MainMenuConstants.Department)
+                //门店导入
+                if (menu.Name == MainMenuEnum.Department.ToString())
                 {
                     //导入
                     NavButton btnDeptImport = new NavButton();
@@ -212,16 +212,23 @@ namespace USL
                     btnDeptImport.ElementClick += BtnDeptImport_ElementClick;
                     tileNavPane.Buttons.Add(btnDeptImport);
                 }
-                //成品导入
-                if (menu.Name == MainMenuConstants.Goods)
+                //商品导入
+                if (menu.Name == MainMenuEnum.Goods.ToString())
                 {
-                    //导入
+                    //导入商品
                     NavButton btnGoodsImport = new NavButton();
-                    btnGoodsImport.Caption = "导入";
+                    btnGoodsImport.Caption = "导入商品";
                     btnGoodsImport.Glyph = global::USL.Properties.Resources.ExportToXLS_32x32;
                     btnGoodsImport.Name = "btnGoodsImport";
                     btnGoodsImport.ElementClick += btnGoodsImport_ElementClick;
                     tileNavPane.Buttons.Add(btnGoodsImport);
+                    //导入商品售价
+                    NavButton btnSellImport = new NavButton();
+                    btnSellImport.Caption = "导入商品售价";
+                    btnSellImport.Glyph = global::USL.Properties.Resources.ExportToXLS_32x32;
+                    btnSellImport.Name = "btnSellImport";
+                    btnSellImport.ElementClick += BtnSellImport_ElementClick;
+                    tileNavPane.Buttons.Add(btnSellImport);
                     //导入图片
                     //NavButton btnPicImport = new NavButton();
                     //btnPicImport.Caption = "导入图片";
@@ -231,7 +238,7 @@ namespace USL
                     //tileNavPane.Buttons.Add(btnPicImport);
                 }
                 //物料导入
-                if (menu.Name == MainMenuConstants.Material)
+                if (menu.Name == MainMenuEnum.Material.ToString())
                 {
                     //导入
                     NavButton btnMaterialImport = new NavButton();
@@ -262,7 +269,7 @@ namespace USL
             // 库存管理
             else if (menu.ParentID == new Guid("e11eb222-ba7c-460c-bfbe-8de849e89b14"))
             {
-                if (menu.Name == MainMenuConstants.Inventory) {
+                if (menu.Name == MainMenuEnum.Inventory.ToString()) {
                     // 导入账面库存
                     NavButton btnInventory = new NavButton();
                     btnInventory.Caption = "导入账面库存";
@@ -271,7 +278,7 @@ namespace USL
                     btnInventory.ElementClick += BtnInventory_ElementClick; 
                     tileNavPane.Buttons.Add(btnInventory);
                 }
-                if (menu.Name == MainMenuConstants.Stocktaking)
+                if (menu.Name == MainMenuEnum.Stocktaking.ToString())
                 {
                     //盘点导入
                     btnImportCheck = new NavButton();
@@ -299,7 +306,7 @@ namespace USL
                     btnDiff.ElementClick += BtnDiff_ElementClick;
                     tileNavPane.Buttons.Add(btnDiff);
                 }
-                if (menu.Name == MainMenuConstants.ProfitAndLoss)
+                if (menu.Name == MainMenuEnum.ProfitAndLoss.ToString())
                 {
                     // 更新盘点库存
                     //NavButton btnSTUpdate = new NavButton();
@@ -315,6 +322,20 @@ namespace USL
                     btnReason.Name = "btnReason";
                     btnReason.ElementClick += BtnReason_ElementClick;
                     tileNavPane.Buttons.Add(btnReason);
+                    // 生成损耗确认单
+                    NavButton btnLoss = new NavButton();
+                    btnLoss.Caption = "生成损耗确认单";
+                    btnLoss.Glyph = global::USL.Properties.Resources.ExportToXLS_32x32;
+                    btnLoss.Name = "btnLoss";
+                    btnLoss.ElementClick += BtnLoss_ElementClick;
+                    tileNavPane.Buttons.Add(btnLoss);
+                    // 生成未上架商品确认单
+                    NavButton btnUnlisted = new NavButton();
+                    btnUnlisted.Caption = "生成未上架商品确认单";
+                    btnUnlisted.Glyph = global::USL.Properties.Resources.ExportToXLS_32x32;
+                    btnUnlisted.Name = "btnUnlisted";
+                    btnUnlisted.ElementClick += BtnUnlisted_ElementClick;
+                    tileNavPane.Buttons.Add(btnUnlisted);
                     // 完成盘点
                     NavButton btnCheckFinish = new NavButton();
                     btnCheckFinish.Caption = "完成盘点";
@@ -323,15 +344,15 @@ namespace USL
                     btnCheckFinish.ElementClick += BtnCheckFinish_ElementClick;
                     tileNavPane.Buttons.Add(btnCheckFinish);
                 }
-                if (menu.Name == MainMenuConstants.UnlistedGoods)
+                if (menu.Name == MainMenuEnum.InventoryLoss.ToString())
                 {
-                    // 完成未上架商品确认单
-                    NavButton btnUnlistedFinish = new NavButton();
-                    btnUnlistedFinish.Caption = "完成";
-                    btnUnlistedFinish.Glyph = global::USL.Properties.Resources.SaveAndNew_32x32;
-                    btnUnlistedFinish.Name = "btnUnlistedFinish";
-                    btnUnlistedFinish.ElementClick += BtnUnlistedFinish_ElementClick;
-                    tileNavPane.Buttons.Add(btnUnlistedFinish);
+                    // 导入盘点日前30天销售金额
+                    NavButton btn30AMT = new NavButton();
+                    btn30AMT.Caption = "导入30天销售金额";
+                    btn30AMT.Glyph = global::USL.Properties.Resources.SaveAndNew_32x32;
+                    btn30AMT.Name = "btn30AMT";
+                    btn30AMT.ElementClick += Btn30AMT_ElementClick;
+                    tileNavPane.Buttons.Add(btn30AMT);
                 }
                 if (MainForm.buttonPermissions.Exists(o => o.Name == "btnDel" && o.CheckBoxState == true))
                 {
@@ -358,7 +379,7 @@ namespace USL
                     tileNavPane.Buttons.Add(btnHistoryQuery);
                 }
             }
-            if (menu.Name == MainMenuConstants.AttGeneralLog)
+            if (menu.Name == MainMenuEnum.AttGeneralLog.ToString())
             {
                 ////连接设备
                 //btnConnect = new NavButton();
@@ -393,7 +414,7 @@ namespace USL
                 }
                 return;
             }
-            if (menu.Name == MainMenuConstants.PermissionSetting)
+            if (menu.Name == MainMenuEnum.PermissionSetting.ToString())
             {
                 if (MainForm.buttonPermissions.Exists(o => o.Name == "btnSave" && o.CheckBoxState == true))
                 {
@@ -418,7 +439,7 @@ namespace USL
                 btnPrint.ElementClick += btnPrint_ElementClick;
                 tileNavPane.Buttons.Add(btnPrint);
             }
-            if (MainForm.buttonPermissions.Exists(o => o.Name == "btnPrint" && o.CheckBoxState == true) && (menu.Name == MainMenuConstants.WageBill || menu.Name==MainMenuConstants.AttWageBill))
+            if (MainForm.buttonPermissions.Exists(o => o.Name == "btnPrint" && o.CheckBoxState == true) && (menu.Name == MainMenuEnum.WageBill.ToString() || menu.Name== MainMenuEnum.AttWageBill.ToString()))
             {
                 //打印日程工资明细
                 NavButton btnAPTPrint = new NavButton();
@@ -428,7 +449,7 @@ namespace USL
                 btnAPTPrint.ElementClick += btnAPTPrint_ElementClick;
                 tileNavPane.Buttons.Add(btnAPTPrint);
             }
-            //if (menu.Name == MainMenuConstants.Goods || menu.Name == MainMenuConstants.Material && (MainForm.buttonPermissions.Exists(o => o.Name == "btnDel" && o.CheckBoxState == true)))
+            //if (menu.Name == MainMenuEnum.Goods || menu.Name == MainMenuEnum.Material && (MainForm.buttonPermissions.Exists(o => o.Name == "btnDel" && o.CheckBoxState == true)))
             //{
             //    //停产
             //    NavButton btnStop = new NavButton();
@@ -438,7 +459,7 @@ namespace USL
             //    btnStop.ElementClick += BtnStop_ElementClick;
             //    tileNavPane.Buttons.Add(btnStop);
             //}
-            if (menu.Name == MainMenuConstants.UsersInfo)
+            if (menu.Name == MainMenuEnum.UsersInfo.ToString())
             {
                 ////连接设备
                 //btnConnect = new NavButton();
@@ -475,6 +496,237 @@ namespace USL
             //    btnCancelAudit.ElementClick += btnCancelAudit_ElementClick;
             //    tileNavPane.Buttons.Add(btnCancelAudit);
             //}
+        }
+
+        /// <summary>
+        /// 导入盘点日前30天销售金额
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Btn30AMT_ElementClick(object sender, NavElementEventArgs e)
+        {
+            string code = string.Empty;
+            int iError = 1;
+            WaitDialogForm waitDialogForm = null;
+            try
+            {
+                this.Cursor = System.Windows.Forms.Cursors.WaitCursor;
+                List<InventoryLoss> lossList = BLLFty.Create<BaseBLL>().GetListBy<InventoryLoss>(null);
+                if (lossList == null || lossList.Count == 0)
+                {
+                    CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "损耗确认单没有数据。");
+                    return;
+                }
+                var openFileDialog = new System.Windows.Forms.OpenFileDialog();
+                openFileDialog.Filter = "Excel 97-2003 工作簿|*.xls*|Excel 工作簿|*.xlsx|所有文件|*.*";
+                openFileDialog.FilterIndex = 1;
+                if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    new Thread((ThreadStart)delegate {
+                        waitDialogForm = new WaitDialogForm("请稍候...", "正在加载数据", new Size(300, 60), this.FindForm());
+                        System.Windows.Forms.Application.Run(waitDialogForm);
+                    }).Start();
+                    DataSet ds = ExcelHelper.ImportExcel(openFileDialog.FileName);
+                    List<InventoryLoss> updateList = new List<InventoryLoss>();
+                    foreach (DataRow row in ds.Tables[0].Rows)
+                    {
+                        ++iError;
+                        code = row[EnumHelper.GetDescription<InventoryLossEnum>(InventoryLossEnum.GoodsCode, false)].ToString().Trim();
+                        //检查货号是否存在
+                        if (iError > ds.Tables[0].Rows.Count)
+                            continue;
+                        if (string.IsNullOrWhiteSpace(code))
+                        {
+                            CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), string.Format("第{0}行的编码不能为空。", iError));
+                            return;
+                        }
+                        InventoryLoss entity = lossList.FirstOrDefault(o => o.GoodsCode.Equals(code));
+                        if (entity != null)
+                        {
+                            //entity = IListDataSet.DataRowToModel<InventoryLoss>(ds.Tables[0], row, entity);
+                            if (!string.IsNullOrEmpty(row["销售金额"].ToString().Trim()))
+                                entity.PreCheckSellAMT = Convert.ToDecimal(row["销售金额"]);
+                            if (entity.PreCheckSellAMT != 0)
+                                entity.LossRate = Math.Round((decimal)entity.LossAMT / entity.PreCheckSellAMT, 2);
+                            updateList.Add(entity);
+                        }
+                    }
+                    if (updateList.Count > 0)
+                    {
+                        BLLFty.Create<BaseBLL>().UpdateByBulk<InventoryLoss>(updateList);
+                        clientFactory.DataPageRefresh<InventoryLoss>();
+                        // 计算实际差异
+                        //MainForm.calcFinalDiff();
+                        CommonServices.ErrorTrace.SetSuccessfullyInfo(this.FindForm(), "导入成功");
+                        return;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), string.Format("第{0}行的编码[{1}]的记录格式错误。错误信息：\r\n", iError, code) + "\r\n" + ex.Message);
+                return;
+            }
+            finally
+            {
+                if (waitDialogForm != null)
+                    waitDialogForm.Invoke((EventHandler)delegate { waitDialogForm.Close(); });
+                this.Cursor = System.Windows.Forms.Cursors.Default;
+            }
+        }
+
+        /// <summary>
+        /// 生成损耗确认单
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnLoss_ElementClick(object sender, NavElementEventArgs e)
+        {
+            WaitDialogForm waitDialogForm = null;
+            try
+            {
+                this.Cursor = System.Windows.Forms.Cursors.WaitCursor;
+                using (TransactionScope ts = new TransactionScope())
+                {
+                    List<ProfitAndLoss> plList = BLLFty.Create<BaseBLL>().GetListByNoTracking<ProfitAndLoss>(null).OrderBy(o => o.GoodsCode).ToList();
+                    if (plList == null || plList.Count == 0)
+                    {
+                        CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "没有盘点差异数据，请先生成数据。");
+                        return;
+                    }
+                    System.Windows.Forms.DialogResult result = XtraMessageBox.Show("确定要生成损益确认单吗?", "操作提示",
+                System.Windows.Forms.MessageBoxButtons.OKCancel, System.Windows.Forms.MessageBoxIcon.Question, System.Windows.Forms.MessageBoxDefaultButton.Button2);
+                    if (result == System.Windows.Forms.DialogResult.OK)
+                    {
+                        new Thread((ThreadStart)delegate {
+                            waitDialogForm = new WaitDialogForm("请稍候...", "正在加载数据", new Size(300, 60), this.FindForm());
+                            System.Windows.Forms.Application.Run(waitDialogForm);
+                        }).Start();
+                        
+                        SystemStatus systemStatus = MainForm.GetMaxBillNo(MainMenuEnum.Stocktaking, false);
+                        // 保存未上架商品确认单
+                        List<InventoryLoss> insertLossList = new List<InventoryLoss>();
+                        plList.ForEach(item => {
+                            InventoryLoss entity = new InventoryLoss();
+                            foreach (PropertyInfo p in entity.GetType().GetProperties())
+                            {
+                                // 同名属性赋值
+                                if (item.GetType().GetProperty(p.Name) != null)
+                                    p.SetValue(entity, item.GetType().GetProperty(p.Name).GetValue(item, null), null);
+                            }
+                            entity.ID = Guid.NewGuid();
+                            //entity.HdID = hd.ID;
+                            if (entity.StockAMT != 0)
+                                entity.DiffRate = Math.Round((decimal)entity.DiffAMT / entity.StockAMT, 2);
+                            entity.LossQty = item.FinalDiffQty;
+                            entity.LossAMT = Math.Round((decimal)entity.LossQty * entity.Price, 2);
+                            insertLossList.Add(entity);
+                        });
+                        BLLFty.Create<BaseBLL>().DeleteAndAdd<InventoryLoss>(null, insertLossList);
+
+                        IList refresh = clientFactory.DataPageRefresh<InventoryLoss>();
+                        //定位
+                        MainForm.SetSelected(pageGroupCore, MainForm.mainMenuList[MainMenuEnum.InventoryLoss.ToString()]);
+                        DataQueryPage page = MainForm.itemDetailPageList[MainMenuEnum.InventoryLoss.ToString()].itemDetail as DataQueryPage;
+                        page.BindData(refresh);
+                    }
+                    ts.Complete();
+                }
+            }
+            catch (Exception ex)
+            {
+                CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), ex.Message);
+                //XtraMessageBox.Show(ex.Message, "操作提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                if (waitDialogForm != null)
+                    waitDialogForm.Invoke((EventHandler)delegate { waitDialogForm.Close(); });
+                this.Cursor = System.Windows.Forms.Cursors.Default;
+            }
+        }
+
+        /// <summary>
+        /// 生成未上架商品确认单
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnUnlisted_ElementClick(object sender, NavElementEventArgs e)
+        {
+            WaitDialogForm waitDialogForm = null;
+            try
+            {
+                this.Cursor = System.Windows.Forms.Cursors.WaitCursor;
+                using (TransactionScope ts = new TransactionScope())
+                {
+                    List<ProfitAndLoss> list = BLLFty.Create<BaseBLL>().GetListBy<ProfitAndLoss>(null);
+                    if (list == null || list.Count == 0)
+                    {
+                        CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "没有盘点差异数据，请先生成数据。");
+                        return;
+                    }
+                    System.Windows.Forms.DialogResult result = XtraMessageBox.Show("确定要生成未上架商品确认单吗?", "操作提示",
+                System.Windows.Forms.MessageBoxButtons.OKCancel, System.Windows.Forms.MessageBoxIcon.Question, System.Windows.Forms.MessageBoxDefaultButton.Button2);
+                    if (result == System.Windows.Forms.DialogResult.OK)
+                    {
+                        new Thread((ThreadStart)delegate {
+                            waitDialogForm = new WaitDialogForm("请稍候...", "正在加载数据", new Size(300, 60), this.FindForm());
+                            System.Windows.Forms.Application.Run(waitDialogForm);
+                        }).Start();
+
+                        List<Goods> goodsList = BLLFty.Create<BaseBLL>().GetListBy<Goods>(null);
+                        SystemStatus systemStatus = MainForm.GetMaxBillNo(MainMenuEnum.Stocktaking, false);
+                        // 保存未上架商品确认单
+                        List<VStocktakingLog> vList = BLLFty.Create<BaseBLL>().GetListByNoTracking<VStocktakingLog>(o => o.BillNo.Equals(systemStatus.MaxBillNo)).OrderBy(o => o.BillDate).ToList();
+                        List<UnlistedGoods> insertUGList = new List<UnlistedGoods>();
+                        // 仓库内的盘点商品
+                        List<VStocktakingLog> warehouseCheck = vList.FindAll(o => o.WarehouseID == new Guid(EnumHelper.GetDescription<WarehouseEnum>(WarehouseEnum.Warehouse, true))).ToList();
+                        // 卖场里的盘点商品
+                        List<VStocktakingLog> shopCheck = vList.FindAll(o => o.WarehouseID == new Guid(EnumHelper.GetDescription<WarehouseEnum>(WarehouseEnum.Shop, true))).ToList();
+                        warehouseCheck.ForEach(item => {
+                            VStocktakingLog stocktaking = shopCheck.FirstOrDefault(o => o.DeptID.Equals(item.DeptID) && o.GoodsCode.Equals(item.GoodsCode));
+                            if (stocktaking == null) // 未上架商品
+                            {
+                                UnlistedGoods entity = new UnlistedGoods();
+                                foreach (PropertyInfo p in entity.GetType().GetProperties())
+                                {
+                                    // 同名属性赋值
+                                    if (item.GetType().GetProperty(p.Name) != null)
+                                        p.SetValue(entity, item.GetType().GetProperty(p.Name).GetValue(item, null), null);
+                                }
+                                entity.ID = Guid.NewGuid();
+                                //entity.HdID = hd.ID;
+                                Goods val = goodsList.FirstOrDefault(o => o.Code.Equals(item.GoodsCode));
+                                if (val != null)
+                                    entity.Category = val.Category;
+                                entity.StockAMT = Math.Round((decimal)item.StockQty * entity.Price, 2);
+                                entity.UnlistedQty = item.CheckQty;
+                                entity.UnlistedAMT = Math.Round((decimal)item.CheckQty * entity.Price, 2);
+                                insertUGList.Add(entity);
+                            }
+                        });
+                        BLLFty.Create<BaseBLL>().DeleteAndAdd<UnlistedGoods>(null, insertUGList);
+
+                        IList refresh = clientFactory.DataPageRefresh<UnlistedGoods>();
+                        //定位
+                        MainForm.SetSelected(pageGroupCore, MainForm.mainMenuList[MainMenuEnum.UnlistedGoods.ToString()]);
+                        DataQueryPage page = MainForm.itemDetailPageList[MainMenuEnum.UnlistedGoods.ToString()].itemDetail as DataQueryPage;
+                        page.BindData(refresh);
+                    }
+                    ts.Complete();
+                }
+            }
+            catch (Exception ex)
+            {
+                CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), ex.Message);
+                //XtraMessageBox.Show(ex.Message, "操作提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                if (waitDialogForm != null)
+                    waitDialogForm.Invoke((EventHandler)delegate { waitDialogForm.Close(); });
+                this.Cursor = System.Windows.Forms.Cursors.Default;
+            }
         }
 
         /// <summary>
@@ -525,28 +777,7 @@ namespace USL
                             entity.ID = Guid.NewGuid();
                             isNew = true;
                         }
-                        foreach (PropertyInfo p in entity.GetType().GetProperties())
-                        {
-                            ListItem<InventoryEnum> item = EnumHelper.GetEnumValues<InventoryEnum>(false).FirstOrDefault(o => o.Value.ToString().Equals(p.Name));
-                            if (item != null)
-                            {
-                                if (ds.Tables[0].Columns.Contains(item.Name))
-                                {
-                                    if (p.PropertyType.IsGenericType)
-                                    {
-                                        // 泛型Nullable<>
-                                        Type genericTypeDefinition = p.PropertyType.GetGenericTypeDefinition();
-                                        if (genericTypeDefinition == typeof(Nullable<>))
-                                            p.SetValue(entity, string.IsNullOrWhiteSpace(row[item.Name].ToString()) ? null : Convert.ChangeType(row[item.Name], Nullable.GetUnderlyingType(p.PropertyType)), null);
-                                    }
-                                    else
-                                    {
-                                        // 非泛型
-                                        p.SetValue(entity, string.IsNullOrWhiteSpace(row[item.Name].ToString()) ? null : Convert.ChangeType(row[item.Name], p.PropertyType), null);
-                                    }
-                                }
-                            }
-                        }
+                        IListDataSet.DataRowToModel<Inventory, InventoryEnum>(ds.Tables[0], row, entity);
                         if (isNew)
                         {
                             insertList.Add(entity);
@@ -558,7 +789,7 @@ namespace USL
                     }
                     if (insertList.Count > 0 || updateList.Count > 0)
                     {
-                        BLLFty.Create<BaseBLL>().AddAndUpdate(insertList, updateList);
+                        BLLFty.Create<BaseBLL>().AddAndUpdate<Inventory>(insertList, updateList);
                         clientFactory.DataPageRefresh<Inventory>();
                         CommonServices.ErrorTrace.SetSuccessfullyInfo(this.FindForm(), "导入成功");
                     }
@@ -568,66 +799,6 @@ namespace USL
             catch (Exception ex)
             {
                 CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), string.Format("第{0}行记录格式异常。", iCount) + "\r\n" + ex.Message);
-            }
-            finally
-            {
-                if (waitDialogForm != null)
-                    waitDialogForm.Invoke((EventHandler)delegate { waitDialogForm.Close(); });
-                this.Cursor = System.Windows.Forms.Cursors.Default;
-            }
-        }
-
-        /// <summary>
-        /// 完成未上架商品确认单
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void BtnUnlistedFinish_ElementClick(object sender, NavElementEventArgs e)
-        {
-            WaitDialogForm waitDialogForm = null;
-            try
-            {
-                this.Cursor = System.Windows.Forms.Cursors.WaitCursor;
-                using (TransactionScope ts = new TransactionScope())
-                {
-                    List<UnlistedGoods> ugList = BLLFty.Create<BaseBLL>().GetListBy<UnlistedGoods>(null);
-                    if (ugList == null || ugList.Count == 0)
-                    {
-                        CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "没有未上架数据。");
-                        return;
-                    }
-                    System.Windows.Forms.DialogResult result = XtraMessageBox.Show("确定要完成未上架商品确认单操作吗?\r\n一旦完成，数据将不能再更改。", "操作提示",
-                    System.Windows.Forms.MessageBoxButtons.OKCancel, System.Windows.Forms.MessageBoxIcon.Question, System.Windows.Forms.MessageBoxDefaultButton.Button2);
-                    if (result == System.Windows.Forms.DialogResult.OK)
-                    {
-                        new Thread((ThreadStart)delegate {
-                            waitDialogForm = new WaitDialogForm("请稍候...", "正在保存数据", new Size(300, 60), this.FindForm());
-                            System.Windows.Forms.Application.Run(waitDialogForm);
-                        }).Start();
-                        // 保存未上架商品确认单日志表
-                        List<UnlistedGoodsLog> dtlList = new List<UnlistedGoodsLog>();
-                        ugList.ForEach(o =>
-                        {
-                            UnlistedGoodsLog dtl = new UnlistedGoodsLog();
-                            foreach (PropertyInfo p in dtl.GetType().GetProperties())
-                            {
-                                // 同名属性赋值
-                                if (o.GetType().GetProperty(p.Name) != null)
-                                    p.SetValue(dtl, o.GetType().GetProperty(p.Name).GetValue(o, null), null);
-                            }
-                            dtlList.Add(dtl);
-                        });
-                        BLLFty.Create<InventoryBLL>().FinishUnlistedGoods(dtlList);
-                        clientFactory.DataPageRefresh<UnlistedGoods>();
-                        clientFactory.DataPageRefresh<VUnlistedGoodsLog>();
-                        CommonServices.ErrorTrace.SetSuccessfullyInfo(this.FindForm(), "已完成盘点");
-                    }
-                    ts.Complete();
-                }
-            }
-            catch (Exception ex)
-            {
-                CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), ex.Message);
             }
             finally
             {
@@ -682,44 +853,16 @@ namespace USL
                         ProfitAndLoss entity = plList.FirstOrDefault(o => o.GoodsCode.Equals(code));
                         if (entity != null)
                         {
-                            foreach (PropertyInfo p in entity.GetType().GetProperties())
-                            {
-                                List<ListItem<ReasonEnum>> enumList = EnumHelper.GetEnumValues<ReasonEnum>(false);
-                                enumList.ForEach(item =>
-                                {
-                                    if (item.Value.ToString().Equals(p.Name))
-                                    {
-                                        if (p.PropertyType.IsGenericType)
-                                        {
-                                            // 泛型Nullable<>
-                                            Type genericTypeDefinition = p.PropertyType.GetGenericTypeDefinition();
-                                            if (genericTypeDefinition == typeof(Nullable<>))
-                                                p.SetValue(entity, string.IsNullOrWhiteSpace(row[item.Name].ToString()) ? null : Convert.ChangeType(row[item.Name], Nullable.GetUnderlyingType(p.PropertyType)), null);
-                                        }
-                                        else
-                                        {
-                                            // 非泛型
-                                            p.SetValue(entity, string.IsNullOrWhiteSpace(row[item.Name].ToString()) ? null : Convert.ChangeType(row[item.Name], p.PropertyType), null);
-                                        }
-                                        updateList.Add(entity);
-                                    }
-                                });
-                            }
-
-                            //var transitQty = row[EnumHelper.GetDescription<ReasonEnum>(ReasonEnum.TransitQty, false)];
-                            //entity.TransitQty = Convert.ToInt32(transitQty is DBNull ? 0 : transitQty);
-                            //entity.TransitAMT = Math.Round((decimal)entity.TransitQty * entity.Price, 2);
-                            //var nonArrivalQty = row[EnumHelper.GetDescription<ReasonEnum>(ReasonEnum.NonArrivalQty, false)];
-                            //entity.NonArrivalQty = Convert.ToInt32(nonArrivalQty is DBNull ? 0 : nonArrivalQty);
-                            //entity.NonArrivalAMT = Math.Round((decimal)entity.NonArrivalQty * entity.Price, 2);
+                            IListDataSet.DataRowToModel<ProfitAndLoss, ReasonEnum>(ds.Tables[0], row, entity);
+                            // 计算实际差异和金额
+                            MainForm.calcFinalDiff(entity);
+                            updateList.Add(entity);
                         }
                     }
                     if (updateList.Count > 0)
                     {
-                        BLLFty.Create<BaseBLL>().UpdateByBulk(updateList);                        
+                        BLLFty.Create<BaseBLL>().UpdateByBulk(updateList); 
                         clientFactory.DataPageRefresh<ProfitAndLoss>();
-                        // 计算实际差异
-                        MainForm.calcFinalDiff();
                         CommonServices.ErrorTrace.SetSuccessfullyInfo(this.FindForm(), "导入成功");
                         return;
                     }
@@ -749,97 +892,108 @@ namespace USL
             try
             {
                 this.Cursor = System.Windows.Forms.Cursors.WaitCursor;
-                using (TransactionScope ts = new TransactionScope())
+                List<ProfitAndLoss> plList = BLLFty.Create<BaseBLL>().GetListBy<ProfitAndLoss>(null);
+                if (plList == null || plList.Count == 0)
                 {
-                    List<ProfitAndLoss> plList = BLLFty.Create<BaseBLL>().GetListBy<ProfitAndLoss>(null); 
-                    if (plList == null || plList.Count == 0)
+                    CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "没有盘点差异数据。");
+                    return;
+                }
+                System.Windows.Forms.DialogResult result = XtraMessageBox.Show("确定要完成盘点操作吗?\r\n一旦完成，差异表数据将不能再更改。", "操作提示",
+                System.Windows.Forms.MessageBoxButtons.OKCancel, System.Windows.Forms.MessageBoxIcon.Question, System.Windows.Forms.MessageBoxDefaultButton.Button2);
+                if (result == System.Windows.Forms.DialogResult.OK)
+                {
+                    new Thread((ThreadStart)delegate
                     {
-                        CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "没有盘点差异数据。");
-                        return;
-                    }
-                    System.Windows.Forms.DialogResult result = XtraMessageBox.Show("确定要完成盘点操作吗?\r\n一旦完成，差异表数据将不能再更改。", "操作提示",
-                    System.Windows.Forms.MessageBoxButtons.OKCancel, System.Windows.Forms.MessageBoxIcon.Question, System.Windows.Forms.MessageBoxDefaultButton.Button2);
-                    if (result == System.Windows.Forms.DialogResult.OK)
+                        waitDialogForm = new WaitDialogForm("请稍候...", "正在保存数据", new Size(300, 60), this.FindForm());
+                        System.Windows.Forms.Application.Run(waitDialogForm);
+                    }).Start();
+                    List<Goods> goodsList = BLLFty.Create<BaseBLL>().GetListBy<Goods>(null);
+                    SystemStatus systemStatus = MainForm.GetMaxBillNo(MainMenuEnum.Stocktaking, false);
+                    // 保存盘点日志表头
+                    StocktakingLogHd hd = new StocktakingLogHd();
+                    hd.ID = Guid.NewGuid();
+                    hd.BillNo = systemStatus.MaxBillNo;
+                    hd.Checker = MainForm.usersInfo.Name;
+                    hd.BillDate = DateTime.Now;
+                    hd.CheckingTime = string.Empty;
+                    hd.Status = (int)StocktakingStatusEnum.Finish;
+                    // 保存系统状态表(完成盘点后将状态改为初盘，准备下一轮盘点)
+                    systemStatus.Status = (int)StocktakingStatusEnum.First;
+                    //if (btnImportCheck != null)
+                    //btnImportCheck.Caption = string.Format("盘点导入【{0}】", EnumHelper.GetDescription<StocktakingStatusEnum>((StocktakingStatusEnum)systemStatus.Status, false));
+                    // 保存差异日志表
+                    List<ProfitAndLossLog> plLogList = new List<ProfitAndLossLog>();
+                    plList.ForEach(o =>
                     {
-                        new Thread((ThreadStart)delegate {
-                            waitDialogForm = new WaitDialogForm("请稍候...", "正在保存数据", new Size(300, 60), this.FindForm());
-                            System.Windows.Forms.Application.Run(waitDialogForm);
-                        }).Start();
-                        List<Goods> goodsList = BLLFty.Create<BaseBLL>().GetListBy<Goods>(null);
-                        SystemStatus systemStatus = MainForm.GetMaxBillNo(MainMenuConstants.Stocktaking, false);
-                        // 保存盘点日志表头
-                        StocktakingLogHd hd = new StocktakingLogHd();
-                        hd.ID = Guid.NewGuid();
-                        hd.BillNo = systemStatus.MaxBillNo;
-                        hd.Checker = MainForm.usersInfo.Name;
-                        hd.BillDate = DateTime.Now;
-                        hd.CheckingTime = string.Empty;
-                        hd.Status = (int)StocktakingStatusEnum.Finish;
-                        // 保存系统状态表(完成盘点后将状态改为初盘，准备下一轮盘点)
-                        systemStatus.Status = (int)StocktakingStatusEnum.First;
-                        //if (btnImportCheck != null)
-                            //btnImportCheck.Caption = string.Format("盘点导入【{0}】", EnumHelper.GetDescription<StocktakingStatusEnum>((StocktakingStatusEnum)systemStatus.Status, false));
-                        // 保存差异日志表
-                        List<ProfitAndLossLog> dtlList = new List<ProfitAndLossLog>();
-                        plList.ForEach(o =>
+                        ProfitAndLossLog dtl = new ProfitAndLossLog();
+                        dtl.HdID = hd.ID;
+                        foreach (PropertyInfo p in dtl.GetType().GetProperties())
                         {
-                            ProfitAndLossLog dtl = new ProfitAndLossLog();
-                            dtl.HdID = hd.ID;
-                            foreach (PropertyInfo p in dtl.GetType().GetProperties())
-                            {
                                 // 同名属性赋值
                                 if (o.GetType().GetProperty(p.Name) != null)
-                                    p.SetValue(dtl, o.GetType().GetProperty(p.Name).GetValue(o, null), null);
-                            }
-                            dtlList.Add(dtl);
-                        });
-                        // 保存未上架商品确认单
-                        List<VStocktakingLog> vList = BLLFty.Create<BaseBLL>().GetListByNoTracking<VStocktakingLog>(o => o.BillNo.Equals(systemStatus.MaxBillNo)).OrderBy(o => o.BillDate).ToList();
-                        List<UnlistedGoods> insertUGList = new List<UnlistedGoods>();
-                        //List<UnlistedGoods> updateUGList = new List<UnlistedGoods>();
-                        //List<UnlistedGoods> unlisteds = MainForm.ConvertList<UnlistedGoods>((IList)MainForm.dataSourceList[typeof(UnlistedGoods)]);
-                        // 仓库内的盘点商品
-                        List<VStocktakingLog> warehouseCheck = vList.FindAll(o => o.WarehouseID == new Guid(EnumHelper.GetDescription<WarehouseEnum>(WarehouseEnum.Warehouse, true))).ToList();
-                        // 卖场里的盘点商品
-                        List<VStocktakingLog> shopCheck = vList.FindAll(o => o.WarehouseID == new Guid(EnumHelper.GetDescription<WarehouseEnum>(WarehouseEnum.Shop, true))).ToList();
-                        warehouseCheck.ForEach(item => {
-                            VStocktakingLog stocktaking = shopCheck.FirstOrDefault(o => o.DeptID.Equals(item.DeptID) && o.GoodsCode.Equals(item.GoodsCode));
-                            if (stocktaking == null) // 未上架商品
-                            {
-                                //UnlistedGoods obj = unlisteds.FirstOrDefault(o => o.DeptID.Equals(item.DeptID) && o.GoodsCode.Equals(item.GoodsCode));
-                                //if (obj == null)
-                                //{
-                                    UnlistedGoods entity = new UnlistedGoods();
-                                    foreach (PropertyInfo p in entity.GetType().GetProperties())
-                                    {
-                                        // 同名属性赋值
-                                        if (item.GetType().GetProperty(p.Name) != null)
-                                            p.SetValue(entity, item.GetType().GetProperty(p.Name).GetValue(item, null), null);
-                                    }
-                                entity.ID = Guid.NewGuid();
-                                entity.HdID = hd.ID;
-                                Goods val = goodsList.FirstOrDefault(o => o.Code.Equals(item.GoodsCode));
-                                if (val != null)
-                                    entity.Category = val.Category;
-                                entity.StockAMT = Math.Round((decimal)item.StockQty * entity.Price, 2);
-                                entity.UnlistedQty = item.CheckQty;
-                                entity.UnlistedAMT = Math.Round((decimal)item.CheckQty * entity.Price, 2);
-                                insertUGList.Add(entity);
-                                //}
-                                //else
-                                //{
-                                //    obj.StockQty = item.StockQty;
-                                //}
-                            }
-                        });
-                        BLLFty.Create<InventoryBLL>().FinishCheck(systemStatus, hd, dtlList, insertUGList);
-                        clientFactory.DataPageRefresh<StocktakingLogHd>();
-                        clientFactory.DataPageRefresh<ProfitAndLoss>();
-                        clientFactory.DataPageRefresh<VProfitAndLossLog>();
-                        clientFactory.DataPageRefresh<UnlistedGoods>();
-                        CommonServices.ErrorTrace.SetSuccessfullyInfo(this.FindForm(), "已完成盘点");
-                    }
-                    ts.Complete();
+                                p.SetValue(dtl, o.GetType().GetProperty(p.Name).GetValue(o, null), null);
+                        }
+                        plLogList.Add(dtl);
+                    });
+                    // 保存损耗确认单日志表
+                    List<InventoryLoss> lossList = BLLFty.Create<BaseBLL>().GetListBy<InventoryLoss>(null);
+                    List<InventoryLossLog> lossLogList = new List<InventoryLossLog>();
+                    lossList.ForEach(o =>
+                    {
+                        InventoryLossLog lossLog = new InventoryLossLog();
+                        foreach (PropertyInfo p in lossLog.GetType().GetProperties())
+                        {
+                                // 同名属性赋值
+                                if (o.GetType().GetProperty(p.Name) != null)
+                                p.SetValue(lossLog, o.GetType().GetProperty(p.Name).GetValue(o, null), null);
+                        }
+                        lossLog.HdID = hd.ID;
+                        lossLogList.Add(lossLog);
+                    });
+                    // 保存未上架商品确认单日志表
+                    List<UnlistedGoods> ugList = BLLFty.Create<BaseBLL>().GetListBy<UnlistedGoods>(null);
+                    List<UnlistedGoodsLog> ugLogList = new List<UnlistedGoodsLog>();
+                    ugList.ForEach(o =>
+                    {
+                        UnlistedGoodsLog ugLog = new UnlistedGoodsLog();
+                        foreach (PropertyInfo p in ugLog.GetType().GetProperties())
+                        {
+                                // 同名属性赋值
+                                if (o.GetType().GetProperty(p.Name) != null)
+                                p.SetValue(ugLog, o.GetType().GetProperty(p.Name).GetValue(o, null), null);
+                        }
+                        ugLog.HdID = hd.ID;
+                        ugLogList.Add(ugLog);
+                    });
+                    // 保存账面库存日志表
+                    List<Inventory> stockList = BLLFty.Create<BaseBLL>().GetListBy<Inventory>(null);
+                    List<InventoryLog> stockLogList = new List<InventoryLog>();
+                    stockList.ForEach(o =>
+                    {
+                        InventoryLog stockLog = new InventoryLog();
+                        foreach (PropertyInfo p in stockLog.GetType().GetProperties())
+                        {
+                                // 同名属性赋值
+                                if (o.GetType().GetProperty(p.Name) != null)
+                                p.SetValue(stockLog, o.GetType().GetProperty(p.Name).GetValue(o, null), null);
+                        }
+                        stockLog.HdID = hd.ID;
+                        stockLog.DeptID = MainForm.department.ID;
+                        stockLog.DeptCode = MainForm.department.Code;
+                        stockLog.DeptName = MainForm.department.Name;
+                        stockLogList.Add(stockLog);
+                    });
+                    BLLFty.Create<InventoryBLL>().FinishCheck(systemStatus, hd, plLogList, lossLogList, ugLogList, stockLogList);
+                    clientFactory.DataPageRefresh<StocktakingLogHd>();
+                    clientFactory.DataPageRefresh<ProfitAndLoss>();
+                    clientFactory.DataPageRefresh<VProfitAndLossLog>();
+                    clientFactory.DataPageRefresh<InventoryLoss>();
+                    clientFactory.DataPageRefresh<VInventoryLossLog>();
+                    clientFactory.DataPageRefresh<UnlistedGoods>();
+                    clientFactory.DataPageRefresh<VUnlistedGoodsLog>();
+                    clientFactory.DataPageRefresh<Inventory>();
+                    clientFactory.DataPageRefresh<VInventoryLog>();
+                    CommonServices.ErrorTrace.SetSuccessfullyInfo(this.FindForm(), "已完成盘点");
                 }
             }
             catch (Exception ex)
@@ -852,7 +1006,7 @@ namespace USL
                     waitDialogForm.Invoke((EventHandler)delegate { waitDialogForm.Close(); });
                 this.Cursor = System.Windows.Forms.Cursors.Default;
             }
-            
+
         }
 
         /// <summary>
@@ -884,11 +1038,11 @@ namespace USL
                         }).Start();
                         
                         StocktakingStatusEnum status = StocktakingStatusEnum.First;
-                        SystemStatus systemStatus = BLLFty.Create<BaseBLL>().GetListBy<SystemStatus>(o => o.MainMenuName.Equals(MainMenuConstants.Stocktaking)).FirstOrDefault();
+                        SystemStatus systemStatus = BLLFty.Create<BaseBLL>().GetListBy<SystemStatus>(null).FirstOrDefault(o => o.MainMenuName.Equals(MainMenuEnum.Stocktaking.ToString()));
                         if (systemStatus != null)
                             status = (StocktakingStatusEnum)systemStatus.Status;
                         // 初盘创建新单，复盘单号和初盘一致
-                        systemStatus = MainForm.GetMaxBillNo(MainMenuConstants.Stocktaking,
+                        systemStatus = MainForm.GetMaxBillNo(MainMenuEnum.Stocktaking,
                             status == StocktakingStatusEnum.First ? true : false);
                         // 保存盘点日志表头
                         StocktakingLogHd hd = new StocktakingLogHd();
@@ -999,6 +1153,7 @@ namespace USL
                             }
                             else
                             {
+                                item.Price = o.Price;
                                 item.StockQty = o.StockQty;
                                 item.StockAMT = o.StockAMT;
                                 item.CheckQty = o.CheckQty;
@@ -1012,8 +1167,8 @@ namespace USL
                         IList refresh = clientFactory.DataPageRefresh<ProfitAndLoss>();
                         clientFactory.DataPageRefresh<Stocktaking>();
                         //定位
-                        MainForm.SetSelected(pageGroupCore, MainForm.mainMenuList[MainMenuConstants.ProfitAndLoss]);
-                        DataQueryPage page = MainForm.itemDetailPageList[MainMenuConstants.ProfitAndLoss].itemDetail as DataQueryPage;
+                        MainForm.SetSelected(pageGroupCore, MainForm.mainMenuList[MainMenuEnum.ProfitAndLoss.ToString()]);
+                        DataQueryPage page = MainForm.itemDetailPageList[MainMenuEnum.ProfitAndLoss.ToString()].itemDetail as DataQueryPage;
                         page.BindData(refresh);
                     }
                     ts.Complete();
@@ -1055,13 +1210,115 @@ namespace USL
             if (Invalid())
             {
                 //实现导入功能
-                Dictionary<string, object> dict = new Dictionary<string, object>();
                 //List<Department> deptList = clientFactory.GetData<Department>();
-                List<Warehouse> warehouseList = BLLFty.Create<BaseBLL>().GetListByNoTracking<Warehouse>(null);
-                //dict.Add(MainMenuConstants.Department, deptList.FirstOrDefault(o => o.ID.Equals(new Guid(lueDept.EditValue.ToString()))));
-                dict.Add(MainMenuConstants.Warehouse, warehouseList.FirstOrDefault(o => o.ID.Equals(new Guid(lueWarehouse.EditValue.ToString()))));
-                iExtensions.SendData(dict);
+                Warehouse warehouse = BLLFty.Create<BaseBLL>().GetListByNoTracking<Warehouse>(null).FirstOrDefault(o => o.ID.Equals(new Guid(lueWarehouse.EditValue.ToString())));
+                //dict.Add(MainMenuEnum.Department, deptList.FirstOrDefault(o => o.ID.Equals(new Guid(lueDept.EditValue.ToString()))));
+                //iExtensions.SendData(dict);
+                // 隐藏下拉列表
                 tileNavPane.HideDropDownWindow();
+
+                string code = string.Empty;
+                int iCount = 1;
+                WaitDialogForm waitDialogForm = null;
+                try
+                {
+                    this.Cursor = System.Windows.Forms.Cursors.WaitCursor;
+                    var openFileDialog = new System.Windows.Forms.OpenFileDialog();
+                    openFileDialog.Filter = "Excel 97-2003 工作簿|*.xls*|Excel 工作簿|*.xlsx|所有文件|*.*";
+                    openFileDialog.FilterIndex = 1;
+                    if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                    {
+                        new Thread((ThreadStart)delegate {
+                            waitDialogForm = new WaitDialogForm("请稍候...", "正在导入数据", new Size(300, 60), this.FindForm());
+                            System.Windows.Forms.Application.Run(waitDialogForm);
+                        }).Start();
+
+                        DataSet ds = ExcelHelper.ImportExcel(openFileDialog.FileName);
+
+                        List<Stocktaking> insertList = new List<Stocktaking>();
+                        List<Stocktaking> updateList = new List<Stocktaking>();
+                        List<string> repeatCodeList = new List<string>();
+                        List<Stocktaking> stList = BLLFty.Create<BaseBLL>().GetListBy<Stocktaking>(null);
+                        foreach (DataRow row in ds.Tables[0].Rows)
+                        {
+                            iCount++;
+                            code = row[EnumHelper.GetDescription<StocktakingEnum>(StocktakingEnum.GoodsCode, false)].ToString().Trim();
+                            //检查编号是否存在
+                            if (iCount > ds.Tables[0].Rows.Count)
+                                continue;
+                            if (string.IsNullOrWhiteSpace(code))
+                            {
+                                CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), string.Format("第{0}行的编码不能为空。", iCount));
+                                return;
+                            }
+                            Stocktaking entity = stList.FirstOrDefault(o => o.DeptID.Equals(MainForm.department.ID) && o.WarehouseID.Equals(warehouse.ID) && o.GoodsCode.Equals(code));
+                            bool isNew = false;
+                            int oldCheckQty = 0;
+                            if (entity == null)
+                            {
+                                entity = new Stocktaking();
+                                entity.ID = Guid.NewGuid();
+                                entity.DeptID = MainForm.department.ID;
+                                entity.DeptCode = MainForm.department.Code;
+                                entity.DeptName = MainForm.department.Name;
+                                entity.WarehouseID = warehouse.ID;
+                                entity.WarehouseCode = warehouse.Code;
+                                entity.WarehouseName = warehouse.Name;
+                                isNew = true;
+                            }
+                            else
+                            {
+                                // 记录之前的盘点数，和新导入的合并
+                                oldCheckQty = entity.CheckQty;
+                            }
+                            IListDataSet.DataRowToModel<Stocktaking, StocktakingEnum>(ds.Tables[0], row, entity);
+                            if (isNew)
+                            {
+                                // excel表里的编码如果有重复，则合并
+                                if (repeatCodeList.Contains(entity.GoodsCode))
+                                {
+                                    Stocktaking repeatItem = insertList.FirstOrDefault(o => o.GoodsCode.Equals(entity.GoodsCode));
+                                    repeatItem.CheckQty += entity.CheckQty;
+                                }
+                                else
+                                {
+                                    insertList.Add(entity);
+                                    repeatCodeList.Add(entity.GoodsCode);
+                                }
+
+                                //insertList.ForEach(o=>{
+                                //    // 编号重复则盘点数累加
+                                //    if (o.WarehouseID.Equals(entity.WarehouseID) && o.Code.Equals(entity.Code))
+                                //    {
+                                //        o.CheckQty += entity.CheckQty;
+                                //    }
+                                //});
+                            }
+                            else
+                            {
+                                entity.CheckQty += oldCheckQty;// 合并盘点数
+                                updateList.Add(entity);
+                            }
+                        }
+                        if (insertList.Count > 0 || updateList.Count > 0)
+                        {
+                            BLLFty.Create<BaseBLL>().AddAndUpdate<Stocktaking>(insertList, updateList);
+                            clientFactory.DataPageRefresh<Stocktaking>();
+                            CommonServices.ErrorTrace.SetSuccessfullyInfo(this.FindForm(), "导入成功");
+                        }
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), string.Format("第{0}行记录格式异常。", iCount) + "\r\n" + ex.Message);
+                }
+                finally
+                {
+                    if (waitDialogForm != null)
+                        waitDialogForm.Invoke((EventHandler)delegate { waitDialogForm.Close(); });
+                    this.Cursor = System.Windows.Forms.Cursors.Default;
+                }
             }
         }
 
@@ -1095,7 +1352,7 @@ namespace USL
                 object currentObj = iExtensions.ReceiveData();
 
 
-                //if (menu.Name == MainMenuConstants.ProductionOrderQuery && currentObj != null)
+                //if (menu.Name == MainMenuEnum.ProductionOrderQuery && currentObj != null)
                 //{
                 //    VProductionOrder order = currentObj as VProductionOrder;
                 //    OrderHd hd = BLLFty.Create<OrderBLL>().GetOrderHd(order.HdID);
@@ -1103,7 +1360,7 @@ namespace USL
                 //    //外加工回收单表头数据
                 //    StockInBillHd inHd = new StockInBillHd();
                 //    inHd.ID = Guid.NewGuid();
-                //    inHd.BillNo = MainForm.GetBillMaxBillNo(MainMenuConstants.StockInBillType, "RK");
+                //    inHd.BillNo = MainForm.GetBillMaxBillNo(MainMenuEnum.StockInBillType, "RK");
                 //    inHd.WarehouseID = hd.WarehouseID;
                 //    inHd.WarehouseType = hd.WarehouseType;
                 //    inHd.OrderID = hd.ID;
@@ -1141,14 +1398,14 @@ namespace USL
                 //    }
 
                 //    BLLFty.Create<StockInBillBLL>().Insert(inHd, inDtlList);
-                //    //////MainForm.BillSaveRefresh<>(MainMenuConstants.FGStockInBillQuery);
+                //    //////MainForm.BillSaveRefresh<>(MainMenuEnum.FGStockInBillQuery);
 
                 //    //定位
-                //    MainForm.SetSelected(pageGroupCore, MainForm.mainMenuList[MainMenuConstants.FGStockInBill]);
-                //    StockInBillPage page = MainForm.itemDetailPageList[MainMenuConstants.FGStockInBill].itemDetail as StockInBillPage;
+                //    MainForm.SetSelected(pageGroupCore, MainForm.mainMenuList[MainMenuEnum.FGStockInBill]);
+                //    StockInBillPage page = MainForm.itemDetailPageList[MainMenuEnum.FGStockInBill].itemDetail as StockInBillPage;
                 //    page.BindData(inHd.ID);
                 //}
-                //else if (menu.Name == MainMenuConstants.SalesReturnBillQuery && currentObj != null)
+                //else if (menu.Name == MainMenuEnum.SalesReturnBillQuery && currentObj != null)
                 //{
                 //    VStockInBill bill = currentObj as VStockInBill;
                 //    StockInBillHd hd = BLLFty.Create<StockInBillBLL>().GetStockInBillHd(bill.HdID);
@@ -1156,7 +1413,7 @@ namespace USL
                 //    //退料单表头数据
                 //    StockInBillHd inHd = new StockInBillHd();
                 //    inHd.ID = Guid.NewGuid();
-                //    inHd.BillNo = MainForm.GetBillMaxBillNo(MainMenuConstants.StockInBillType, "RK");
+                //    inHd.BillNo = MainForm.GetBillMaxBillNo(MainMenuEnum.StockInBillType, "RK");
                 //    inHd.WarehouseID = clientFactory.GetData<Warehouse>().FirstOrDefault(o => o.Code == WarehouseConstants.SFG).ID;  //半成品
                 //    inHd.WarehouseType = hd.WarehouseType;
                 //    inHd.OrderID = hd.ID;
@@ -1194,12 +1451,12 @@ namespace USL
                 //    }
 
                 //    BLLFty.Create<StockInBillBLL>().Insert(inHd, inDtlList);
-                //    //////MainForm.BillSaveRefresh(MainMenuConstants.ReturnedMaterialBillQuery);
-                //    //////MainForm.BillSaveRefresh(MainMenuConstants.SalesReturnBillQuery);
+                //    //////MainForm.BillSaveRefresh(MainMenuEnum.ReturnedMaterialBillQuery);
+                //    //////MainForm.BillSaveRefresh(MainMenuEnum.SalesReturnBillQuery);
 
                 //    //定位
-                //    MainForm.SetSelected(pageGroupCore, MainForm.mainMenuList[MainMenuConstants.ReturnedMaterialBill]);
-                //    StockInBillPage page = MainForm.itemDetailPageList[MainMenuConstants.ReturnedMaterialBill].itemDetail as StockInBillPage;
+                //    MainForm.SetSelected(pageGroupCore, MainForm.mainMenuList[MainMenuEnum.ReturnedMaterialBill]);
+                //    StockInBillPage page = MainForm.itemDetailPageList[MainMenuEnum.ReturnedMaterialBill].itemDetail as StockInBillPage;
                 //    page.BindData(inHd.ID);
                 //}
             }
@@ -1295,6 +1552,7 @@ namespace USL
                     DataSet ds = ExcelHelper.ImportExcel(openFileDialog.FileName);
                     List<Department> insertList = new List<Department>();
                     List<Department> updateList = new List<Department>();
+                    List<Department> deptList = BLLFty.Create<BaseBLL>().GetListBy<Department>(null);
                     foreach (DataRow row in ds.Tables[0].Rows)
                     {
                         ++iError;
@@ -1307,7 +1565,7 @@ namespace USL
                             CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), string.Format("第{0}行的编码不能为空。", iError));
                             return;
                         }
-                        Department entity = BLLFty.Create<BaseBLL>().GetListBy<Department>(o => o.Code == code).FirstOrDefault();
+                        Department entity = deptList.FirstOrDefault(o => o.Code == code);
                         bool isNew = false;
                         if (entity == null)
                         {
@@ -1316,30 +1574,7 @@ namespace USL
                             entity.AddTime = DateTime.Now;
                             isNew = true;
                         }
-                        //entity.Code = code;
-                        foreach (PropertyInfo p in entity.GetType().GetProperties())
-                        {
-                            ListItem<DepartmentEnum> item = EnumHelper.GetEnumValues<DepartmentEnum>(false).FirstOrDefault(o => o.Value.ToString().Equals(p.Name));
-                            if (item != null)
-                            {
-                                if (ds.Tables[0].Columns.Contains(item.Name))
-                                {
-                                    object cell = row[item.Name];
-                                    if (p.PropertyType.IsGenericType)
-                                    {
-                                        // 泛型Nullable<>
-                                        Type genericTypeDefinition = p.PropertyType.GetGenericTypeDefinition();
-                                        if (genericTypeDefinition == typeof(Nullable<>))
-                                            p.SetValue(entity, string.IsNullOrWhiteSpace(row[item.Name].ToString()) ? null : Convert.ChangeType(row[item.Name], Nullable.GetUnderlyingType(p.PropertyType)), null);
-                                    }
-                                    else
-                                    {
-                                        // 非泛型
-                                        p.SetValue(entity, string.IsNullOrWhiteSpace(row[item.Name].ToString()) ? null : Convert.ChangeType(row[item.Name], p.PropertyType), null);
-                                    }
-                                }
-                            }
-                        }
+                        IListDataSet.DataRowToModel<Department, DepartmentEnum>(ds.Tables[0], row, entity);
                         if (isNew)
                             insertList.Add(entity);
                         else
@@ -1347,7 +1582,7 @@ namespace USL
                     }
                     if (insertList.Count > 0 || updateList.Count > 0)
                     {
-                        BLLFty.Create<BaseBLL>().AddAndUpdate(insertList, updateList);
+                        BLLFty.Create<BaseBLL>().AddAndUpdate<Department>(insertList, updateList);
                         clientFactory.DataPageRefresh<Department>();
                         CommonServices.ErrorTrace.SetSuccessfullyInfo(this.FindForm(), "导入成功");
                         return;
@@ -1420,29 +1655,8 @@ namespace USL
                             hasGoods.AddTime = DateTime.Now;
                             isNewGoods = true;
                         }
-                        hasGoods.Code = goodsCode;
-                        foreach (PropertyInfo p in hasGoods.GetType().GetProperties())
-                        {
-                            ListItem<GoodsEnum> goodsEnum = EnumHelper.GetEnumValues<GoodsEnum>(false).FirstOrDefault(o => o.Value.ToString().Equals(p.Name));
-                            if (goodsEnum != null)
-                            {
-                                if (ds.Tables[0].Columns.Contains(goodsEnum.Name))
-                                {
-                                    if (p.PropertyType.IsGenericType)
-                                    {
-                                        // 泛型Nullable<>
-                                        Type genericTypeDefinition = p.PropertyType.GetGenericTypeDefinition();
-                                        if (genericTypeDefinition == typeof(Nullable<>))
-                                            p.SetValue(hasGoods, string.IsNullOrWhiteSpace(row[goodsEnum.Name].ToString()) ? null : Convert.ChangeType(row[goodsEnum.Name], Nullable.GetUnderlyingType(p.PropertyType)), null);
-                                    }
-                                    else
-                                    {
-                                        // 非泛型
-                                        p.SetValue(hasGoods, string.IsNullOrWhiteSpace(row[goodsEnum.Name].ToString()) ? null : Convert.ChangeType(row[goodsEnum.Name], p.PropertyType), null);
-                                    }
-                                }
-                            }
-                        }
+                        //hasGoods.Code = goodsCode;
+                        IListDataSet.DataRowToModel<Goods, GoodsEnum>(ds.Tables[0], row, hasGoods);
                         if (isNewGoods)
                             InsertGoodsList.Add(hasGoods);
                         else
@@ -1450,7 +1664,7 @@ namespace USL
                     }
                     if (InsertGoodsList.Count > 0 || UpdateGoodsList.Count > 0)
                     {
-                        BLLFty.Create<BaseBLL>().AddAndUpdate(InsertGoodsList, UpdateGoodsList);
+                        BLLFty.Create<BaseBLL>().AddAndUpdate<Goods>(InsertGoodsList, UpdateGoodsList);
                         clientFactory.DataPageRefresh<Goods>();
                         CommonServices.ErrorTrace.SetSuccessfullyInfo(this.FindForm(), "导入成功");
                         return;
@@ -1460,6 +1674,72 @@ namespace USL
             catch (Exception ex)
             {
                 CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), string.Format("第{0}行的编码[{1}]的记录格式错误。错误信息：\r\n", iError, goodsCode) + "\r\n" + ex.Message);
+                return;
+            }
+            finally
+            {
+                if (waitDialogForm != null)
+                    waitDialogForm.Invoke((EventHandler)delegate { waitDialogForm.Close(); });
+                this.Cursor = System.Windows.Forms.Cursors.Default;
+            }
+        }
+
+        private void BtnSellImport_ElementClick(object sender, NavElementEventArgs e)
+        {
+            string code = string.Empty;
+            int iError = 1;
+            WaitDialogForm waitDialogForm = null;
+            try
+            {
+                this.Cursor = System.Windows.Forms.Cursors.WaitCursor;
+                List<Goods> goodsList = BLLFty.Create<BaseBLL>().GetListBy<Goods>(null);
+                if (goodsList == null || goodsList.Count == 0)
+                {
+                    CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), "没有商品资料，请先导入商品资料。");
+                    return;
+                }
+                var openFileDialog = new System.Windows.Forms.OpenFileDialog();
+                openFileDialog.Filter = "Excel 97-2003 工作簿|*.xls*|Excel 工作簿|*.xlsx|所有文件|*.*";
+                openFileDialog.FilterIndex = 1;
+                if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    new Thread((ThreadStart)delegate {
+                        waitDialogForm = new WaitDialogForm("请稍候...", "正在导入数据", new Size(300, 60), this.FindForm());
+                        System.Windows.Forms.Application.Run(waitDialogForm);
+                    }).Start();
+                    DataSet ds = ExcelHelper.ImportExcel(openFileDialog.FileName);
+                    List<Goods> updateList = new List<Goods>();
+                    foreach (DataRow row in ds.Tables[0].Rows)
+                    {
+                        ++iError;
+                        code = row[EnumHelper.GetDescription<GoodsEnum>(GoodsEnum.Code, false)].ToString().Trim();
+                        //检查货号是否存在
+                        if (iError > ds.Tables[0].Rows.Count)
+                            continue;
+                        if (string.IsNullOrWhiteSpace(code))
+                        {
+                            CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), string.Format("第{0}行的编码不能为空。", iError));
+                            return;
+                        }
+                        Goods entity = goodsList.FirstOrDefault(o => o.Code.Equals(code));
+                        if (entity != null)
+                        {
+                            IListDataSet.DataRowToModel<Goods, GoodsEnum>(ds.Tables[0], row, entity);
+                            updateList.Add(entity);
+                        }
+                    }
+                    if (updateList.Count > 0)
+                    {
+                        BLLFty.Create<BaseBLL>().UpdateByBulk<Goods>(updateList);
+                        clientFactory.DataPageRefresh<Goods>();
+                        CommonServices.ErrorTrace.SetSuccessfullyInfo(this.FindForm(), "导入成功");
+                        return;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                CommonServices.ErrorTrace.SetErrorInfo(this.FindForm(), string.Format("第{0}行的编码[{1}]的记录格式错误。错误信息：\r\n", iError, code) + "\r\n" + ex.Message);
                 return;
             }
             finally
@@ -1575,7 +1855,7 @@ namespace USL
                             else
                             hasGoods.Price = Convert.ToDecimal(row["单价"]);
                         //goods.BarCode = Convert.ToString(++iBarCode);
-                        hasGoods.PCS = 1;
+                        //hasGoods.PCS = 1;
                         hasGoods.CavityNumber = 1;
                             //goods.InnerBox = Convert.ToInt32(row["内盒"]);
                             if (!string.IsNullOrEmpty(row["单位"].ToString().Trim()))
@@ -1587,17 +1867,17 @@ namespace USL
                             //goods.BarCode = Regex.Replace(goods.Code + goods.SPEC, "[*-.]", "", RegexOptions.IgnoreCase);
                             //if (!string.IsNullOrEmpty(row["毛重"].ToString().Trim()))
                             //    goods.GWeight = Convert.ToDecimal(row["毛重"]);
-                            if (string.IsNullOrEmpty(row["模重"].ToString().Trim()))
-                            hasGoods.NWeight = 1;
-                            else
-                            hasGoods.NWeight = Convert.ToDecimal(row["模重"]) == 0 ? 1 : Convert.ToDecimal(row["模重"]);
+                            //if (string.IsNullOrEmpty(row["模重"].ToString().Trim()))
+                            //hasGoods.NWeight = 1;
+                            //else
+                            //hasGoods.NWeight = Convert.ToDecimal(row["模重"]) == 0 ? 1 : Convert.ToDecimal(row["模重"]);
                             if (string.IsNullOrEmpty(row["出数"].ToString().Trim()))
                             hasGoods.CavityNumber = 1;
                             else
                             hasGoods.CavityNumber = Convert.ToDecimal(row["出数"]) == 0 ? 1 : Convert.ToDecimal(row["出数"]);
                             if (row["货品类型"].ToString().Trim().Contains("原料"))
                             {
-                            hasGoods.NWeight = 1;
+                            //hasGoods.NWeight = 1;
                             hasGoods.CavityNumber = 1;
                             }
                         //if (!string.IsNullOrEmpty(row["计算周期"].ToString().Trim()))
@@ -1726,17 +2006,17 @@ namespace USL
                                 {
                                     if (jj.Type != (int)GoodsBigType.Material)
                                     {
-                                        if (has[g.Code] == null)
-                                        {
-                                            has.Add(g.Code, g);
-                                            g.NWeight = jj.NWeight * (string.IsNullOrEmpty(row["损耗"].ToString().Trim()) ? 1 : Convert.ToInt32(row["损耗"]));
-                                            g.CavityNumber = jj.CavityNumber;
-                                        }
-                                        else
-                                        {
-                                            g.NWeight += jj.NWeight * (string.IsNullOrEmpty(row["损耗"].ToString().Trim()) ? 1 : Convert.ToInt32(row["损耗"]));
-                                            g.CavityNumber = 1;
-                                        }
+                                        //if (has[g.Code] == null)
+                                        //{
+                                        //    has.Add(g.Code, g);
+                                        //    g.NWeight = jj.NWeight * (string.IsNullOrEmpty(row["损耗"].ToString().Trim()) ? 1 : Convert.ToInt32(row["损耗"]));
+                                        //    g.CavityNumber = jj.CavityNumber;
+                                        //}
+                                        //else
+                                        //{
+                                        //    g.NWeight += jj.NWeight * (string.IsNullOrEmpty(row["损耗"].ToString().Trim()) ? 1 : Convert.ToInt32(row["损耗"]));
+                                        //    g.CavityNumber = 1;
+                                        //}
                                     }
                                 }
                             }
@@ -1751,20 +2031,20 @@ namespace USL
                                 Goods gu = UpdateGoodsList.Find(o => o.Code == row["货号"].ToString().Trim());
                                 if (gu != null && gu.Type != (int)GoodsBigType.Goods)
                                 {
-                                    if (jju.Type != (int)GoodsBigType.Material)
-                                    {
-                                        if (has[gu.Code] == null)
-                                        {
-                                            has.Add(gu.Code, gu);
-                                            gu.NWeight = jju.NWeight * (string.IsNullOrEmpty(row["损耗"].ToString().Trim()) ? 1 : Convert.ToInt32(row["损耗"]));
-                                            gu.CavityNumber = jju.CavityNumber;
-                                        }
-                                        else
-                                        {
-                                            gu.NWeight += jju.NWeight * (string.IsNullOrEmpty(row["损耗"].ToString().Trim()) ? 1 : Convert.ToInt32(row["损耗"]));
-                                            gu.CavityNumber = 1;
-                                        }
-                                    }
+                                    //if (jju.Type != (int)GoodsBigType.Material)
+                                    //{
+                                    //    if (has[gu.Code] == null)
+                                    //    {
+                                    //        has.Add(gu.Code, gu);
+                                    //        gu.NWeight = jju.NWeight * (string.IsNullOrEmpty(row["损耗"].ToString().Trim()) ? 1 : Convert.ToInt32(row["损耗"]));
+                                    //        gu.CavityNumber = jju.CavityNumber;
+                                    //    }
+                                    //    else
+                                    //    {
+                                    //        gu.NWeight += jju.NWeight * (string.IsNullOrEmpty(row["损耗"].ToString().Trim()) ? 1 : Convert.ToInt32(row["损耗"]));
+                                    //        gu.CavityNumber = 1;
+                                    //    }
+                                    //}
                                 }
                             }
                         }
@@ -2298,99 +2578,59 @@ namespace USL
 
         public void PageFty(string menuName)
         {
-            switch (menuName)
+            switch (Enum.Parse(typeof(MainMenuEnum), menuName))
             {
-                //case MainMenuConstants.ProductionStockInBill:
-                //case MainMenuConstants.SalesReturnBill:
-                //case MainMenuConstants.FGStockInBill:
-                //case MainMenuConstants.EMSReturnBill:
-                //case MainMenuConstants.SFGStockInBill:
-                //case MainMenuConstants.FSMStockInBill:
-                //case MainMenuConstants.FSMReturnBill:
-                //case MainMenuConstants.AssembleStockInBill:
-                //case MainMenuConstants.ReturnedMaterialBill:
-                //    itemDetail = new StockInBillPage(Guid.Empty, pageGroupCore, menuName);
-                //    iExtensions = (StockInBillPage)itemDetail;
-                //    break;
-                //case MainMenuConstants.Order:
-                //case MainMenuConstants.FSMOrder:
-                //case MainMenuConstants.ProductionOrder:
-                //    itemDetail = new OrderEditPage(Guid.Empty, menuName);
-                //    iExtensions = (OrderEditPage)itemDetail;
-                //    break;
-                //case MainMenuConstants.FGStockOutBill:
-                //case MainMenuConstants.EMSStockOutBill:
-                //case MainMenuConstants.SFGStockOutBill:
-                //case MainMenuConstants.FSMStockOutBill:
-                //case MainMenuConstants.GetMaterialBill:
-                //case MainMenuConstants.FSMDPReturnBill:
-                //case MainMenuConstants.EMSDPReturnBill:
-                //    itemDetail = new StockOutBillPage(Guid.Empty, menuName);
-                //    iExtensions = (StockOutBillPage)itemDetail;
-                //    break;
-                case MainMenuConstants.BOM:
+                case MainMenuEnum.BOM:
                     itemDetail = new BOMEditPage(BOMType.BOM);
                     break;
-                case MainMenuConstants.MoldList:
+                case MainMenuEnum.MoldList:
                     itemDetail = new BOMEditPage(BOMType.MoldList);
                     break;
-                case MainMenuConstants.MoldMaterial:
+                case MainMenuEnum.MoldMaterial:
                     itemDetail = new BOMEditPage(BOMType.MoldMaterial);
                     break;
-                case MainMenuConstants.Assemble:
+                case MainMenuEnum.Assemble:
                     itemDetail = new BOMEditPage(BOMType.Assemble);
                     break;
-                case MainMenuConstants.MoldAllot:
+                case MainMenuEnum.MoldAllot:
                     itemDetail = new MoldAllotPage();
                     break;
-                case MainMenuConstants.CustomerSLSalePrice:
+                case MainMenuEnum.CustomerSLSalePrice:
                     itemDetail = new SLSalePricePage(BusinessContactType.Customer);
                     break;
-                case MainMenuConstants.SupplierSLSalePrice:
+                case MainMenuEnum.SupplierSLSalePrice:
                     itemDetail = new SLSalePricePage(BusinessContactType.Supplier);
                     break;
-                //case MainMenuConstants.ReceiptBill:
-                //    itemDetail = new ReceiptBillPage(Guid.Empty);
-                //    iExtensions = (ReceiptBillPage)itemDetail;
-                //    break;
-                //case MainMenuConstants.PaymentBill:
-                //    itemDetail = new PaymentBillPage(Guid.Empty);
-                //    iExtensions = (PaymentBillPage)itemDetail;
-                //    break;
-                case MainMenuConstants.PermissionSetting:
+                case MainMenuEnum.PermissionSetting:
                     itemDetail = new PermissionSettingPage();
                     break;
-                case MainMenuConstants.Material:
+                case MainMenuEnum.Material:
                     itemDetail = new TabbedGoodsPage(menu, pageGroupCore, itemDetailButtonList);
                     iExtensions = (TabbedGoodsPage)itemDetail;
                     break;
-                case MainMenuConstants.ProductionScheduling:
+                case MainMenuEnum.ProductionScheduling:
                     itemDetail = new ProductionSchedulingPage();
                     break;
-                //case MainMenuConstants.WageBill:
-                //    itemDetail = new WageBillPage(Guid.Empty);
-                //    iExtensions = (WageBillPage)itemDetail;
-                //    break;
-                case MainMenuConstants.SchClass:
+                case MainMenuEnum.SchClass:
                     itemDetail = new SchClassPage();
                     break;
-                case MainMenuConstants.StaffSchClass:
+                case MainMenuEnum.StaffSchClass:
                     itemDetail = new StaffSchClassPage();
                     break;
-                case MainMenuConstants.StaffAttendance:
+                case MainMenuEnum.StaffAttendance:
                     itemDetail = new AttendanceSchedulingPage();
                     break;
-                case MainMenuConstants.AttWageBill:
+                case MainMenuEnum.AttWageBill:
                     itemDetail = new AttWageBillPage(Guid.Empty);
                     iExtensions = (AttWageBillPage)itemDetail;
                     break;
-                case MainMenuConstants.SalesSummaryMonthlyReport:
+                case MainMenuEnum.SalesSummaryMonthlyReport:
                     itemDetail = new MonthlyChartPage();
                     break;
-                case MainMenuConstants.AnnualSalesSummaryByCustomerReport:
+                case MainMenuEnum.AnnualSalesSummaryByCustomerReport:
                     itemDetail = new CustomerChartPage();
                     break;
-                case MainMenuConstants.AnnualSalesSummaryByGoodsReport:
+                case MainMenuEnum.AnnualSalesSummaryByGoodsReport:
                     itemDetail = new GoodsChartPage();
                     break;
             }

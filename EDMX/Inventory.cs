@@ -18,10 +18,10 @@ namespace EDMX
         [StringLength(50)]
         public string GoodsName { get; set; }
 
-        [StringLength(20)]
+        [StringLength(50)]
         public string Barcode { get; set; }
 
-        [StringLength(30)]
+        [StringLength(50)]
         public string SPEC { get; set; }
 
         [StringLength(10)]

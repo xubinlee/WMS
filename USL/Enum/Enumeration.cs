@@ -3,9 +3,468 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Utility;
 
-namespace Utility
+namespace USL
 {
+    public enum MainMenuEnum
+    {
+        /// <summary>
+        /// 仓库资料
+        /// </summary>
+        Warehouse,
+        /// <summary>
+        /// 公司资料（指客户）
+        /// </summary>
+        Company,
+        /// <summary>
+        /// 客户资料
+        /// </summary>
+        Customer,
+        /// <summary>
+        /// 部门资料
+        /// </summary>
+        Department,
+        /// <summary>
+        /// 供应商资料
+        /// </summary>
+        Supplier,
+        /// <summary>
+        /// 厂家资料
+        /// </summary>
+        Mfrs,
+        /// <summary>
+        /// 职工资料
+        /// </summary>
+        UsersInfo,
+        /// <summary>
+        /// 成品资料
+        /// </summary>
+        Goods,
+        /// <summary>
+        /// 材料资料
+        /// </summary>
+        Material,
+        /// <summary>
+        /// 货品类型
+        /// </summary>
+        GoodsType,
+        /// <summary>
+        /// 包装方式
+        /// </summary>
+        Packaging,
+        /// <summary>
+        /// 成品布产单
+        /// </summary>
+        ProductionOrder,
+        /// <summary>
+        /// 成品布产单查询
+        /// </summary>
+        ProductionOrderQuery,
+        /// <summary>
+        /// 成品入库单
+        /// </summary>
+        ProductionStockInBill,
+        /// <summary>
+        /// 成品入库单查询
+        /// </summary>
+        ProductionStockInBillQuery,
+        /// <summary>
+        /// 销售退货单
+        /// </summary>
+        SalesReturnBill,
+        /// <summary>
+        /// 销售退货单查询
+        /// </summary>
+        SalesReturnBillQuery,
+        /// <summary>
+        /// 外加工产品回收单
+        /// </summary>
+        FGStockInBill,
+        /// <summary>
+        /// 外加工产品回收单查询
+        /// </summary>
+        FGStockInBillQuery,
+        /// <summary>
+        /// 外加工退料单
+        /// </summary>
+        EMSReturnBill,
+        /// <summary>
+        /// 外加工退料单查询
+        /// </summary>
+        EMSReturnBillQuery,
+        /// <summary>
+        /// 外加工残次品退货单
+        /// </summary>
+        EMSDPReturnBill,
+        /// <summary>
+        /// 外加工残次品退货单查询
+        /// </summary>
+        EMSDPReturnBillQuery,
+        /// <summary>
+        /// 采购入料单
+        /// </summary>
+        SFGStockInBill,
+        /// <summary>
+        /// 采购入料单
+        /// </summary>
+        SFGStockInBillQuery,
+        /// <summary>
+        /// 自动机回收单
+        /// </summary>
+        FSMStockInBill,
+        /// <summary>
+        /// 自动机回收单查询
+        /// </summary>
+        FSMStockInBillQuery,
+        /// <summary>
+        /// 入库单查询
+        /// </summary>
+        //StockInBillQuery,
+        /// <summary>
+        /// 订货单
+        /// </summary>
+        Order,
+        /// <summary>
+        /// 订货单查询
+        /// </summary>
+        OrderQuery,
+        /// <summary>
+        /// 发货单
+        /// </summary>
+        FGStockOutBill,
+        /// <summary>
+        /// 发货单查询
+        /// </summary>
+        FGStockOutBillQuery,
+        /// <summary>
+        /// 投料单
+        /// </summary>
+        EMSStockOutBill,
+        /// <summary>
+        /// 投料查询
+        /// </summary>
+        EMSStockOutBillQuery,
+        /// <summary>
+        /// 采购退料单
+        /// </summary>
+        SFGStockOutBill,
+        /// <summary>
+        /// 采购退料单查询
+        /// </summary>
+        SFGStockOutBillQuery,
+        /// <summary>
+        /// 自动机发料单
+        /// </summary>
+        FSMStockOutBill,
+        /// <summary>
+        /// 领料出库单
+        /// </summary>
+        GetMaterialBill,
+        /// <summary>
+        /// 自动机发料单查询
+        /// </summary>
+        FSMStockOutBillQuery,
+        /// <summary>
+        /// 领料出库单查询
+        /// </summary>
+        GetMaterialBillQuery,
+        /// <summary>
+        /// 自动机退料单
+        /// </summary>
+        FSMReturnBill,
+        /// <summary>
+        /// 自动机退料单查询
+        /// </summary>
+        FSMReturnBillQuery,
+        /// <summary>
+        /// 自动机残次材料退货单
+        /// </summary>
+        FSMDPReturnBill,
+        /// <summary>
+        /// 自动机残次材料退货单查询
+        /// </summary>
+        FSMDPReturnBillQuery,
+        /// <summary>
+        /// 装配入库单
+        /// </summary>
+        AssembleStockInBill,
+        /// <summary>
+        /// 退料入库单
+        /// </summary>
+        ReturnedMaterialBill,
+        /// <summary>
+        /// 装配入库单查询
+        /// </summary>
+        AssembleStockInBillQuery,
+        /// <summary>
+        /// 退料入库单查询
+        /// </summary>
+        ReturnedMaterialBillQuery,
+        /// <summary>
+        /// 自动机生产订单
+        /// </summary>
+        FSMOrder,
+        /// <summary>
+        /// 自动机生产订单查询
+        /// </summary>
+        FSMOrderQuery,
+        /// <summary>
+        /// 成品库存明细
+        /// </summary>
+        InventoryQuery,
+        /// <summary>
+        /// 成品库存查询
+        /// </summary>
+        InventoryGroupByGoodsQuery,
+        /// <summary>
+        /// 半成品库存明细
+        /// </summary>
+        MaterialInventoryQuery,
+        /// <summary>
+        /// 半成品库存查询
+        /// </summary>
+        InventoryGroupByMaterialQuery,
+        /// <summary>
+        /// 外加工库存查询
+        /// </summary>
+        EMSInventoryQuery,
+        /// <summary>
+        /// 自动机库存查询
+        /// </summary>
+        FSMInventoryQuery,
+        /// <summary>
+        /// 账页查询
+        /// </summary>
+        AccountBookQuery,
+        /// <summary>
+        /// 账面库存
+        /// </summary>
+        Inventory,
+        /// <summary>
+        /// 账面库存日志表
+        /// </summary>
+        VInventoryLog,
+        /// <summary>
+        /// 库存盘点
+        /// </summary>
+        Stocktaking,
+        /// <summary>
+        /// 盘点盈亏表
+        /// </summary>
+        ProfitAndLoss,
+        /// <summary>
+        /// 损耗确认单
+        /// </summary>
+        InventoryLoss,
+        /// <summary>
+        /// 未上架商品确认单
+        /// </summary>
+        UnlistedGoods,
+        /// <summary>
+        /// 盘点日志表
+        /// </summary>
+        StocktakingLogHd,
+        /// <summary>
+        /// 盘点日志明细表
+        /// </summary>
+        VStocktakingLog,
+        /// <summary>
+        /// 盘点差异日志表
+        /// </summary>
+        VProfitAndLossLog,
+        /// <summary>
+        /// 盘点损耗日志表
+        /// </summary>
+        VInventoryLossLog,
+        /// <summary>
+        /// 未上架商品日志表
+        /// </summary>
+        VUnlistedGoodsLog,
+        /// <summary>
+        /// 货品装配物料清单
+        /// </summary>
+        BOM,
+        /// <summary>
+        /// 自动机模具清单
+        /// </summary>
+        MoldList,
+        /// <summary>
+        /// 自动机模具原料清单
+        /// </summary>
+        MoldMaterial,
+        /// <summary>
+        /// 材料装配物料清单
+        /// </summary>
+        Assemble,
+        /// <summary>
+        /// 自动机模具分配
+        /// </summary>
+        MoldAllot,
+        /// <summary>
+        /// 客户商品售价
+        /// </summary>
+        CustomerSLSalePrice,
+        /// <summary>
+        /// 供应商商品售价
+        /// </summary>
+        SupplierSLSalePrice,
+        /// <summary>
+        /// 收款单
+        /// </summary>
+        ReceiptBill,
+        /// <summary>
+        /// 收款单查询
+        /// </summary>
+        ReceiptBillQuery,
+        /// <summary>
+        /// 客户结算对账单
+        /// </summary>
+        StatementOfAccountToCustomer,
+        /// <summary>
+        /// 付款单
+        /// </summary>
+        PaymentBill,
+        /// <summary>
+        /// 付款单查询
+        /// </summary>
+        PaymentBillQuery,
+        /// <summary>
+        /// 供应商结算对账单
+        /// </summary>
+        StatementOfAccountToSupplier,
+        /// <summary>
+        /// 外加工货品跟踪日报表
+        /// </summary>
+        EMSGoodsTrackingDailyReport,
+        /// <summary>
+        /// 自动机货品跟踪日报表
+        /// </summary>
+        FSMGoodsTrackingDailyReport,
+        /// <summary>
+        /// 样品发放情况
+        /// </summary>
+        SampleStockOutReport,
+        /// <summary>
+        /// 销售单据汇总表
+        /// </summary>
+        SalesBillSummaryReport,
+        /// <summary>
+        /// 客户销售汇总表
+        /// </summary>
+        SalesSummaryByCustomerReport,
+        /// <summary>
+        /// 客户销售汇总月度图表
+        /// </summary>
+        SalesSummaryMonthlyReport,
+        /// <summary>
+        /// 客户销售汇总图表
+        /// </summary>
+        AnnualSalesSummaryByCustomerReport,
+        /// <summary>
+        /// 商品销售汇总表
+        /// </summary>
+        SalesSummaryByGoodsReport,
+        /// <summary>
+        /// 商品价格销量统计表
+        /// </summary>
+        SalesSummaryByGoodsPriceReport,
+        /// <summary>
+        /// 商品销售汇总图表
+        /// </summary>
+        AnnualSalesSummaryByGoodsReport,
+        /// <summary>
+        /// 客户商品销售汇总表
+        /// </summary>
+        GoodsSalesSummaryByCustomerReport,
+        /// <summary>
+        /// 入库单类型
+        /// </summary>
+        StockInBillType,
+        /// <summary>
+        /// 出库单类型
+        /// </summary>
+        StockOutBillType,
+        /// <summary>
+        /// 订货单类型
+        /// </summary>
+        OrderType,
+        /// <summary>
+        /// 提醒列表
+        /// </summary>
+        AlertQuery,
+        /// <summary>
+        /// 权限设置
+        /// </summary>
+        PermissionSetting,
+        /// <summary>
+        /// 关于
+        /// </summary>
+        AboutBox,
+        /// <summary>
+        /// 出勤记录
+        /// </summary>
+        AttGeneralLog,
+        /// <summary>
+        /// 人员考勤
+        /// </summary>
+        StaffAttendance,
+        /// <summary>
+        /// 考勤明细
+        /// </summary>
+        AttendanceQuery,
+        /// <summary>
+        /// 班次时段设置
+        /// </summary>
+        SchClass,
+        /// <summary>
+        /// 人员排班
+        /// </summary>
+        StaffSchClass,
+        /// <summary>
+        /// 生产排程
+        /// </summary>
+        ProductionScheduling,
+        /// <summary>
+        /// 日程安排查询
+        /// </summary>
+        SchedulingQuery,
+        /// <summary>
+        /// 工资结算表
+        /// </summary>
+        WageBill,
+        /// <summary>
+        /// 工资结算表查询
+        /// </summary>
+        WageBillQuery,
+        /// <summary>
+        /// 考勤工资结算表
+        /// </summary>
+        AttWageBill,
+        /// <summary>
+        /// 考勤工资结算表查询
+        /// </summary>
+        AttWageBillQuery,
+
+
+        /// <summary>
+        /// 客户择样
+        /// </summary>
+        CustomerSamplePick,
+        /// <summary>
+        /// 择样记录
+        /// </summary>
+        SamplePickQuery,
+        /// <summary>
+        /// 样品扫描
+        /// </summary>
+        SampleScan,
+
+        /// <summary>
+        /// 系统状态
+        /// </summary>
+        SystemStatus,
+    }
     /// <summary>
     /// 系统版本
     /// </summary>
@@ -804,8 +1263,12 @@ namespace Utility
     /// <summary>
     /// 账面库存日志表
     /// </summary>
-    public enum InventoryLogEnum
+    public enum VInventoryLogEnum
     {
+        [MemberDescription("单据编号", "BillNo")]
+        BillNo,
+        [MemberDescription("单据日期", "BillDate")]
+        BillDate,
         [MemberDescription("门店编码", "DeptCode")]
         DeptCode,
         [MemberDescription("门店名称", "DeptName")]
@@ -865,9 +1328,9 @@ namespace Utility
         DiffQty,
         [MemberDescription("实盘差异金额", "DiffAMT")]
         DiffAMT,
-        [MemberDescription("在途商品数量", "TransitQty")]
+        [MemberDescription("在途数量", "TransitQty")]
         TransitQty,
-        [MemberDescription("在途商品金额", "TransitAMT")]
+        [MemberDescription("在途金额", "TransitAMT")]
         TransitAMT,
         [MemberDescription("已退货未减库存数量", "ReturnedQty")]
         ReturnedQty,
@@ -881,21 +1344,21 @@ namespace Utility
         NonArrivalQty,
         [MemberDescription("已调入未到店金额", "NonArrivalAMT")]
         NonArrivalAMT,
-        [MemberDescription("外部已提未售商品数量", "ExtraPresellQty")]
+        [MemberDescription("外部已提未售数量", "ExtraPresellQty")]
         ExtraPresellQty,
-        [MemberDescription("外部已提未售商品金额", "ExtraPresellAMT")]
+        [MemberDescription("外部已提未售金额", "ExtraPresellAMT")]
         ExtraPresellAMT,
-        [MemberDescription("外部已售未提商品数量", "ExtraSoldQty")]
+        [MemberDescription("外部已售未提数量", "ExtraSoldQty")]
         ExtraSoldQty,
-        [MemberDescription("内部已售未提商品金额", "ExtraSoldAMT")]
+        [MemberDescription("内部已售未提金额", "ExtraSoldAMT")]
         ExtraSoldAMT,
-        [MemberDescription("内部已提未售商品数量", "IntraPresellQty")]
+        [MemberDescription("内部已提未售数量", "IntraPresellQty")]
         IntraPresellQty,
-        [MemberDescription("内部已提未售商品金额", "IntraPresellAMT")]
+        [MemberDescription("内部已提未售金额", "IntraPresellAMT")]
         IntraPresellAMT,
-        [MemberDescription("内部已售未提商品数量", "IntraSoldQty")]
+        [MemberDescription("内部已售未提数量", "IntraSoldQty")]
         IntraSoldQty,
-        [MemberDescription("内部已售未提商品金额", "IntraSoldAMT")]
+        [MemberDescription("内部已售未提金额", "IntraSoldAMT")]
         IntraSoldAMT,
         [MemberDescription("已调出未销账数量", "NonChargeOffQty")]
         NonChargeOffQty,
@@ -940,20 +1403,14 @@ namespace Utility
         DeptCode,
         [MemberDescription("门店名称", "DeptName")]
         DeptName,
-        [MemberDescription("仓位", "WarehouseName")]
-        WarehouseName,
+        //[MemberDescription("仓位", "WarehouseName")]
+        //WarehouseName,
         [MemberDescription("商品品类", "Category")]
         Category,
         [MemberDescription("商品编码", "GoodsCode")]
         GoodsCode,
         [MemberDescription("商品名称", "GoodsName")]
         GoodsName,
-        //[MemberDescription("条码", "Barcode")]
-        //Barcode,
-        //[MemberDescription("规格", "SPEC")]
-        //SPEC,
-        //[MemberDescription("单位", "Unit")]
-        //Unit,
         [MemberDescription("价格", "Price")]
         Price,
         [MemberDescription("账面数量", "StockQty")]
@@ -968,9 +1425,9 @@ namespace Utility
         DiffQty,
         [MemberDescription("实盘差异金额", "DiffAMT")]
         DiffAMT,
-        [MemberDescription("在途商品数量", "TransitQty")]
+        [MemberDescription("在途数量", "TransitQty")]
         TransitQty,
-        [MemberDescription("在途商品金额", "TransitAMT")]
+        [MemberDescription("在途金额", "TransitAMT")]
         TransitAMT,
         [MemberDescription("已退货未减库存数量", "ReturnedQty")]
         ReturnedQty,
@@ -984,21 +1441,21 @@ namespace Utility
         NonArrivalQty,
         [MemberDescription("已调入未到店金额", "NonArrivalAMT")]
         NonArrivalAMT,
-        [MemberDescription("外部已提未售商品数量", "ExtraPresellQty")]
+        [MemberDescription("外部已提未售数量", "ExtraPresellQty")]
         ExtraPresellQty,
-        [MemberDescription("外部已提未售商品金额", "ExtraPresellAMT")]
+        [MemberDescription("外部已提未售金额", "ExtraPresellAMT")]
         ExtraPresellAMT,
-        [MemberDescription("外部已售未提商品数量", "ExtraSoldQty")]
+        [MemberDescription("外部已售未提数量", "ExtraSoldQty")]
         ExtraSoldQty,
-        [MemberDescription("内部已售未提商品金额", "ExtraSoldAMT")]
+        [MemberDescription("内部已售未提金额", "ExtraSoldAMT")]
         ExtraSoldAMT,
-        [MemberDescription("内部已提未售商品数量", "IntraPresellQty")]
+        [MemberDescription("内部已提未售数量", "IntraPresellQty")]
         IntraPresellQty,
-        [MemberDescription("内部已提未售商品金额", "IntraPresellAMT")]
+        [MemberDescription("内部已提未售金额", "IntraPresellAMT")]
         IntraPresellAMT,
-        [MemberDescription("内部已售未提商品数量", "IntraSoldQty")]
+        [MemberDescription("内部已售未提数量", "IntraSoldQty")]
         IntraSoldQty,
-        [MemberDescription("内部已售未提商品金额", "IntraSoldAMT")]
+        [MemberDescription("内部已售未提金额", "IntraSoldAMT")]
         IntraSoldAMT,
         [MemberDescription("已调出未销账数量", "NonChargeOffQty")]
         NonChargeOffQty,
@@ -1012,6 +1469,10 @@ namespace Utility
         GroupBuyingQty,
         [MemberDescription("团购金额", "GroupBuyingAMT")]
         GroupBuyingAMT,
+        [MemberDescription("灾害数量", "DisasterQty")]
+        DisasterQty,
+        [MemberDescription("灾害金额", "DisasterAMT")]
+        DisasterAMT,
         [MemberDescription("其他数量", "OtherQty")]
         OtherQty,
         [MemberDescription("其他金额", "OtherAMT")]
@@ -1059,6 +1520,145 @@ namespace Utility
         Checker,
         [MemberDescription("时间", "CheckingDate")]
         CheckingDate,
+    }
+
+
+    /// <summary>
+    /// 盘点日志表
+    /// </summary>
+    public enum StocktakingLogHdEnum
+    {
+        [MemberDescription("单据编号", "BillNo")]
+        BillNo,
+        [MemberDescription("单据日期", "BillDate")]
+        BillDate,
+        [MemberDescription("盘点人", "Checker")]
+        Checker,
+        [MemberDescription("盘点时间", "CheckingTime")]
+        CheckingTime,
+        [MemberDescription("状态", "Status")]
+        Status,
+    }
+
+    /// <summary>
+    /// 盘点日志明细表
+    /// </summary>
+    public enum VStocktakingLogEnum
+    {
+        [MemberDescription("门店编码", "DeptCode")]
+        DeptCode,
+        [MemberDescription("门店名称", "DeptName")]
+        DeptName,
+        [MemberDescription("仓位", "WarehouseName")]
+        WarehouseName,
+        [MemberDescription("编码", "GoodsCode")]
+        GoodsCode,
+        [MemberDescription("品名", "GoodsName")]
+        GoodsName,
+        [MemberDescription("条码", "Barcode")]
+        Barcode,
+        [MemberDescription("规格", "SPEC")]
+        SPEC,
+        [MemberDescription("单位", "Unit")]
+        Unit,
+        [MemberDescription("库存", "StockQty")]
+        StockQty,
+        [MemberDescription("实盘数", "CheckQty")]
+        CheckQty,
+        [MemberDescription("价格", "Price")]
+        Price,
+        [MemberDescription("扫描单", "ScanBill")]
+        ScanBill,
+        [MemberDescription("作业者", "Checker")]
+        Checker,
+        [MemberDescription("时间", "CheckingDate")]
+        CheckingDate,
+    }
+
+    /// <summary>
+    /// 损耗确认表
+    /// </summary>
+    public enum InventoryLossEnum
+    {
+        [MemberDescription("门店编码", "DeptCode")]
+        DeptCode,
+        [MemberDescription("门店名称", "DeptName")]
+        DeptName,
+        [MemberDescription("商品品类", "Category")]
+        Category,
+        [MemberDescription("商品编码", "GoodsCode")]
+        GoodsCode,
+        [MemberDescription("商品名称", "GoodsName")]
+        GoodsName,
+        [MemberDescription("账面数量", "StockQty")]
+        StockQty,
+        [MemberDescription("实盘数量", "CheckQty")]
+        CheckQty,
+        [MemberDescription("实盘差异数量", "DiffQty")]
+        DiffQty,
+        [MemberDescription("损耗数量", "LossQty")]
+        LossQty,
+        [MemberDescription("价格", "Price")]
+        Price,
+        [MemberDescription("账面金额", "StockAMT")]
+        StockAMT,
+        [MemberDescription("实盘金额", "CheckAMT")]
+        CheckAMT,
+        [MemberDescription("实盘差异金额", "DiffAMT")]
+        DiffAMT,
+        [MemberDescription("盘点日前30天销售金额", "PreCheckSellAMT")]
+        PreCheckSellAMT,
+        [MemberDescription("损耗金额", "LossAMT")]
+        LossAMT,
+        [MemberDescription("盘点损耗率", "LossRate")]
+        LossRate,
+        [MemberDescription("备注", "Remark")]
+        Remark,
+    }
+
+    /// <summary>
+    /// 损耗确认单日志表
+    /// </summary>
+    public enum VInventoryLossLogEnum
+    {
+        [MemberDescription("单据编号", "BillNo")]
+        BillNo,
+        [MemberDescription("单据日期", "BillDate")]
+        BillDate,
+        [MemberDescription("门店编码", "DeptCode")]
+        DeptCode,
+        [MemberDescription("门店名称", "DeptName")]
+        DeptName,
+        [MemberDescription("商品品类", "Category")]
+        Category,
+        [MemberDescription("商品编码", "GoodsCode")]
+        GoodsCode,
+        [MemberDescription("商品名称", "GoodsName")]
+        GoodsName,
+        [MemberDescription("账面数量", "StockQty")]
+        StockQty,
+        [MemberDescription("实盘数量", "CheckQty")]
+        CheckQty,
+        [MemberDescription("实盘差异数量", "DiffQty")]
+        DiffQty,
+        [MemberDescription("损耗数量", "LossQty")]
+        LossQty,
+        [MemberDescription("价格", "Price")]
+        Price,
+        [MemberDescription("账面金额", "StockAMT")]
+        StockAMT,
+        [MemberDescription("实盘金额", "CheckAMT")]
+        CheckAMT,
+        [MemberDescription("实盘差异金额", "DiffAMT")]
+        DiffAMT,
+        [MemberDescription("盘点日前30天销售金额", "PreCheckSellAMT")]
+        PreCheckSellAMT,
+        [MemberDescription("损耗金额", "LossAMT")]
+        LossAMT,
+        [MemberDescription("盘点损耗率", "LossRate")]
+        LossRate,
+        [MemberDescription("备注", "Remark")]
+        Remark,
     }
 
     /// <summary>
@@ -1132,23 +1732,6 @@ namespace Utility
     }
 
     /// <summary>
-    /// 盘点日志表
-    /// </summary>
-    public enum StocktakingLogHdEnum
-    {
-        [MemberDescription("单据编号", "BillNo")]
-        BillNo,
-        [MemberDescription("单据日期", "BillDate")]
-        BillDate,
-        [MemberDescription("盘点人", "Checker")]
-        Checker,
-        [MemberDescription("盘点时间", "CheckingTime")]
-        CheckingTime,
-        [MemberDescription("状态", "Status")]
-        Status,
-    }
-
-    /// <summary>
     /// 商品资料
     /// </summary>
     public enum GoodsEnum
@@ -1163,8 +1746,8 @@ namespace Utility
         Name,
         [MemberDescription("售价", "Price")]
         Price,
-        [MemberDescription("条码", "Barcode")]
-        BarCode,
+        [MemberDescription("条形码", "Barcode")]
+        Barcode,
         [MemberDescription("规格", "SPEC")]
         SPEC,
         [MemberDescription("单位", "Unit")]
@@ -1248,13 +1831,13 @@ namespace Utility
         NonInStoreQty,
         [MemberDescription("已调入未到店", "NonArrivalQty")]
         NonArrivalQty,
-        [MemberDescription("外部已提未售商品", "ExtraPresellQty")]
+        [MemberDescription("外部已提未售", "ExtraPresellQty")]
         ExtraPresellQty,
-        [MemberDescription("外部已售未提商品", "ExtraSoldQty")]
+        [MemberDescription("外部已售未提", "ExtraSoldQty")]
         ExtraSoldQty,
-        [MemberDescription("内部已提未售商品", "IntraPresellQty")]
+        [MemberDescription("内部已提未售", "IntraPresellQty")]
         IntraPresellQty,
-        [MemberDescription("内部已售未提商品", "IntraSoldQty")]
+        [MemberDescription("内部已售未提", "IntraSoldQty")]
         IntraSoldQty,
         [MemberDescription("已调出未销账", "NonChargeOffQty")]
         NonChargeOffQty,
@@ -1262,6 +1845,8 @@ namespace Utility
         NonRecordedQty,
         [MemberDescription("团购", "GroupBuyingQty")]
         GroupBuyingQty,
+        [MemberDescription("灾害", "DisasterQty")]
+        DisasterQty,
         [MemberDescription("其他", "OtherQty")]
         OtherQty,
         [MemberDescription("过期变质破损", "ScrapQty")]

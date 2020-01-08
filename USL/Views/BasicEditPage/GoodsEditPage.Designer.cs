@@ -52,7 +52,6 @@
             this.txtSPEC = new DevExpress.XtraEditors.TextEdit();
             this.txtInnerBox = new DevExpress.XtraEditors.TextEdit();
             this.txtPCS = new DevExpress.XtraEditors.TextEdit();
-            this.txtQty = new DevExpress.XtraEditors.TextEdit();
             this.txtPrice = new DevExpress.XtraEditors.TextEdit();
             this.txtName = new DevExpress.XtraEditors.TextEdit();
             this.txtCode = new DevExpress.XtraEditors.TextEdit();
@@ -81,13 +80,8 @@
             this.layoutControlItem39 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem40 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem41 = new DevExpress.XtraLayout.LayoutControlItem();
-            this.lciQty = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem42 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem22 = new DevExpress.XtraLayout.LayoutControlItem();
-            this.layoutControlItem24 = new DevExpress.XtraLayout.LayoutControlItem();
-            this.layoutControlItem25 = new DevExpress.XtraLayout.LayoutControlItem();
-            this.layoutControlItem29 = new DevExpress.XtraLayout.LayoutControlItem();
-            this.layoutControlItem30 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem32 = new DevExpress.XtraLayout.LayoutControlItem();
             this.lcgMainMark = new DevExpress.XtraLayout.LayoutControlGroup();
             this.layoutControlItem20 = new DevExpress.XtraLayout.LayoutControlItem();
@@ -97,15 +91,19 @@
             this.layoutControlItem44 = new DevExpress.XtraLayout.LayoutControlItem();
             this.lcgRemark = new DevExpress.XtraLayout.LayoutControlGroup();
             this.layoutControlItem43 = new DevExpress.XtraLayout.LayoutControlItem();
-            this.layoutControlItem27 = new DevExpress.XtraLayout.LayoutControlItem();
-            this.layoutControlItem31 = new DevExpress.XtraLayout.LayoutControlItem();
-            this.layoutControlItem26 = new DevExpress.XtraLayout.LayoutControlItem();
             this.lciCycle = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem45 = new DevExpress.XtraLayout.LayoutControlItem();
             this.lciCavityNumber = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem35 = new DevExpress.XtraLayout.LayoutControlItem();
-            this.lciPurchasePrice = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem33 = new DevExpress.XtraLayout.LayoutControlItem();
+            this.layoutControlItem24 = new DevExpress.XtraLayout.LayoutControlItem();
+            this.layoutControlItem25 = new DevExpress.XtraLayout.LayoutControlItem();
+            this.layoutControlItem26 = new DevExpress.XtraLayout.LayoutControlItem();
+            this.layoutControlItem29 = new DevExpress.XtraLayout.LayoutControlItem();
+            this.layoutControlItem30 = new DevExpress.XtraLayout.LayoutControlItem();
+            this.layoutControlItem27 = new DevExpress.XtraLayout.LayoutControlItem();
+            this.layoutControlItem31 = new DevExpress.XtraLayout.LayoutControlItem();
+            this.lciPurchasePrice = new DevExpress.XtraLayout.LayoutControlItem();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl)).BeginInit();
             this.layoutControl.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtPurchasePrice.Properties)).BeginInit();
@@ -129,7 +127,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.txtSPEC.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtInnerBox.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtPCS.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtQty.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtPrice.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtName.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtCode.Properties)).BeginInit();
@@ -152,13 +149,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem39)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem40)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem41)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.lciQty)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem42)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem22)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem24)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem25)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem29)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem30)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem32)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lcgMainMark)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem20)).BeginInit();
@@ -168,15 +160,19 @@
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem44)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lcgRemark)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem43)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem27)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem31)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem26)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lciCycle)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem45)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lciCavityNumber)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem35)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.lciPurchasePrice)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem33)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem24)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem25)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem26)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem29)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem30)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem27)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem31)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lciPurchasePrice)).BeginInit();
             this.SuspendLayout();
             // 
             // layoutControl
@@ -202,7 +198,6 @@
             this.layoutControl.Controls.Add(this.txtSPEC);
             this.layoutControl.Controls.Add(this.txtInnerBox);
             this.layoutControl.Controls.Add(this.txtPCS);
-            this.layoutControl.Controls.Add(this.txtQty);
             this.layoutControl.Controls.Add(this.txtPrice);
             this.layoutControl.Controls.Add(this.txtName);
             this.layoutControl.Controls.Add(this.txtCode);
@@ -273,9 +268,9 @@
             // 
             this.meInnerMark.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.goodsBindingSource, "InnerMark", true));
             this.meInnerMark.EnterMoveNextControl = true;
-            this.meInnerMark.Location = new System.Drawing.Point(424, 380);
+            this.meInnerMark.Location = new System.Drawing.Point(424, 356);
             this.meInnerMark.Name = "meInnerMark";
-            this.meInnerMark.Size = new System.Drawing.Size(172, 96);
+            this.meInnerMark.Size = new System.Drawing.Size(172, 120);
             this.meInnerMark.StyleController = this.layoutControl;
             this.meInnerMark.TabIndex = 49;
             // 
@@ -283,9 +278,9 @@
             // 
             this.meSideMark.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.goodsBindingSource, "SideMark", true));
             this.meSideMark.EnterMoveNextControl = true;
-            this.meSideMark.Location = new System.Drawing.Point(224, 380);
+            this.meSideMark.Location = new System.Drawing.Point(224, 356);
             this.meSideMark.Name = "meSideMark";
-            this.meSideMark.Size = new System.Drawing.Size(172, 96);
+            this.meSideMark.Size = new System.Drawing.Size(172, 120);
             this.meSideMark.StyleController = this.layoutControl;
             this.meSideMark.TabIndex = 48;
             // 
@@ -293,9 +288,9 @@
             // 
             this.meMainMark.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.goodsBindingSource, "MainMark", true));
             this.meMainMark.EnterMoveNextControl = true;
-            this.meMainMark.Location = new System.Drawing.Point(24, 380);
+            this.meMainMark.Location = new System.Drawing.Point(24, 356);
             this.meMainMark.Name = "meMainMark";
-            this.meMainMark.Size = new System.Drawing.Size(172, 96);
+            this.meMainMark.Size = new System.Drawing.Size(172, 120);
             this.meMainMark.StyleController = this.layoutControl;
             this.meMainMark.TabIndex = 47;
             // 
@@ -303,9 +298,9 @@
             // 
             this.meRemark.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.goodsBindingSource, "Remark", true));
             this.meRemark.EnterMoveNextControl = true;
-            this.meRemark.Location = new System.Drawing.Point(624, 380);
+            this.meRemark.Location = new System.Drawing.Point(624, 356);
             this.meRemark.Name = "meRemark";
-            this.meRemark.Size = new System.Drawing.Size(152, 96);
+            this.meRemark.Size = new System.Drawing.Size(152, 120);
             this.meRemark.StyleController = this.layoutControl;
             this.meRemark.TabIndex = 46;
             // 
@@ -326,7 +321,7 @@
             // 
             this.txtOutPutVAT.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.goodsBindingSource, "OutPutVAT", true));
             this.txtOutPutVAT.EnterMoveNextControl = true;
-            this.txtOutPutVAT.Location = new System.Drawing.Point(122, 325);
+            this.txtOutPutVAT.Location = new System.Drawing.Point(122, 301);
             this.txtOutPutVAT.Name = "txtOutPutVAT";
             this.txtOutPutVAT.Size = new System.Drawing.Size(331, 20);
             this.txtOutPutVAT.StyleController = this.layoutControl;
@@ -336,7 +331,7 @@
             // 
             this.txtInPutVAT.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.goodsBindingSource, "InPutVAT", true));
             this.txtInPutVAT.EnterMoveNextControl = true;
-            this.txtInPutVAT.Location = new System.Drawing.Point(122, 301);
+            this.txtInPutVAT.Location = new System.Drawing.Point(122, 277);
             this.txtInPutVAT.Name = "txtInPutVAT";
             this.txtInPutVAT.Size = new System.Drawing.Size(331, 20);
             this.txtInPutVAT.StyleController = this.layoutControl;
@@ -346,7 +341,7 @@
             // 
             this.txtLowerLimit.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.goodsBindingSource, "LowerLimit", true));
             this.txtLowerLimit.EnterMoveNextControl = true;
-            this.txtLowerLimit.Location = new System.Drawing.Point(122, 277);
+            this.txtLowerLimit.Location = new System.Drawing.Point(122, 253);
             this.txtLowerLimit.Name = "txtLowerLimit";
             this.txtLowerLimit.Size = new System.Drawing.Size(331, 20);
             this.txtLowerLimit.StyleController = this.layoutControl;
@@ -356,7 +351,7 @@
             // 
             this.txtUpperLimit.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.goodsBindingSource, "UpperLimit", true));
             this.txtUpperLimit.EnterMoveNextControl = true;
-            this.txtUpperLimit.Location = new System.Drawing.Point(122, 253);
+            this.txtUpperLimit.Location = new System.Drawing.Point(122, 229);
             this.txtUpperLimit.Name = "txtUpperLimit";
             this.txtUpperLimit.Size = new System.Drawing.Size(331, 20);
             this.txtUpperLimit.StyleController = this.layoutControl;
@@ -366,7 +361,7 @@
             // 
             this.txtVolume.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.goodsBindingSource, "Volume", true));
             this.txtVolume.EnterMoveNextControl = true;
-            this.txtVolume.Location = new System.Drawing.Point(122, 229);
+            this.txtVolume.Location = new System.Drawing.Point(122, 205);
             this.txtVolume.Name = "txtVolume";
             this.txtVolume.Size = new System.Drawing.Size(331, 20);
             this.txtVolume.StyleController = this.layoutControl;
@@ -406,7 +401,7 @@
             // 
             this.txtMEAS.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.goodsBindingSource, "MEAS", true));
             this.txtMEAS.EnterMoveNextControl = true;
-            this.txtMEAS.Location = new System.Drawing.Point(548, 229);
+            this.txtMEAS.Location = new System.Drawing.Point(548, 205);
             this.txtMEAS.Name = "txtMEAS";
             this.txtMEAS.Size = new System.Drawing.Size(240, 20);
             this.txtMEAS.StyleController = this.layoutControl;
@@ -426,7 +421,7 @@
             // 
             this.txtInnerBox.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.goodsBindingSource, "InnerBox", true));
             this.txtInnerBox.EnterMoveNextControl = true;
-            this.txtInnerBox.Location = new System.Drawing.Point(548, 325);
+            this.txtInnerBox.Location = new System.Drawing.Point(548, 301);
             this.txtInnerBox.Name = "txtInnerBox";
             this.txtInnerBox.Size = new System.Drawing.Size(240, 20);
             this.txtInnerBox.StyleController = this.layoutControl;
@@ -436,21 +431,11 @@
             // 
             this.txtPCS.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.goodsBindingSource, "PCS", true));
             this.txtPCS.EnterMoveNextControl = true;
-            this.txtPCS.Location = new System.Drawing.Point(548, 301);
+            this.txtPCS.Location = new System.Drawing.Point(548, 277);
             this.txtPCS.Name = "txtPCS";
             this.txtPCS.Size = new System.Drawing.Size(240, 20);
             this.txtPCS.StyleController = this.layoutControl;
             this.txtPCS.TabIndex = 32;
-            // 
-            // txtQty
-            // 
-            this.txtQty.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.goodsBindingSource, "Qty", true));
-            this.txtQty.EnterMoveNextControl = true;
-            this.txtQty.Location = new System.Drawing.Point(103, 205);
-            this.txtQty.Name = "txtQty";
-            this.txtQty.Size = new System.Drawing.Size(685, 20);
-            this.txtQty.StyleController = this.layoutControl;
-            this.txtQty.TabIndex = 31;
             // 
             // txtPrice
             // 
@@ -493,7 +478,7 @@
             // 
             // lblOutPutVAT
             // 
-            this.lblOutPutVAT.Location = new System.Drawing.Point(12, 325);
+            this.lblOutPutVAT.Location = new System.Drawing.Point(12, 301);
             this.lblOutPutVAT.Name = "lblOutPutVAT";
             this.lblOutPutVAT.Size = new System.Drawing.Size(106, 20);
             this.lblOutPutVAT.StyleController = this.layoutControl;
@@ -502,7 +487,7 @@
             // 
             // lblInPutVAT
             // 
-            this.lblInPutVAT.Location = new System.Drawing.Point(12, 301);
+            this.lblInPutVAT.Location = new System.Drawing.Point(12, 277);
             this.lblInPutVAT.Name = "lblInPutVAT";
             this.lblInPutVAT.Size = new System.Drawing.Size(106, 20);
             this.lblInPutVAT.StyleController = this.layoutControl;
@@ -511,7 +496,7 @@
             // 
             // lblLowerLimit
             // 
-            this.lblLowerLimit.Location = new System.Drawing.Point(12, 277);
+            this.lblLowerLimit.Location = new System.Drawing.Point(12, 253);
             this.lblLowerLimit.Name = "lblLowerLimit";
             this.lblLowerLimit.Size = new System.Drawing.Size(106, 20);
             this.lblLowerLimit.StyleController = this.layoutControl;
@@ -520,7 +505,7 @@
             // 
             // lblUpperLimit
             // 
-            this.lblUpperLimit.Location = new System.Drawing.Point(12, 253);
+            this.lblUpperLimit.Location = new System.Drawing.Point(12, 229);
             this.lblUpperLimit.Name = "lblUpperLimit";
             this.lblUpperLimit.Size = new System.Drawing.Size(106, 20);
             this.lblUpperLimit.StyleController = this.layoutControl;
@@ -529,7 +514,7 @@
             // 
             // lblVolume
             // 
-            this.lblVolume.Location = new System.Drawing.Point(12, 229);
+            this.lblVolume.Location = new System.Drawing.Point(12, 205);
             this.lblVolume.Name = "lblVolume";
             this.lblVolume.Size = new System.Drawing.Size(106, 20);
             this.lblVolume.StyleController = this.layoutControl;
@@ -540,7 +525,7 @@
             // 
             this.lueGoodsType.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.goodsBindingSource, "GoodsTypeID", true));
             this.lueGoodsType.EnterMoveNextControl = true;
-            this.lueGoodsType.Location = new System.Drawing.Point(548, 253);
+            this.lueGoodsType.Location = new System.Drawing.Point(548, 229);
             this.lueGoodsType.Name = "lueGoodsType";
             this.lueGoodsType.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
@@ -566,7 +551,7 @@
             // 
             this.luePackaging.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.goodsBindingSource, "PackagingID", true));
             this.luePackaging.EnterMoveNextControl = true;
-            this.luePackaging.Location = new System.Drawing.Point(548, 277);
+            this.luePackaging.Location = new System.Drawing.Point(548, 253);
             this.luePackaging.Name = "luePackaging";
             this.luePackaging.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
@@ -654,8 +639,7 @@
             this.layoutControlItem30,
             this.layoutControlItem27,
             this.layoutControlItem31,
-            this.lciPurchasePrice,
-            this.lciQty});
+            this.lciPurchasePrice});
             this.layoutControlGroup1.Name = "Root";
             this.layoutControlGroup1.Size = new System.Drawing.Size(800, 500);
             this.layoutControlGroup1.TextVisible = false;
@@ -664,7 +648,7 @@
             // 
             this.layoutControlItem15.Control = this.lblVolume;
             this.layoutControlItem15.CustomizationFormText = "layoutControlItem15";
-            this.layoutControlItem15.Location = new System.Drawing.Point(0, 217);
+            this.layoutControlItem15.Location = new System.Drawing.Point(0, 193);
             this.layoutControlItem15.MaxSize = new System.Drawing.Size(110, 24);
             this.layoutControlItem15.MinSize = new System.Drawing.Size(110, 24);
             this.layoutControlItem15.Name = "layoutControlItem15";
@@ -677,7 +661,7 @@
             // 
             this.layoutControlItem16.Control = this.lblUpperLimit;
             this.layoutControlItem16.CustomizationFormText = "layoutControlItem16";
-            this.layoutControlItem16.Location = new System.Drawing.Point(0, 241);
+            this.layoutControlItem16.Location = new System.Drawing.Point(0, 217);
             this.layoutControlItem16.MaxSize = new System.Drawing.Size(110, 24);
             this.layoutControlItem16.MinSize = new System.Drawing.Size(110, 24);
             this.layoutControlItem16.Name = "layoutControlItem16";
@@ -690,7 +674,7 @@
             // 
             this.layoutControlItem17.Control = this.lblLowerLimit;
             this.layoutControlItem17.CustomizationFormText = "layoutControlItem17";
-            this.layoutControlItem17.Location = new System.Drawing.Point(0, 265);
+            this.layoutControlItem17.Location = new System.Drawing.Point(0, 241);
             this.layoutControlItem17.MaxSize = new System.Drawing.Size(110, 24);
             this.layoutControlItem17.MinSize = new System.Drawing.Size(110, 24);
             this.layoutControlItem17.Name = "layoutControlItem17";
@@ -703,7 +687,7 @@
             // 
             this.layoutControlItem18.Control = this.lblInPutVAT;
             this.layoutControlItem18.CustomizationFormText = "layoutControlItem18";
-            this.layoutControlItem18.Location = new System.Drawing.Point(0, 289);
+            this.layoutControlItem18.Location = new System.Drawing.Point(0, 265);
             this.layoutControlItem18.MaxSize = new System.Drawing.Size(110, 24);
             this.layoutControlItem18.MinSize = new System.Drawing.Size(110, 24);
             this.layoutControlItem18.Name = "layoutControlItem18";
@@ -717,7 +701,7 @@
             // 
             this.layoutControlItem19.Control = this.lblOutPutVAT;
             this.layoutControlItem19.CustomizationFormText = "layoutControlItem19";
-            this.layoutControlItem19.Location = new System.Drawing.Point(0, 313);
+            this.layoutControlItem19.Location = new System.Drawing.Point(0, 289);
             this.layoutControlItem19.MaxSize = new System.Drawing.Size(110, 24);
             this.layoutControlItem19.MinSize = new System.Drawing.Size(110, 24);
             this.layoutControlItem19.Name = "layoutControlItem19";
@@ -751,7 +735,7 @@
             // 
             this.layoutControlItem37.Control = this.txtVolume;
             this.layoutControlItem37.CustomizationFormText = "layoutControlItem37";
-            this.layoutControlItem37.Location = new System.Drawing.Point(110, 217);
+            this.layoutControlItem37.Location = new System.Drawing.Point(110, 193);
             this.layoutControlItem37.Name = "layoutControlItem37";
             this.layoutControlItem37.Size = new System.Drawing.Size(335, 24);
             this.layoutControlItem37.TextSize = new System.Drawing.Size(0, 0);
@@ -761,7 +745,7 @@
             // 
             this.layoutControlItem38.Control = this.txtUpperLimit;
             this.layoutControlItem38.CustomizationFormText = "layoutControlItem38";
-            this.layoutControlItem38.Location = new System.Drawing.Point(110, 241);
+            this.layoutControlItem38.Location = new System.Drawing.Point(110, 217);
             this.layoutControlItem38.Name = "layoutControlItem38";
             this.layoutControlItem38.Size = new System.Drawing.Size(335, 24);
             this.layoutControlItem38.TextSize = new System.Drawing.Size(0, 0);
@@ -771,7 +755,7 @@
             // 
             this.layoutControlItem39.Control = this.txtLowerLimit;
             this.layoutControlItem39.CustomizationFormText = "layoutControlItem39";
-            this.layoutControlItem39.Location = new System.Drawing.Point(110, 265);
+            this.layoutControlItem39.Location = new System.Drawing.Point(110, 241);
             this.layoutControlItem39.Name = "layoutControlItem39";
             this.layoutControlItem39.Size = new System.Drawing.Size(335, 24);
             this.layoutControlItem39.TextSize = new System.Drawing.Size(0, 0);
@@ -781,7 +765,7 @@
             // 
             this.layoutControlItem40.Control = this.txtInPutVAT;
             this.layoutControlItem40.CustomizationFormText = "layoutControlItem40";
-            this.layoutControlItem40.Location = new System.Drawing.Point(110, 289);
+            this.layoutControlItem40.Location = new System.Drawing.Point(110, 265);
             this.layoutControlItem40.Name = "layoutControlItem40";
             this.layoutControlItem40.Size = new System.Drawing.Size(335, 24);
             this.layoutControlItem40.TextSize = new System.Drawing.Size(0, 0);
@@ -792,22 +776,12 @@
             // 
             this.layoutControlItem41.Control = this.txtOutPutVAT;
             this.layoutControlItem41.CustomizationFormText = "layoutControlItem41";
-            this.layoutControlItem41.Location = new System.Drawing.Point(110, 313);
+            this.layoutControlItem41.Location = new System.Drawing.Point(110, 289);
             this.layoutControlItem41.Name = "layoutControlItem41";
             this.layoutControlItem41.Size = new System.Drawing.Size(335, 24);
             this.layoutControlItem41.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem41.TextVisible = false;
             this.layoutControlItem41.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Never;
-            // 
-            // lciQty
-            // 
-            this.lciQty.Control = this.txtQty;
-            this.lciQty.CustomizationFormText = "库存数量";
-            this.lciQty.Location = new System.Drawing.Point(0, 193);
-            this.lciQty.Name = "lciQty";
-            this.lciQty.Size = new System.Drawing.Size(780, 24);
-            this.lciQty.Text = "库存数量";
-            this.lciQty.TextSize = new System.Drawing.Size(88, 14);
             // 
             // layoutControlItem42
             // 
@@ -838,58 +812,6 @@
             this.layoutControlItem22.Text = "货号";
             this.layoutControlItem22.TextSize = new System.Drawing.Size(88, 16);
             // 
-            // layoutControlItem24
-            // 
-            this.layoutControlItem24.Control = this.txtName;
-            this.layoutControlItem24.CustomizationFormText = "品名";
-            this.layoutControlItem24.ImageOptions.Alignment = System.Drawing.ContentAlignment.MiddleRight;
-            this.layoutControlItem24.ImageOptions.Image = global::USL.Properties.Resources.mark;
-            this.layoutControlItem24.Location = new System.Drawing.Point(0, 24);
-            this.layoutControlItem24.Name = "layoutControlItem24";
-            this.layoutControlItem24.Size = new System.Drawing.Size(660, 24);
-            this.layoutControlItem24.Text = "品名";
-            this.layoutControlItem24.TextSize = new System.Drawing.Size(88, 16);
-            // 
-            // layoutControlItem25
-            // 
-            this.layoutControlItem25.Control = this.lueGoodsType;
-            this.layoutControlItem25.CustomizationFormText = "货品类型";
-            this.layoutControlItem25.ImageOptions.Alignment = System.Drawing.ContentAlignment.MiddleRight;
-            this.layoutControlItem25.ImageOptions.Image = global::USL.Properties.Resources.mark;
-            this.layoutControlItem25.Location = new System.Drawing.Point(445, 241);
-            this.layoutControlItem25.Name = "layoutControlItem25";
-            this.layoutControlItem25.Size = new System.Drawing.Size(335, 24);
-            this.layoutControlItem25.Text = "货品类型";
-            this.layoutControlItem25.TextSize = new System.Drawing.Size(88, 16);
-            // 
-            // layoutControlItem29
-            // 
-            this.layoutControlItem29.Control = this.txtPCS;
-            this.layoutControlItem29.CustomizationFormText = "装箱数(PCS)";
-            this.layoutControlItem29.ImageOptions.Alignment = System.Drawing.ContentAlignment.MiddleRight;
-            this.layoutControlItem29.ImageOptions.Image = global::USL.Properties.Resources.mark;
-            this.layoutControlItem29.Location = new System.Drawing.Point(445, 289);
-            this.layoutControlItem29.MinSize = new System.Drawing.Size(54, 24);
-            this.layoutControlItem29.Name = "layoutControlItem29";
-            this.layoutControlItem29.Size = new System.Drawing.Size(335, 24);
-            this.layoutControlItem29.SizeConstraintsType = DevExpress.XtraLayout.SizeConstraintsType.Custom;
-            this.layoutControlItem29.Text = "装箱数(PCS)";
-            this.layoutControlItem29.TextSize = new System.Drawing.Size(88, 16);
-            // 
-            // layoutControlItem30
-            // 
-            this.layoutControlItem30.Control = this.txtInnerBox;
-            this.layoutControlItem30.CustomizationFormText = "内盒";
-            this.layoutControlItem30.ImageOptions.Alignment = System.Drawing.ContentAlignment.MiddleRight;
-            this.layoutControlItem30.ImageOptions.Image = global::USL.Properties.Resources.mark;
-            this.layoutControlItem30.Location = new System.Drawing.Point(445, 313);
-            this.layoutControlItem30.MinSize = new System.Drawing.Size(54, 24);
-            this.layoutControlItem30.Name = "layoutControlItem30";
-            this.layoutControlItem30.Size = new System.Drawing.Size(335, 24);
-            this.layoutControlItem30.SizeConstraintsType = DevExpress.XtraLayout.SizeConstraintsType.Custom;
-            this.layoutControlItem30.Text = "内盒";
-            this.layoutControlItem30.TextSize = new System.Drawing.Size(88, 16);
-            // 
             // layoutControlItem32
             // 
             this.layoutControlItem32.Control = this.txtSPEC;
@@ -907,9 +829,9 @@
             this.lcgMainMark.CustomizationFormText = "正唛";
             this.lcgMainMark.Items.AddRange(new DevExpress.XtraLayout.BaseLayoutItem[] {
             this.layoutControlItem20});
-            this.lcgMainMark.Location = new System.Drawing.Point(0, 337);
+            this.lcgMainMark.Location = new System.Drawing.Point(0, 313);
             this.lcgMainMark.Name = "lcgMainMark";
-            this.lcgMainMark.Size = new System.Drawing.Size(200, 143);
+            this.lcgMainMark.Size = new System.Drawing.Size(200, 167);
             this.lcgMainMark.Text = "正唛";
             // 
             // layoutControlItem20
@@ -918,7 +840,7 @@
             this.layoutControlItem20.CustomizationFormText = "layoutControlItem20";
             this.layoutControlItem20.Location = new System.Drawing.Point(0, 0);
             this.layoutControlItem20.Name = "layoutControlItem20";
-            this.layoutControlItem20.Size = new System.Drawing.Size(176, 100);
+            this.layoutControlItem20.Size = new System.Drawing.Size(176, 124);
             this.layoutControlItem20.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem20.TextVisible = false;
             // 
@@ -927,9 +849,9 @@
             this.lcgSideMark.CustomizationFormText = "侧唛";
             this.lcgSideMark.Items.AddRange(new DevExpress.XtraLayout.BaseLayoutItem[] {
             this.layoutControlItem23});
-            this.lcgSideMark.Location = new System.Drawing.Point(200, 337);
+            this.lcgSideMark.Location = new System.Drawing.Point(200, 313);
             this.lcgSideMark.Name = "lcgSideMark";
-            this.lcgSideMark.Size = new System.Drawing.Size(200, 143);
+            this.lcgSideMark.Size = new System.Drawing.Size(200, 167);
             this.lcgSideMark.Text = "侧唛";
             // 
             // layoutControlItem23
@@ -938,7 +860,7 @@
             this.layoutControlItem23.CustomizationFormText = "layoutControlItem23";
             this.layoutControlItem23.Location = new System.Drawing.Point(0, 0);
             this.layoutControlItem23.Name = "layoutControlItem23";
-            this.layoutControlItem23.Size = new System.Drawing.Size(176, 100);
+            this.layoutControlItem23.Size = new System.Drawing.Size(176, 124);
             this.layoutControlItem23.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem23.TextVisible = false;
             // 
@@ -947,9 +869,9 @@
             this.lcgInnerMark.CustomizationFormText = "内盒唛";
             this.lcgInnerMark.Items.AddRange(new DevExpress.XtraLayout.BaseLayoutItem[] {
             this.layoutControlItem44});
-            this.lcgInnerMark.Location = new System.Drawing.Point(400, 337);
+            this.lcgInnerMark.Location = new System.Drawing.Point(400, 313);
             this.lcgInnerMark.Name = "lcgInnerMark";
-            this.lcgInnerMark.Size = new System.Drawing.Size(200, 143);
+            this.lcgInnerMark.Size = new System.Drawing.Size(200, 167);
             this.lcgInnerMark.Text = "内盒唛";
             // 
             // layoutControlItem44
@@ -958,7 +880,7 @@
             this.layoutControlItem44.CustomizationFormText = "layoutControlItem44";
             this.layoutControlItem44.Location = new System.Drawing.Point(0, 0);
             this.layoutControlItem44.Name = "layoutControlItem44";
-            this.layoutControlItem44.Size = new System.Drawing.Size(176, 100);
+            this.layoutControlItem44.Size = new System.Drawing.Size(176, 124);
             this.layoutControlItem44.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem44.TextVisible = false;
             // 
@@ -967,9 +889,9 @@
             this.lcgRemark.CustomizationFormText = "备注";
             this.lcgRemark.Items.AddRange(new DevExpress.XtraLayout.BaseLayoutItem[] {
             this.layoutControlItem43});
-            this.lcgRemark.Location = new System.Drawing.Point(600, 337);
+            this.lcgRemark.Location = new System.Drawing.Point(600, 313);
             this.lcgRemark.Name = "lcgRemark";
-            this.lcgRemark.Size = new System.Drawing.Size(180, 143);
+            this.lcgRemark.Size = new System.Drawing.Size(180, 167);
             this.lcgRemark.Text = "备注";
             // 
             // layoutControlItem43
@@ -978,47 +900,9 @@
             this.layoutControlItem43.CustomizationFormText = "layoutControlItem43";
             this.layoutControlItem43.Location = new System.Drawing.Point(0, 0);
             this.layoutControlItem43.Name = "layoutControlItem43";
-            this.layoutControlItem43.Size = new System.Drawing.Size(156, 100);
+            this.layoutControlItem43.Size = new System.Drawing.Size(156, 124);
             this.layoutControlItem43.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem43.TextVisible = false;
-            // 
-            // layoutControlItem27
-            // 
-            this.layoutControlItem27.Control = this.txtPrice;
-            this.layoutControlItem27.CustomizationFormText = "单价";
-            this.layoutControlItem27.ImageOptions.Alignment = System.Drawing.ContentAlignment.MiddleRight;
-            this.layoutControlItem27.ImageOptions.Image = global::USL.Properties.Resources.mark;
-            this.layoutControlItem27.Location = new System.Drawing.Point(0, 48);
-            this.layoutControlItem27.Name = "layoutControlItem27";
-            this.layoutControlItem27.Size = new System.Drawing.Size(660, 24);
-            this.layoutControlItem27.Text = "单价";
-            this.layoutControlItem27.TextSize = new System.Drawing.Size(88, 16);
-            // 
-            // layoutControlItem31
-            // 
-            this.layoutControlItem31.Control = this.txtUnit;
-            this.layoutControlItem31.CustomizationFormText = "单位";
-            this.layoutControlItem31.ImageOptions.Alignment = System.Drawing.ContentAlignment.MiddleRight;
-            this.layoutControlItem31.ImageOptions.Image = global::USL.Properties.Resources.mark;
-            this.layoutControlItem31.Location = new System.Drawing.Point(0, 72);
-            this.layoutControlItem31.MinSize = new System.Drawing.Size(50, 25);
-            this.layoutControlItem31.Name = "layoutControlItem31";
-            this.layoutControlItem31.Size = new System.Drawing.Size(660, 25);
-            this.layoutControlItem31.SizeConstraintsType = DevExpress.XtraLayout.SizeConstraintsType.Custom;
-            this.layoutControlItem31.Text = "单位";
-            this.layoutControlItem31.TextSize = new System.Drawing.Size(88, 16);
-            // 
-            // layoutControlItem26
-            // 
-            this.layoutControlItem26.Control = this.luePackaging;
-            this.layoutControlItem26.CustomizationFormText = "包装方式";
-            this.layoutControlItem26.ImageOptions.Alignment = System.Drawing.ContentAlignment.MiddleRight;
-            this.layoutControlItem26.ImageOptions.Image = global::USL.Properties.Resources.mark;
-            this.layoutControlItem26.Location = new System.Drawing.Point(445, 265);
-            this.layoutControlItem26.Name = "layoutControlItem26";
-            this.layoutControlItem26.Size = new System.Drawing.Size(335, 24);
-            this.layoutControlItem26.Text = "包装方式";
-            this.layoutControlItem26.TextSize = new System.Drawing.Size(88, 16);
             // 
             // lciCycle
             // 
@@ -1062,6 +946,108 @@
             this.layoutControlItem35.Text = "净值(克)";
             this.layoutControlItem35.TextSize = new System.Drawing.Size(88, 14);
             // 
+            // layoutControlItem33
+            // 
+            this.layoutControlItem33.Control = this.txtMEAS;
+            this.layoutControlItem33.CustomizationFormText = "layoutControlItem33";
+            this.layoutControlItem33.Location = new System.Drawing.Point(445, 193);
+            this.layoutControlItem33.MinSize = new System.Drawing.Size(54, 24);
+            this.layoutControlItem33.Name = "layoutControlItem33";
+            this.layoutControlItem33.Size = new System.Drawing.Size(335, 24);
+            this.layoutControlItem33.SizeConstraintsType = DevExpress.XtraLayout.SizeConstraintsType.Custom;
+            this.layoutControlItem33.Text = "外箱规格(CM)";
+            this.layoutControlItem33.TextSize = new System.Drawing.Size(88, 14);
+            // 
+            // layoutControlItem24
+            // 
+            this.layoutControlItem24.Control = this.txtName;
+            this.layoutControlItem24.CustomizationFormText = "品名";
+            this.layoutControlItem24.ImageOptions.Alignment = System.Drawing.ContentAlignment.MiddleRight;
+            this.layoutControlItem24.ImageOptions.Image = global::USL.Properties.Resources.mark;
+            this.layoutControlItem24.Location = new System.Drawing.Point(0, 24);
+            this.layoutControlItem24.Name = "layoutControlItem24";
+            this.layoutControlItem24.Size = new System.Drawing.Size(660, 24);
+            this.layoutControlItem24.Text = "品名";
+            this.layoutControlItem24.TextSize = new System.Drawing.Size(88, 16);
+            // 
+            // layoutControlItem25
+            // 
+            this.layoutControlItem25.Control = this.lueGoodsType;
+            this.layoutControlItem25.CustomizationFormText = "货品类型";
+            this.layoutControlItem25.ImageOptions.Alignment = System.Drawing.ContentAlignment.MiddleRight;
+            this.layoutControlItem25.ImageOptions.Image = global::USL.Properties.Resources.mark;
+            this.layoutControlItem25.Location = new System.Drawing.Point(445, 217);
+            this.layoutControlItem25.Name = "layoutControlItem25";
+            this.layoutControlItem25.Size = new System.Drawing.Size(335, 24);
+            this.layoutControlItem25.Text = "货品类型";
+            this.layoutControlItem25.TextSize = new System.Drawing.Size(88, 16);
+            // 
+            // layoutControlItem26
+            // 
+            this.layoutControlItem26.Control = this.luePackaging;
+            this.layoutControlItem26.CustomizationFormText = "包装方式";
+            this.layoutControlItem26.ImageOptions.Alignment = System.Drawing.ContentAlignment.MiddleRight;
+            this.layoutControlItem26.ImageOptions.Image = global::USL.Properties.Resources.mark;
+            this.layoutControlItem26.Location = new System.Drawing.Point(445, 241);
+            this.layoutControlItem26.Name = "layoutControlItem26";
+            this.layoutControlItem26.Size = new System.Drawing.Size(335, 24);
+            this.layoutControlItem26.Text = "包装方式";
+            this.layoutControlItem26.TextSize = new System.Drawing.Size(88, 16);
+            // 
+            // layoutControlItem29
+            // 
+            this.layoutControlItem29.Control = this.txtPCS;
+            this.layoutControlItem29.CustomizationFormText = "装箱数(PCS)";
+            this.layoutControlItem29.ImageOptions.Alignment = System.Drawing.ContentAlignment.MiddleRight;
+            this.layoutControlItem29.ImageOptions.Image = global::USL.Properties.Resources.mark;
+            this.layoutControlItem29.Location = new System.Drawing.Point(445, 265);
+            this.layoutControlItem29.MinSize = new System.Drawing.Size(54, 24);
+            this.layoutControlItem29.Name = "layoutControlItem29";
+            this.layoutControlItem29.Size = new System.Drawing.Size(335, 24);
+            this.layoutControlItem29.SizeConstraintsType = DevExpress.XtraLayout.SizeConstraintsType.Custom;
+            this.layoutControlItem29.Text = "装箱数(PCS)";
+            this.layoutControlItem29.TextSize = new System.Drawing.Size(88, 16);
+            // 
+            // layoutControlItem30
+            // 
+            this.layoutControlItem30.Control = this.txtInnerBox;
+            this.layoutControlItem30.CustomizationFormText = "内盒";
+            this.layoutControlItem30.ImageOptions.Alignment = System.Drawing.ContentAlignment.MiddleRight;
+            this.layoutControlItem30.ImageOptions.Image = global::USL.Properties.Resources.mark;
+            this.layoutControlItem30.Location = new System.Drawing.Point(445, 289);
+            this.layoutControlItem30.MinSize = new System.Drawing.Size(54, 24);
+            this.layoutControlItem30.Name = "layoutControlItem30";
+            this.layoutControlItem30.Size = new System.Drawing.Size(335, 24);
+            this.layoutControlItem30.SizeConstraintsType = DevExpress.XtraLayout.SizeConstraintsType.Custom;
+            this.layoutControlItem30.Text = "内盒";
+            this.layoutControlItem30.TextSize = new System.Drawing.Size(88, 16);
+            // 
+            // layoutControlItem27
+            // 
+            this.layoutControlItem27.Control = this.txtPrice;
+            this.layoutControlItem27.CustomizationFormText = "单价";
+            this.layoutControlItem27.ImageOptions.Alignment = System.Drawing.ContentAlignment.MiddleRight;
+            this.layoutControlItem27.ImageOptions.Image = global::USL.Properties.Resources.mark;
+            this.layoutControlItem27.Location = new System.Drawing.Point(0, 48);
+            this.layoutControlItem27.Name = "layoutControlItem27";
+            this.layoutControlItem27.Size = new System.Drawing.Size(660, 24);
+            this.layoutControlItem27.Text = "单价";
+            this.layoutControlItem27.TextSize = new System.Drawing.Size(88, 16);
+            // 
+            // layoutControlItem31
+            // 
+            this.layoutControlItem31.Control = this.txtUnit;
+            this.layoutControlItem31.CustomizationFormText = "单位";
+            this.layoutControlItem31.ImageOptions.Alignment = System.Drawing.ContentAlignment.MiddleRight;
+            this.layoutControlItem31.ImageOptions.Image = global::USL.Properties.Resources.mark;
+            this.layoutControlItem31.Location = new System.Drawing.Point(0, 72);
+            this.layoutControlItem31.MinSize = new System.Drawing.Size(50, 25);
+            this.layoutControlItem31.Name = "layoutControlItem31";
+            this.layoutControlItem31.Size = new System.Drawing.Size(660, 25);
+            this.layoutControlItem31.SizeConstraintsType = DevExpress.XtraLayout.SizeConstraintsType.Custom;
+            this.layoutControlItem31.Text = "单位";
+            this.layoutControlItem31.TextSize = new System.Drawing.Size(88, 16);
+            // 
             // lciPurchasePrice
             // 
             this.lciPurchasePrice.Control = this.txtPurchasePrice;
@@ -1072,18 +1058,6 @@
             this.lciPurchasePrice.TextAlignMode = DevExpress.XtraLayout.TextAlignModeItem.CustomSize;
             this.lciPurchasePrice.TextSize = new System.Drawing.Size(55, 20);
             this.lciPurchasePrice.TextToControlDistance = 5;
-            // 
-            // layoutControlItem33
-            // 
-            this.layoutControlItem33.Control = this.txtMEAS;
-            this.layoutControlItem33.CustomizationFormText = "layoutControlItem33";
-            this.layoutControlItem33.Location = new System.Drawing.Point(445, 217);
-            this.layoutControlItem33.MinSize = new System.Drawing.Size(54, 24);
-            this.layoutControlItem33.Name = "layoutControlItem33";
-            this.layoutControlItem33.Size = new System.Drawing.Size(335, 24);
-            this.layoutControlItem33.SizeConstraintsType = DevExpress.XtraLayout.SizeConstraintsType.Custom;
-            this.layoutControlItem33.Text = "外箱规格(CM)";
-            this.layoutControlItem33.TextSize = new System.Drawing.Size(88, 14);
             // 
             // GoodsEditPage
             // 
@@ -1115,7 +1089,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.txtSPEC.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtInnerBox.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtPCS.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtQty.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtPrice.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtName.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtCode.Properties)).EndInit();
@@ -1138,13 +1111,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem39)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem40)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem41)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.lciQty)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem42)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem22)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem24)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem25)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem29)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem30)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem32)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lcgMainMark)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem20)).EndInit();
@@ -1154,15 +1122,19 @@
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem44)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lcgRemark)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem43)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem27)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem31)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem26)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lciCycle)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem45)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lciCavityNumber)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem35)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.lciPurchasePrice)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem33)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem24)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem25)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem26)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem29)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem30)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem27)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem31)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lciPurchasePrice)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1198,7 +1170,6 @@
         private DevExpress.XtraEditors.TextEdit txtSPEC;
         private DevExpress.XtraEditors.TextEdit txtInnerBox;
         private DevExpress.XtraEditors.TextEdit txtPCS;
-        private DevExpress.XtraEditors.TextEdit txtQty;
         private DevExpress.XtraEditors.TextEdit txtPrice;
         private DevExpress.XtraEditors.TextEdit txtName;
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem34;
@@ -1212,7 +1183,6 @@
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem42;
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem43;
         private System.Windows.Forms.BindingSource goodsBindingSource;
-        private DevExpress.XtraLayout.LayoutControlItem lciQty;
         private DevExpress.XtraEditors.LookUpEdit lueGoodsType;
         private System.Windows.Forms.BindingSource goodsTypeBindingSource;
         private DevExpress.XtraEditors.LookUpEdit luePackaging;

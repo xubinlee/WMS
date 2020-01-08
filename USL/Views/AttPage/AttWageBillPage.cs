@@ -96,7 +96,7 @@ namespace USL
         {
             attWageBillHdBindingSource.DataSource = hd = new AttWageBillHd();
             uSPAttWageBillDtlBindingSource.DataSource = dtl = new List<USPAttWageBillDtl>();
-            hd.BillNo = MainForm.GetMaxBillNo(MainMenuConstants.WageBill, true).MaxBillNo;
+            hd.BillNo = MainForm.GetMaxBillNo(MainMenuEnum.WageBill, true).MaxBillNo;
             meLastAMT.EditValue = null;
             meTotalAMT.EditValue = null;
             headID = Guid.Empty;
@@ -472,9 +472,9 @@ namespace USL
                             if (i - 1 == 0)
                                 btnPrev.Enabled = false;
                             if (bills[i - 1].Status == 0)
-                                MainForm.itemDetailPageList[MainMenuConstants.AttWageBill].setNavButtonStatus(MainForm.mainMenuList[MainMenuConstants.AttWageBill], ButtonType.btnSave);
+                                MainForm.itemDetailPageList[MainMenuEnum.AttWageBill.ToString()].setNavButtonStatus(MainForm.mainMenuList[MainMenuEnum.AttWageBill.ToString()], ButtonType.btnSave);
                             else
-                                MainForm.itemDetailPageList[MainMenuConstants.AttWageBill].setNavButtonStatus(MainForm.mainMenuList[MainMenuConstants.AttWageBill], ButtonType.btnAudit);
+                                MainForm.itemDetailPageList[MainMenuEnum.AttWageBill.ToString()].setNavButtonStatus(MainForm.mainMenuList[MainMenuEnum.AttWageBill.ToString()], ButtonType.btnAudit);
                             break;
                         }
                         else
@@ -504,9 +504,9 @@ namespace USL
                             if (i + 1 == bills.Count - 1)
                                 btnNext.Enabled = false;
                             if (bills[i + 1].Status == 0)
-                                MainForm.itemDetailPageList[MainMenuConstants.AttWageBill].setNavButtonStatus(MainForm.mainMenuList[MainMenuConstants.AttWageBill], ButtonType.btnSave);
+                                MainForm.itemDetailPageList[MainMenuEnum.AttWageBill.ToString()].setNavButtonStatus(MainForm.mainMenuList[MainMenuEnum.AttWageBill.ToString()], ButtonType.btnSave);
                             else
-                                MainForm.itemDetailPageList[MainMenuConstants.AttWageBill].setNavButtonStatus(MainForm.mainMenuList[MainMenuConstants.AttWageBill], ButtonType.btnAudit);
+                                MainForm.itemDetailPageList[MainMenuEnum.AttWageBill.ToString()].setNavButtonStatus(MainForm.mainMenuList[MainMenuEnum.AttWageBill.ToString()], ButtonType.btnAudit);
                             break;
                         }
                         else

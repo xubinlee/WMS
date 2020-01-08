@@ -151,7 +151,7 @@ namespace USL
                 PrintSettingController psc = new PrintSettingController(chartControl1);
                 //页眉 
                 psc.PrintCompany = MainForm.Company;
-                MainMenu mm = MainForm.AllMainMenuList.FirstOrDefault(o => o.Name == MainMenuConstants.SalesSummaryMonthlyReport);
+                MainMenu mm = MainForm.AllMainMenuList.FirstOrDefault(o => o.Name == MainMenuEnum.SalesSummaryMonthlyReport.ToString());
                 if (mm != null)
                     psc.PrintHeader = mm.Caption;
                 psc.PrintSubTitle = MainForm.Contacts.Replace("\\r\\n", "\r\n");

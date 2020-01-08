@@ -47,8 +47,8 @@ namespace USL
                 lciTimeWage.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Never;
             }
             types = BLLFty.Create<BaseBLL>().GetListByNoTracking<TypesList>(null);
-            typesListBindingSource.DataSource = types.FindAll(o => o.Type == TypesListConstants.PrivilegeType);
-            wageTypeBindingSource.DataSource = types.FindAll(o => o.Type == TypesListConstants.WageType);
+            //typesListBindingSource.DataSource = types.FindAll(o => o.Type == TypesListConstants.PrivilegeType);
+            //wageTypeBindingSource.DataSource = types.FindAll(o => o.Type == TypesListConstants.WageType);
             if (obj == null)
             {
                 user = new UsersInfo();
@@ -89,7 +89,7 @@ namespace USL
                 }
                 Expression<Func<UsersInfo, bool>> whereLambda = o => o.ID != obj.ID && o.AttCardnumber.Equals(obj.AttCardnumber) && o.IsDel == false;
                 List<UsersInfo> users = BLLFty.Create<BaseBLL>().GetListByNoTracking<UsersInfo>(whereLambda);
-                if (string.IsNullOrEmpty(obj.AttCardnumber.Trim()) && users.Count > 0)
+                if (users.Count > 0 && user.ID != obj.ID && !string.IsNullOrEmpty(obj.AttCardnumber) && user.AttCardnumber == obj.AttCardnumber)
                 {
                     XtraMessageBox.Show(string.Format("考勤卡号：{0}已经存在，不允许添加重复考勤卡号。", obj.AttCardnumber), "操作提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return false;
@@ -116,7 +116,9 @@ namespace USL
                         p.SerialNo = menu.SerialNo;
                         p.UserID = user.ID;
                         p.Caption = menu.Caption;
-                        p.CheckBoxState = false;
+                        //p.CheckBoxState = false;
+                        // 由于不开放权限设置功能，暂时新增用户时分配所有权限
+                        p.CheckBoxState = true;
                         pList.Add(p);
                     }
                     //添加按钮权限信息
@@ -126,7 +128,9 @@ namespace USL
                         btnP.UserID = user.ID;
                         btnP.Name = btn.ToString();
                         btnP.Caption = EnumHelper.GetDescription<ButtonType>(btn, false);
-                        btnP.CheckBoxState = false;
+                        //btnP.CheckBoxState = false;
+                        // 由于不开放权限设置功能，暂时新增用户时分配所有权限
+                        btnP.CheckBoxState = true;
                         btnList.Add(btnP);
                     }
                     BLLFty.Create<UsersInfoBLL>().Insert(user, pList, btnList);

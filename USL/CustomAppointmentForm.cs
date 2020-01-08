@@ -146,19 +146,19 @@ namespace USL
             appointment.CustomFields["PlanYield"] = txtPlanYield.EditValue;
             appointment.CustomFields["Yielded"] = txtYielded.EditValue;
             appointment.CustomFields["AMT"] = tbLocation.EditValue;
-            if (lueGoods.EditValue != null)  //修改净重和计算周期
-            {
-                Goods goods = BLLFty.Create<BaseBLL>().GetListBy<Goods>(o =>
-                    o.ID == new Guid(lueGoods.EditValue.ToString())).FirstOrDefault();
-                if (goods != null && 
-                    ((!string.IsNullOrEmpty(txtNWeight.Text) && goods.NWeight != decimal.Parse(txtNWeight.Text)) ||
-                    (!string.IsNullOrEmpty(txtCycle.Text) && goods.Cycle != decimal.Parse(txtCycle.Text))))
-                {
-                    goods.NWeight = decimal.Parse(txtNWeight.Text);
-                    goods.Cycle = decimal.Parse(txtCycle.Text);
-                    BLLFty.Create<BaseBLL>().Modify(goods);
-                }
-            }
+            //if (lueGoods.EditValue != null)  //修改净重和计算周期
+            //{
+            //    Goods goods = BLLFty.Create<BaseBLL>().GetListBy<Goods>(o =>
+            //        o.ID == new Guid(lueGoods.EditValue.ToString())).FirstOrDefault();
+            //    //if (goods != null && 
+            //    //    ((!string.IsNullOrEmpty(txtNWeight.Text) && goods.NWeight != decimal.Parse(txtNWeight.Text)) ||
+            //    //    (!string.IsNullOrEmpty(txtCycle.Text) && goods.Cycle != decimal.Parse(txtCycle.Text))))
+            //    //{
+            //    //    //goods.NWeight = decimal.Parse(txtNWeight.Text);
+            //    //    //goods.Cycle = decimal.Parse(txtCycle.Text);
+            //    //    BLLFty.Create<BaseBLL>().Modify(goods);
+            //    //}
+            //}
             return base.SaveFormData(appointment);
         }
         /// <summary>
@@ -182,8 +182,8 @@ namespace USL
             {
                 goodsName = goods.Name;
                 tbSubject.Text = goods.Name;
-                txtNWeight.EditValue = goods.NWeight;
-                txtCycle.EditValue = goods.Cycle;
+                //txtNWeight.EditValue = goods.NWeight;
+                //txtCycle.EditValue = goods.Cycle;
                 #region 处理图片
                 if (!string.IsNullOrEmpty(lueGoods.Text))
                 {

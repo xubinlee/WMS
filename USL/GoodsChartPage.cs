@@ -183,7 +183,7 @@ namespace USL
             //    //页眉 
             //    psc.PrintCompany = MainForm.Company;
             //    MainMenu mm = ((List<MainMenu>)MainForm.dataSourceList[typeof(MainMenu)]).FirstOrDefault(o =>
-            //        o.Name == MainMenuConstants.AnnualSalesSummaryByGoodsReport);
+            //        o.Name == MainMenuEnum.AnnualSalesSummaryByGoodsReport);
             //    if (mm != null)
             //        psc.PrintHeader = mm.Caption;
             //    psc.PrintSubTitle = MainForm.Contacts.Replace("\\r\\n", "\r\n");

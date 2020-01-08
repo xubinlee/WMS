@@ -67,7 +67,7 @@ namespace USL
             }
             BindData();
 
-            if (mainMenu.Name == MainMenuConstants.Goods)
+            if (mainMenu.Name == MainMenuEnum.Goods.ToString())
                 SetEditItem(DevExpress.XtraLayout.Utils.LayoutVisibility.Always);
             else
                 SetEditItem(DevExpress.XtraLayout.Utils.LayoutVisibility.Never);
@@ -86,7 +86,7 @@ namespace USL
             //layoutControlItem12.Visibility = flag;
             //layoutControlItem34.Visibility = flag;
             //lciPurchasePrice.Visibility = flag;
-            //if (mainMenu.Name == MainMenuConstants.Goods)
+            //if (mainMenu.Name == MainMenuEnum.Goods)
             //    lblNWeight.Text = "净重(KGS)";
             //else
             //    lblNWeight.Text = "净重(G)";
@@ -159,25 +159,25 @@ namespace USL
                         obj.Pic = ImageHelper.MakeBuff(ImageHelper.GetReducedImage((Image)pePic.EditValue, 24, 24));
                     }
                 }
-                if (mainMenu.Name == MainMenuConstants.Goods)
+                if (mainMenu.Name == MainMenuEnum.Goods.ToString())
                 {
                     obj.Type = 0;
-                    if (string.IsNullOrEmpty(obj.SideMark))
-                    {
-                        StringBuilder sb = new StringBuilder();
-                        sb.AppendFormat("\r\nITEM NO: {0}\r\n", obj.Code);
-                        sb.Append("QTY:  PCS\r\n");
-                        sb.AppendFormat("G.W: {0} KGS\r\n", obj.GWeight);
-                        sb.AppendFormat("N.W: {0} KGS\r\n", obj.NWeight);
-                        sb.AppendFormat("MEAS: {0} CM\r\n", obj.MEAS);
-                        obj.SideMark = sb.ToString();
-                    }
+                    //if (string.IsNullOrEmpty(obj.SideMark))
+                    //{
+                    //    StringBuilder sb = new StringBuilder();
+                    //    sb.AppendFormat("\r\nITEM NO: {0}\r\n", obj.Code);
+                    //    sb.Append("QTY:  PCS\r\n");
+                    //    sb.AppendFormat("G.W: {0} KGS\r\n", obj.GWeight);
+                    //    sb.AppendFormat("N.W: {0} KGS\r\n", obj.NWeight);
+                    //    sb.AppendFormat("MEAS: {0} CM\r\n", obj.MEAS);
+                    //    obj.SideMark = sb.ToString();
+                    //}
                 }
                 else
                 {
                     obj.Type = MainForm.GoodsBigType;
                     obj.PackagingID = Guid.Empty;
-                    obj.PCS = 1;
+                    //obj.PCS = 1;
                 }
                 bool exists = BLLFty.Create<BaseBLL>().GetListByNoTracking<Goods>(o => o.ID != obj.ID && o.Code.Equals(obj.Code)).Any();
                 if (exists)
@@ -185,14 +185,8 @@ namespace USL
                     XtraMessageBox.Show(string.Format("货号：{0}已经存在，不允许添加重复货号。", obj.Code), "操作提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return false;
                 }
-                if (MainForm.Company.Contains("纸"))
-                {
-                    obj.PackagingID = new Guid("93fcc1eb-8d01-4465-9d27-c3ef00bf2251");
-                    obj.PCS = 1;
-                    obj.InnerBox = 1;
-                }
-                if (obj.NWeight == 0)
-                    obj.NWeight = 1;
+                //if (obj.NWeight == 0)
+                //    obj.NWeight = 1;
                 if (obj.CavityNumber == 0)
                     obj.CavityNumber = 1;
                 //添加

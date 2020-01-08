@@ -48,7 +48,5 @@ namespace EDMX
         public decimal? Modulus { get; set; }
 
         public string Remark { get; set; }
-
-        public virtual Goods Goods { get; set; }
     }
 }

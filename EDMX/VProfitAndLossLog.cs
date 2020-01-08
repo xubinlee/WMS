@@ -38,7 +38,7 @@ namespace EDMX
         [StringLength(50)]
         public string DeptName { get; set; }
 
-        [StringLength(20)]
+        [StringLength(50)]
         public string Category { get; set; }
 
         [Key]
@@ -92,11 +92,11 @@ namespace EDMX
         [Key]
         [Column(Order = 16)]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int NonArrivalQty { get; set; }
+        public int ReturnedQty { get; set; }
 
         [Key]
         [Column(Order = 17)]
-        public decimal NonArrivalAMT { get; set; }
+        public decimal ReturnedAMT { get; set; }
 
         [Key]
         [Column(Order = 18)]
@@ -110,63 +110,108 @@ namespace EDMX
         [Key]
         [Column(Order = 20)]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int SoldQty { get; set; }
+        public int NonArrivalQty { get; set; }
 
         [Key]
         [Column(Order = 21)]
-        public decimal SoldAMT { get; set; }
+        public decimal NonArrivalAMT { get; set; }
 
         [Key]
         [Column(Order = 22)]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int NonChargeOffQty { get; set; }
+        public int ExtraPresellQty { get; set; }
 
         [Key]
         [Column(Order = 23)]
-        public decimal NonChargeOffAMT { get; set; }
+        public decimal ExtraPresellAMT { get; set; }
 
         [Key]
         [Column(Order = 24)]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int ReturnedQty { get; set; }
+        public int ExtraSoldQty { get; set; }
 
         [Key]
         [Column(Order = 25)]
-        public decimal ReturnedAMT { get; set; }
+        public decimal ExtraSoldAMT { get; set; }
 
         [Key]
         [Column(Order = 26)]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int GroupBuyingQty { get; set; }
+        public int IntraPresellQty { get; set; }
 
         [Key]
         [Column(Order = 27)]
-        public decimal GroupBuyingAMT { get; set; }
+        public decimal IntraPresellAMT { get; set; }
 
         [Key]
         [Column(Order = 28)]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int OtherQty { get; set; }
+        public int IntraSoldQty { get; set; }
 
         [Key]
         [Column(Order = 29)]
-        public decimal OtherAMT { get; set; }
+        public decimal IntraSoldAMT { get; set; }
 
         [Key]
         [Column(Order = 30)]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int FinalDiffQty { get; set; }
+        public int NonChargeOffQty { get; set; }
 
         [Key]
         [Column(Order = 31)]
-        public decimal FinalDiffAMT { get; set; }
+        public decimal NonChargeOffAMT { get; set; }
 
         [Key]
         [Column(Order = 32)]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public int NonRecordedQty { get; set; }
+
+        [Key]
+        [Column(Order = 33)]
+        public decimal NonRecordedAMT { get; set; }
+
+        [Key]
+        [Column(Order = 34)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public int GroupBuyingQty { get; set; }
+
+        [Key]
+        [Column(Order = 35)]
+        public decimal GroupBuyingAMT { get; set; }
+
+        [Key]
+        [Column(Order = 36)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public int DisasterQty { get; set; }
+
+        [Key]
+        [Column(Order = 37)]
+        public decimal DisasterAMT { get; set; }
+
+        [Key]
+        [Column(Order = 38)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public int OtherQty { get; set; }
+
+        [Key]
+        [Column(Order = 39)]
+        public decimal OtherAMT { get; set; }
+
+        [Key]
+        [Column(Order = 40)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public int FinalDiffQty { get; set; }
+
+        [Key]
+        [Column(Order = 41)]
+        public decimal FinalDiffAMT { get; set; }
+
+        [Key]
+        [Column(Order = 42)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int ScrapQty { get; set; }
 
-        [StringLength(50)]
-        public string Reason { get; set; }
+        [StringLength(100)]
+        public string Remark { get; set; }
     }
 }

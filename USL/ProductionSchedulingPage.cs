@@ -165,7 +165,7 @@ namespace USL
 
         private void schedulerStorage_AppointmentsChanged(object sender, PersistentObjectsEventArgs e)
         {
-            BLLFty.Create<BaseBLL>().UpdateByBulk(GetAppointmentsList(e.Objects));
+            BLLFty.Create<BaseBLL>().UpdateByBulk<Appointments>(GetAppointmentsList(e.Objects));
             //刷新数据
             clientFactory.DataPageRefresh<Appointments>();
             //clientFactory.DataPageRefresh<VAppointments>();

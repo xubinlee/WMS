@@ -29,7 +29,7 @@ namespace USL
             InitializeComponent();
             types = MainForm.TypesList;
             //单据类型
-            typesListBindingSource.DataSource = types.FindAll(o => o.Type == TypesListConstants.CustomerType);
+            //typesListBindingSource.DataSource = types.FindAll(o => o.Type == TypesListConstants.CustomerType);
             if (obj == null)
             {
                 companyBindingSource.DataSource = new Company();

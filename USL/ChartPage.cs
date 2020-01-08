@@ -32,9 +32,9 @@ namespace USL
 
         public void BindData(object obj)
         {
-            //if (mainMenu.Name==MainMenuConstants.AnnualSalesSummaryByCustomerReport)
+            //if (mainMenu.Name==MainMenuEnum.AnnualSalesSummaryByCustomerReport)
             //    dataSource = MainForm.dataSourceList[typeof(AnnualSalesSummaryByCustomerReport)] as IList;
-            //else if (mainMenu.Name == MainMenuConstants.AnnualSalesSummaryByGoodsReport)
+            //else if (mainMenu.Name == MainMenuEnum.AnnualSalesSummaryByGoodsReport)
             //    dataSource = MainForm.dataSourceList[typeof(AnnualSalesSummaryByGoodsReport)] as IList;
             //customers = MainForm.dataSourceList[typeof(Company)] as List<Company>;
             //goodsList = MainForm.dataSourceList[typeof(Goods)] as List<Goods>;
@@ -44,7 +44,7 @@ namespace USL
         void BindChart()
         {
             //chartControl1.Series.Clear();
-            //if (mainMenu.Name == MainMenuConstants.AnnualSalesSummaryByCustomerReport)
+            //if (mainMenu.Name == MainMenuEnum.AnnualSalesSummaryByCustomerReport)
             //{
             //    foreach (Company item in customers)
             //    {

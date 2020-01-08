@@ -190,7 +190,7 @@ namespace USL
                 //页眉 
                 psc.PrintCompany = MainForm.Company;
                 MainMenu mm = MainForm.AllMainMenuList.FirstOrDefault(o =>
-                    o.Name == MainMenuConstants.AnnualSalesSummaryByCustomerReport);
+                    o.Name == MainMenuEnum.AnnualSalesSummaryByCustomerReport.ToString());
                 if (mm != null)
                     psc.PrintHeader = mm.Caption;
                 psc.PrintSubTitle = MainForm.Contacts.Replace("\\r\\n", "\r\n");

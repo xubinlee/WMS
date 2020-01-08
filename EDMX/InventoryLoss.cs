@@ -6,12 +6,10 @@ namespace EDMX
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("StocktakingLogDtl")]
-    public partial class StocktakingLogDtl
+    [Table("InventoryLoss")]
+    public partial class InventoryLoss
     {
         public Guid ID { get; set; }
-
-        public Guid HdID { get; set; }
 
         public Guid DeptID { get; set; }
 
@@ -22,13 +20,8 @@ namespace EDMX
         [StringLength(50)]
         public string DeptName { get; set; }
 
-        public Guid WarehouseID { get; set; }
-
-        [StringLength(20)]
-        public string WarehouseCode { get; set; }
-
         [StringLength(50)]
-        public string WarehouseName { get; set; }
+        public string Category { get; set; }
 
         [Required]
         [StringLength(20)]
@@ -37,27 +30,31 @@ namespace EDMX
         [StringLength(50)]
         public string GoodsName { get; set; }
 
-        [StringLength(50)]
-        public string Barcode { get; set; }
-
-        [StringLength(50)]
-        public string SPEC { get; set; }
-
-        [StringLength(10)]
-        public string Unit { get; set; }
-
         public int StockQty { get; set; }
 
         public int CheckQty { get; set; }
 
+        public int DiffQty { get; set; }
+
+        public int LossQty { get; set; }
+
         public decimal Price { get; set; }
 
-        [StringLength(20)]
-        public string ScanBill { get; set; }
+        public decimal StockAMT { get; set; }
 
-        [StringLength(20)]
-        public string Checker { get; set; }
+        public decimal CheckAMT { get; set; }
 
-        public DateTime? CheckingDate { get; set; }
+        public decimal DiffAMT { get; set; }
+
+        public decimal DiffRate { get; set; }
+
+        public decimal PreCheckSellAMT { get; set; }
+
+        public decimal LossAMT { get; set; }
+
+        public decimal LossRate { get; set; }
+
+        [StringLength(100)]
+        public string Remark { get; set; }
     }
 }

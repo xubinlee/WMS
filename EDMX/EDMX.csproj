@@ -68,6 +68,8 @@
     <Compile Include="GoodsType.cs" />
     <Compile Include="Inventory.cs" />
     <Compile Include="InventoryLog.cs" />
+    <Compile Include="InventoryLoss.cs" />
+    <Compile Include="InventoryLossLog.cs" />
     <Compile Include="MainMenu.cs" />
     <Compile Include="MoldAllot.cs" />
     <Compile Include="OrderDtl.cs" />
@@ -101,6 +103,8 @@
     <Compile Include="UnlistedGoodsLog.cs" />
     <Compile Include="UsersInfo.cs" />
     <Compile Include="USPAttWageBillDtl.cs" />
+    <Compile Include="VInventoryLog.cs" />
+    <Compile Include="VInventoryLossLog.cs" />
     <Compile Include="VProfitAndLossLog.cs" />
     <Compile Include="VStocktakingLog.cs" />
     <Compile Include="VUnlistedGoodsLog.cs" />

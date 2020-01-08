@@ -22,7 +22,7 @@ namespace EDMX
         [StringLength(50)]
         public string DeptName { get; set; }
 
-        [StringLength(20)]
+        [StringLength(50)]
         public string Category { get; set; }
 
         [Required]
@@ -50,29 +50,49 @@ namespace EDMX
 
         public decimal TransitAMT { get; set; }
 
-        public int NonArrivalQty { get; set; }
+        public int ReturnedQty { get; set; }
 
-        public decimal NonArrivalAMT { get; set; }
+        public decimal ReturnedAMT { get; set; }
 
         public int NonInStoreQty { get; set; }
 
         public decimal NonInStoreAMT { get; set; }
 
-        public int SoldQty { get; set; }
+        public int NonArrivalQty { get; set; }
 
-        public decimal SoldAMT { get; set; }
+        public decimal NonArrivalAMT { get; set; }
+
+        public int ExtraPresellQty { get; set; }
+
+        public decimal ExtraPresellAMT { get; set; }
+
+        public int ExtraSoldQty { get; set; }
+
+        public decimal ExtraSoldAMT { get; set; }
+
+        public int IntraPresellQty { get; set; }
+
+        public decimal IntraPresellAMT { get; set; }
+
+        public int IntraSoldQty { get; set; }
+
+        public decimal IntraSoldAMT { get; set; }
 
         public int NonChargeOffQty { get; set; }
 
         public decimal NonChargeOffAMT { get; set; }
 
-        public int ReturnedQty { get; set; }
+        public int NonRecordedQty { get; set; }
 
-        public decimal ReturnedAMT { get; set; }
+        public decimal NonRecordedAMT { get; set; }
 
         public int GroupBuyingQty { get; set; }
 
         public decimal GroupBuyingAMT { get; set; }
+
+        public int DisasterQty { get; set; }
+
+        public decimal DisasterAMT { get; set; }
 
         public int OtherQty { get; set; }
 
@@ -84,7 +104,7 @@ namespace EDMX
 
         public int ScrapQty { get; set; }
 
-        [StringLength(50)]
-        public string Reason { get; set; }
+        [StringLength(100)]
+        public string Remark { get; set; }
     }
 }

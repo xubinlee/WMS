@@ -129,8 +129,8 @@ namespace DAL
         /// <param name="list"></param>
         public virtual void AddByBulkCopy<T>(DbContext db, List<T> list) where T : class, new()
         {
-            // 让使用nameof(T)标签的所有缓存过期
-            QueryCacheManager.ExpireTag(nameof(T));
+            // 让使用typeof(T).Name标签的所有缓存过期
+            QueryCacheManager.ExpireTag(typeof(T).Name);
             AddByBulkCopy((SqlConnection)db.Database.Connection, db.ToDataTable<T>(list), typeof(T).Name);
         }
 
@@ -159,8 +159,8 @@ namespace DAL
 
         public virtual int Add<T>(DbContext db, T model) where T : class, new()
         {
-            // 让使用nameof(T)标签的所有缓存过期
-            QueryCacheManager.ExpireTag(nameof(T));
+            // 让使用typeof(T).Name标签的所有缓存过期
+            QueryCacheManager.ExpireTag(typeof(T).Name);
             DbSet<T> dst = db.Set<T>();
             dst.Add(model);
             return db.SaveChanges();
@@ -174,8 +174,8 @@ namespace DAL
 
         public virtual int AddOrUpdate<T>(DbContext db, T model) where T : class, new()
         {
-            // 让使用nameof(T)标签的所有缓存过期
-            QueryCacheManager.ExpireTag(nameof(T));
+            // 让使用typeof(T).Name标签的所有缓存过期
+            QueryCacheManager.ExpireTag(typeof(T).Name);
             DbSet<T> dst = db.Set<T>();
             dst.AddOrUpdateExtension(model);
             return db.SaveChanges();
@@ -191,9 +191,12 @@ namespace DAL
         {
             using (TransactionScope trans = new TransactionScope())
             {
-                // 让使用nameof(T)标签的所有缓存过期
-                QueryCacheManager.ExpireTag(nameof(T));
-                db.Set<T>().Where(delWhere).DeleteFromQuery();
+                // 让使用typeof(T).Name标签的所有缓存过期
+                QueryCacheManager.ExpireTag(typeof(T).Name);
+                if (delWhere == null)
+                    db.Set<T>().DeleteFromQuery();
+                else
+                    db.Set<T>().Where(delWhere).DeleteFromQuery();
                 AddByBulkCopy<T>(db, insertList);
                 trans.Complete();
             }
@@ -209,9 +212,10 @@ namespace DAL
         {
             using (TransactionScope trans = new TransactionScope())
             {
-                // 让使用nameof(T)标签的所有缓存过期
-                QueryCacheManager.ExpireTag(nameof(T));
+                // 让使用typeof(T).Name标签的所有缓存过期
+                QueryCacheManager.ExpireTag(typeof(T).Name);
                 db.Set<H>().Add(hd);
+                db.SaveChanges();
                 AddByBulkCopy<T>(db, dtlList);
                 trans.Complete();
             }
@@ -227,10 +231,12 @@ namespace DAL
         {
             using (TransactionScope trans = new TransactionScope())
             {
-                // 让使用nameof(T)标签的所有缓存过期
-                QueryCacheManager.ExpireTag(nameof(T));
-                AddByBulkCopy<T>(db, insertList);
-                db.Set<T>().BulkUpdate(updateList);
+                // 让使用typeof(T).Name标签的所有缓存过期
+                QueryCacheManager.ExpireTag(typeof(T).Name);
+                if (insertList.Count > 0)
+                    AddByBulkCopy<T>(db, insertList);
+                if (updateList.Count > 0)
+                    db.Set<T>().BulkUpdate(updateList);
                 trans.Complete();
             }
         }
@@ -245,8 +251,8 @@ namespace DAL
         /// <returns></returns>
         public virtual int Del<T>(DbContext db, T model) where T : class, new()
         {
-            // 让使用nameof(T)标签的所有缓存过期
-            QueryCacheManager.ExpireTag(nameof(T));
+            // 让使用typeof(T).Name标签的所有缓存过期
+            QueryCacheManager.ExpireTag(typeof(T).Name);
             db.Set<T>().Attach(model);
             db.Set<T>().Remove(model);
             return db.SaveChanges();
@@ -271,8 +277,8 @@ namespace DAL
         /// <returns></returns>
         public virtual int DelBy<T>(DbContext db, Expression<Func<T, bool>> delWhere) where T : class, new()
         {
-            // 让使用nameof(T)标签的所有缓存过期
-            QueryCacheManager.ExpireTag(nameof(T));
+            // 让使用typeof(T).Name标签的所有缓存过期
+            QueryCacheManager.ExpireTag(typeof(T).Name);
             List<T> listDels = db.Set<T>().Where(delWhere).ToList();
             listDels.ForEach(d =>
             {
@@ -289,8 +295,8 @@ namespace DAL
         /// <returns></returns>
         public virtual int Delete<T>(DbContext db, Expression<Func<T, bool>> delWhere) where T : class, new()
         {
-            // 让使用nameof(T)标签的所有缓存过期
-            QueryCacheManager.ExpireTag(nameof(T));
+            // 让使用typeof(T).Name标签的所有缓存过期
+            QueryCacheManager.ExpireTag(typeof(T).Name);
             if (delWhere == null)
                 return db.Set<T>().Delete();
             else
@@ -331,9 +337,9 @@ namespace DAL
         {
             
             if (whereLambda == null)
-                return db.Set<T>().FromCache(nameof(T)).ToList();
+                return db.Set<T>().FromCache(typeof(T).Name).ToList();
             else
-                return db.Set<T>().Where(whereLambda).AsNoTracking().FromCache(nameof(T)).ToList();
+                return db.Set<T>().Where(whereLambda).AsNoTracking().FromCache(typeof(T).Name).ToList();
         }
 
         /// <summary>
@@ -344,9 +350,9 @@ namespace DAL
         public virtual List<T> GetListBy<T>(DbContext db, Expression<Func<T, bool>> whereLambda) where T : class, new()
         {
             if (whereLambda == null)
-                return db.Set<T>().FromCache(nameof(T)).ToList();
+                return db.Set<T>().FromCache(typeof(T).Name).ToList();
             else
-                return db.Set<T>().Where(whereLambda).FromCache(nameof(T)).ToList();
+                return db.Set<T>().Where(whereLambda).FromCache(typeof(T).Name).ToList();
         }
 
         /// <summary>
@@ -359,7 +365,7 @@ namespace DAL
         {
             // 关闭延迟加载
             db.Configuration.LazyLoadingEnabled = false;
-            return db.Set<T>().Include(path).FromCache(nameof(T)).ToList();
+            return db.Set<T>().Include(path).FromCache(typeof(T).Name).ToList();
         }
 
         public virtual IQueryable GetListByInclude(DbContext db, Type type, string path)
@@ -382,11 +388,11 @@ namespace DAL
             List<T> list = null;
             if (isAsc)
             {
-                list = db.Set<T>().Where(whereLambda).OrderBy(orderLambda).FromCache(nameof(T)).ToList();
+                list = db.Set<T>().Where(whereLambda).OrderBy(orderLambda).FromCache(typeof(T).Name).ToList();
             }
             else
             {
-                list = db.Set<T>().Where(whereLambda).OrderByDescending(orderLambda).FromCache(nameof(T)).ToList();
+                list = db.Set<T>().Where(whereLambda).OrderByDescending(orderLambda).FromCache(typeof(T).Name).ToList();
             }
             return list;
         }
@@ -408,12 +414,12 @@ namespace DAL
             if (isAsc)
             {
                 list = db.Set<T>().Where(whereLambda).OrderBy(orderLambda)
-               .Skip((pageIndex - 1) * pageSize).Take(pageSize).FromCache(nameof(T)).ToList();
+               .Skip((pageIndex - 1) * pageSize).Take(pageSize).FromCache(typeof(T).Name).ToList();
             }
             else
             {
                 list = db.Set<T>().Where(whereLambda).OrderByDescending(orderLambda)
-              .Skip((pageIndex - 1) * pageSize).Take(pageSize).FromCache(nameof(T)).ToList();
+              .Skip((pageIndex - 1) * pageSize).Take(pageSize).FromCache(typeof(T).Name).ToList();
             }
             return list;
         }
@@ -432,18 +438,18 @@ namespace DAL
         {
             int count = 0;
             List<T> list = null;
-            count = db.Set<T>().Where(whereLambda).FromCache(nameof(T)).Count();
+            count = db.Set<T>().Where(whereLambda).FromCache(typeof(T).Name).Count();
             if (isAsc)
             {
                 var iQueryList = db.Set<T>().Where(whereLambda).OrderBy(orderLambda)
-                   .Skip((pageIndex - 1) * pageSize).Take(pageSize).FromCache(nameof(T));
+                   .Skip((pageIndex - 1) * pageSize).Take(pageSize).FromCache(typeof(T).Name);
 
                 list = iQueryList.ToList();
             }
             else
             {
                 var iQueryList = db.Set<T>().Where(whereLambda).OrderByDescending(orderLambda)
-                 .Skip((pageIndex - 1) * pageSize).Take(pageSize).FromCache(nameof(T));
+                 .Skip((pageIndex - 1) * pageSize).Take(pageSize).FromCache(typeof(T).Name);
                 list = iQueryList.ToList();
             }
             rowCount = count;
@@ -461,8 +467,8 @@ namespace DAL
         /// <returns></returns>
         public virtual int Modify<T>(DbContext db, T model) where T : class, new()
         {
-            // 让使用nameof(T)标签的所有缓存过期
-            QueryCacheManager.ExpireTag(nameof(T));
+            // 让使用typeof(T).Name标签的所有缓存过期
+            QueryCacheManager.ExpireTag(typeof(T).Name);
             db.Entry(model).State = EntityState.Modified;
             return db.SaveChanges();
         }
@@ -501,8 +507,8 @@ namespace DAL
         /// <returns></returns>
         public virtual int ModifyBy<T>(DbContext db, T model, Expression<Func<T, bool>> whereLambda, params string[] proNames) where T : class, new()
         {
-            // 让使用nameof(T)标签的所有缓存过期
-            QueryCacheManager.ExpireTag(nameof(T));
+            // 让使用typeof(T).Name标签的所有缓存过期
+            QueryCacheManager.ExpireTag(typeof(T).Name);
             List<T> listModifes = db.Set<T>().Where(whereLambda).ToList();
             Type t = typeof(T);
             List<PropertyInfo> proInfos = t.GetProperties(BindingFlags.Instance | BindingFlags.Public).ToList();

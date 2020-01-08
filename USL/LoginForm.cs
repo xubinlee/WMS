@@ -19,25 +19,18 @@ namespace USL
     public partial class LoginForm : DevExpress.XtraEditors.XtraForm
     {
         private static ClientFactory clientFactory = LoggerInterceptor.CreateProxy<ClientFactory>();
+        private List<Department> deptList = new List<Department>();
         public LoginForm()
         {
             InitializeComponent();
-            //List<Warehouse> list = BLLFty.Create<BaseBLL>().GetListByNoTracking<Warehouse>(null);
-            //List<Warehouse> list2 = BLLFty.Create<BaseBLL>().GetListByNoTracking<Warehouse>(null);
-            //Warehouse warehouse = new Warehouse();
-            //warehouse.ID = Guid.NewGuid();
-            //warehouse.Code = "aaa";
-            //warehouse.Name = "bbb";
-            //BLLFty.Create<BaseBLL>().Add<Warehouse>(warehouse);
-            //List<Warehouse> list3 = BLLFty.Create<BaseBLL>().GetListByNoTracking<Warehouse>(null);
-            //List<Warehouse> list4 = BLLFty.Create<BaseBLL>().GetListByNoTracking<Warehouse>(null);
             BindData();
         }
 
         public void BindData()
         {
             usersInfoBindingSource.DataSource = BLLFty.Create<BaseBLL>().GetListBy<UsersInfo>(o => o.IsDel == false && !string.IsNullOrEmpty(o.Password));
-            deptBindingSource.DataSource = BLLFty.Create<BaseBLL>().GetListBy<Department>(o => o.IsDel == false);
+            deptList = BLLFty.Create<BaseBLL>().GetListBy<Department>(o => o.IsDel == false);
+            deptBindingSource.DataSource = deptList;
             txtCode.EditValue = Utility.ConfigAppSettings.GetValue("User");
         }
         bool Invalid()
@@ -52,9 +45,9 @@ namespace USL
                 txtCode.SelectAll();
                 flag = true;
             }
-            if (string.IsNullOrEmpty(lueDept.Text.Trim()))
+            if (deptList.Count > 0 && string.IsNullOrEmpty(lueDept.Text.Trim()))
             {
-                dxErrorProvider1.SetError(lueDept, "门店不存在。");
+                dxErrorProvider1.SetError(lueDept, "请选择门店。");
                 lueDept.Focus();
                 lueDept.SelectAll();
                 flag = true;
@@ -66,8 +59,12 @@ namespace USL
             if (Invalid())
                 return;
             UsersInfo user = BLLFty.Create<BaseBLL>().GetListBy<UsersInfo>(o => o.Code.Equals(txtCode.Text.Trim())).FirstOrDefault();
-            Guid deptID = Guid.Parse(lueDept.EditValue.ToString());
-            Department dept = BLLFty.Create<BaseBLL>().GetListBy<Department>(o => o.ID.Equals(deptID)).FirstOrDefault();
+            Department dept = new Department();
+            if (deptList.Count > 0)
+            {
+                Guid deptID = Guid.Parse(lueDept.EditValue.ToString());
+                dept = deptList.FirstOrDefault(o => o.ID.Equals(deptID));
+            }
             //string msg = string.Empty;
             if (user.Password != txtPassword.Text.Trim())
             {

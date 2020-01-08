@@ -40,7 +40,7 @@ namespace BLL
         {
             using (WmsContext db = EDMXFty.Dc)
             {
-                DALFty.Create<BaseDAL>().AddByBulkCopy(db, list);
+                DALFty.Create<BaseDAL>().AddByBulkCopy<T>(db, list);
             }
         }
         #endregion
@@ -96,7 +96,7 @@ namespace BLL
         {
             using (WmsContext db = EDMXFty.Dc)
             {
-                DALFty.Create<EfPlusDAL>().UpdateByBulk(db, list);
+                DALFty.Create<EfPlusDAL>().UpdateByBulk<T>(db, list);
             }
         }
         #endregion
@@ -222,11 +222,11 @@ namespace BLL
         /// </summary>
         /// <param name="entity">实体</param>
         /// <returns></returns>
-        public int AddOrUpdate(SystemStatus entity)
+        public int AddOrUpdate<T>(T entity) where T : class, new()
         {
             using (WmsContext db = EDMXFty.Dc)
             {
-                return DALFty.Create<BaseDAL>().AddOrUpdate(db, entity);
+                return DALFty.Create<BaseDAL>().AddOrUpdate<T>(db, entity);
             }
         }
         #endregion

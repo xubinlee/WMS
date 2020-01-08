@@ -44,16 +44,16 @@ namespace USL
             }
             else
                 dpList = dockManager.RootPanels.ToList();
-            foreach (DockPanel panel in dpList)
-            {
-                i = types.Find(o => o.Type == TypesListConstants.GoodsType && o.Name == panel.Text.Trim()).No;
-                //list = clientFactory.GetData<VMaterial>().FindAll(o => o.Type == i);
-                queryPage = new DataQueryPage(menu, list, child, childButtonList);
-                queryPage.Dock = DockStyle.Fill;
-                panel.Controls.Add(queryPage);
-                queryPageList.Add(panel.Text.Trim(), queryPage);
-                //MainForm.SetQueryPageGridColumn(queryPage.gridView, menu);
-            }
+            //foreach (DockPanel panel in dpList)
+            //{
+            //    i = types.Find(o => o.Type == TypesListConstants.GoodsType && o.Name == panel.Text.Trim()).No;
+            //    //list = clientFactory.GetData<VMaterial>().FindAll(o => o.Type == i);
+            //    queryPage = new DataQueryPage(menu, list, child, childButtonList);
+            //    queryPage.Dock = DockStyle.Fill;
+            //    panel.Controls.Add(queryPage);
+            //    queryPageList.Add(panel.Text.Trim(), queryPage);
+            //    //MainForm.SetQueryPageGridColumn(queryPage.gridView, menu);
+            //}
             MainForm.GoodsBigTypeName = "包装资料";
             ////去掉模具资料面板
             //tabbedView1.Documents.Remove(document4);
@@ -62,9 +62,9 @@ namespace USL
 
         public void DataRefresh()
         {
-            int i = types.Find(o => o.Type == TypesListConstants.GoodsType && o.Name == MainForm.GoodsBigTypeName).No;
-            //list = clientFactory.GetData<VMaterial>().FindAll(o => o.Type == i);
-            queryPageList[MainForm.GoodsBigTypeName].BindData(list);
+            //int i = types.Find(o => o.Type == TypesListConstants.GoodsType && o.Name == MainForm.GoodsBigTypeName).No;
+            ////list = clientFactory.GetData<VMaterial>().FindAll(o => o.Type == i);
+            //queryPageList[MainForm.GoodsBigTypeName].BindData(list);
         }
 
         public void Add()
@@ -72,26 +72,26 @@ namespace USL
             //MainForm.GoodsBigType = types.Find(o =>
             //    o.Type == TypesListConstants.GoodsType && o.Name == documentManager.View.ActiveDocument.Caption).No;
             //queryPageList[documentManager.View.ActiveDocument.Caption].Add();
-            MainForm.GoodsBigType=types.Find(o =>
-                o.Type == TypesListConstants.GoodsType && o.Name == MainForm.GoodsBigTypeName).No;
-            queryPageList[MainForm.GoodsBigTypeName].Add();
-            DataRefresh();
+            //MainForm.GoodsBigType=types.Find(o =>
+            //    o.Type == TypesListConstants.GoodsType && o.Name == MainForm.GoodsBigTypeName).No;
+            //queryPageList[MainForm.GoodsBigTypeName].Add();
+            //DataRefresh();
         }
 
         public void Edit()
         {
-            MainForm.GoodsBigType = types.Find(o =>
-                o.Type == TypesListConstants.GoodsType && o.Name == MainForm.GoodsBigTypeName).No;
-            queryPageList[MainForm.GoodsBigTypeName].Edit();
-            DataRefresh();
+            //MainForm.GoodsBigType = types.Find(o =>
+            //    o.Type == TypesListConstants.GoodsType && o.Name == MainForm.GoodsBigTypeName).No;
+            //queryPageList[MainForm.GoodsBigTypeName].Edit();
+            //DataRefresh();
         }
 
         public void Del()
         {
-            MainForm.GoodsBigType = types.Find(o =>
-                o.Type == TypesListConstants.GoodsType && o.Name == MainForm.GoodsBigTypeName).No;
-            queryPageList[MainForm.GoodsBigTypeName].Del();
-            DataRefresh();
+            //MainForm.GoodsBigType = types.Find(o =>
+            //    o.Type == TypesListConstants.GoodsType && o.Name == MainForm.GoodsBigTypeName).No;
+            //queryPageList[MainForm.GoodsBigTypeName].Del();
+            //DataRefresh();
         }
 
         public bool Save()
@@ -106,9 +106,9 @@ namespace USL
 
         public void Print()
         {
-            MainForm.GoodsBigType = types.Find(o =>
-                o.Type == TypesListConstants.GoodsType && o.Name == MainForm.GoodsBigTypeName).No;
-            queryPageList[MainForm.GoodsBigTypeName].Print();
+            //MainForm.GoodsBigType = types.Find(o =>
+            //    o.Type == TypesListConstants.GoodsType && o.Name == MainForm.GoodsBigTypeName).No;
+            //queryPageList[MainForm.GoodsBigTypeName].Print();
         }
 
         private void documentManager_DocumentActivate(object sender, DevExpress.XtraBars.Docking2010.Views.DocumentEventArgs e)
@@ -125,10 +125,10 @@ namespace USL
         public void Export()
         {
             //借用于设置货品停产
-            MainForm.GoodsBigType = types.Find(o =>
-                o.Type == TypesListConstants.GoodsType && o.Name == MainForm.GoodsBigTypeName).No;
-            queryPageList[MainForm.GoodsBigTypeName].Export();
-            DataRefresh();
+            //MainForm.GoodsBigType = types.Find(o =>
+            //    o.Type == TypesListConstants.GoodsType && o.Name == MainForm.GoodsBigTypeName).No;
+            //queryPageList[MainForm.GoodsBigTypeName].Export();
+            //DataRefresh();
         }
 
         public void SendData(object data)

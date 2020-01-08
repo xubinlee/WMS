@@ -27,6 +27,8 @@ namespace EDMX
         public virtual DbSet<GoodsType> GoodsType { get; set; }
         public virtual DbSet<Inventory> Inventory { get; set; }
         public virtual DbSet<InventoryLog> InventoryLog { get; set; }
+        public virtual DbSet<InventoryLoss> InventoryLoss { get; set; }
+        public virtual DbSet<InventoryLossLog> InventoryLossLog { get; set; }
         public virtual DbSet<MainMenu> MainMenu { get; set; }
         public virtual DbSet<MoldAllot> MoldAllot { get; set; }
         public virtual DbSet<OrderDtl> OrderDtl { get; set; }
@@ -64,6 +66,8 @@ namespace EDMX
         public virtual DbSet<Warehouse> Warehouse { get; set; }
         public virtual DbSet<AttParameters> AttParameters { get; set; }
         public virtual DbSet<USPAttWageBillDtl> USPAttWageBillDtl { get; set; }
+        public virtual DbSet<VInventoryLog> VInventoryLog { get; set; }
+        public virtual DbSet<VInventoryLossLog> VInventoryLossLog { get; set; }
         public virtual DbSet<VProfitAndLossLog> VProfitAndLossLog { get; set; }
         public virtual DbSet<VStocktakingLog> VStocktakingLog { get; set; }
         public virtual DbSet<VUnlistedGoodsLog> VUnlistedGoodsLog { get; set; }
@@ -403,32 +407,12 @@ namespace EDMX
                 .IsUnicode(false);
 
             modelBuilder.Entity<Goods>()
-                .Property(e => e.Material)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<Goods>()
-                .Property(e => e.Dosage)
-                .HasPrecision(12, 2);
-
-            modelBuilder.Entity<Goods>()
-                .Property(e => e.Subpackage)
-                .HasPrecision(12, 2);
-
-            modelBuilder.Entity<Goods>()
                 .Property(e => e.Unit)
                 .IsUnicode(false);
 
             modelBuilder.Entity<Goods>()
                 .Property(e => e.SPEC)
                 .IsUnicode(false);
-
-            modelBuilder.Entity<Goods>()
-                .Property(e => e.MEAS)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<Goods>()
-                .Property(e => e.PurchasePrice)
-                .HasPrecision(12, 2);
 
             modelBuilder.Entity<Goods>()
                 .Property(e => e.Price)
@@ -439,24 +423,8 @@ namespace EDMX
                 .HasPrecision(12, 6);
 
             modelBuilder.Entity<Goods>()
-                .Property(e => e.BarCode)
+                .Property(e => e.Barcode)
                 .IsUnicode(false);
-
-            modelBuilder.Entity<Goods>()
-                .Property(e => e.Volume)
-                .HasPrecision(12, 2);
-
-            modelBuilder.Entity<Goods>()
-                .Property(e => e.GWeight)
-                .HasPrecision(12, 3);
-
-            modelBuilder.Entity<Goods>()
-                .Property(e => e.NWeight)
-                .HasPrecision(12, 3);
-
-            modelBuilder.Entity<Goods>()
-                .Property(e => e.Cycle)
-                .HasPrecision(12, 2);
 
             modelBuilder.Entity<Goods>()
                 .Property(e => e.InPutVAT)
@@ -479,21 +447,8 @@ namespace EDMX
                 .HasPrecision(12, 2);
 
             modelBuilder.Entity<Goods>()
-                .Property(e => e.Toner)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<Goods>()
                 .Property(e => e.Remark)
                 .IsUnicode(false);
-
-            modelBuilder.Entity<Goods>()
-                .Property(e => e.Subsidy)
-                .HasPrecision(12, 2);
-
-            modelBuilder.Entity<Goods>()
-                .HasMany(e => e.OrderDtl)
-                .WithRequired(e => e.Goods)
-                .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<GoodsType>()
                 .Property(e => e.Code)
@@ -549,6 +504,118 @@ namespace EDMX
 
             modelBuilder.Entity<InventoryLog>()
                 .Property(e => e.Unit)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<InventoryLoss>()
+                .Property(e => e.DeptCode)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<InventoryLoss>()
+                .Property(e => e.DeptName)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<InventoryLoss>()
+                .Property(e => e.Category)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<InventoryLoss>()
+                .Property(e => e.GoodsCode)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<InventoryLoss>()
+                .Property(e => e.GoodsName)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<InventoryLoss>()
+                .Property(e => e.Price)
+                .HasPrecision(12, 2);
+
+            modelBuilder.Entity<InventoryLoss>()
+                .Property(e => e.StockAMT)
+                .HasPrecision(12, 2);
+
+            modelBuilder.Entity<InventoryLoss>()
+                .Property(e => e.CheckAMT)
+                .HasPrecision(12, 2);
+
+            modelBuilder.Entity<InventoryLoss>()
+                .Property(e => e.DiffAMT)
+                .HasPrecision(12, 2);
+
+            modelBuilder.Entity<InventoryLoss>()
+                .Property(e => e.DiffRate)
+                .HasPrecision(5, 2);
+
+            modelBuilder.Entity<InventoryLoss>()
+                .Property(e => e.PreCheckSellAMT)
+                .HasPrecision(12, 2);
+
+            modelBuilder.Entity<InventoryLoss>()
+                .Property(e => e.LossAMT)
+                .HasPrecision(12, 2);
+
+            modelBuilder.Entity<InventoryLoss>()
+                .Property(e => e.LossRate)
+                .HasPrecision(5, 2);
+
+            modelBuilder.Entity<InventoryLoss>()
+                .Property(e => e.Remark)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<InventoryLossLog>()
+                .Property(e => e.DeptCode)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<InventoryLossLog>()
+                .Property(e => e.DeptName)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<InventoryLossLog>()
+                .Property(e => e.Category)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<InventoryLossLog>()
+                .Property(e => e.GoodsCode)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<InventoryLossLog>()
+                .Property(e => e.GoodsName)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<InventoryLossLog>()
+                .Property(e => e.Price)
+                .HasPrecision(12, 2);
+
+            modelBuilder.Entity<InventoryLossLog>()
+                .Property(e => e.StockAMT)
+                .HasPrecision(12, 2);
+
+            modelBuilder.Entity<InventoryLossLog>()
+                .Property(e => e.CheckAMT)
+                .HasPrecision(12, 2);
+
+            modelBuilder.Entity<InventoryLossLog>()
+                .Property(e => e.DiffAMT)
+                .HasPrecision(12, 2);
+
+            modelBuilder.Entity<InventoryLossLog>()
+                .Property(e => e.DiffRate)
+                .HasPrecision(5, 2);
+
+            modelBuilder.Entity<InventoryLossLog>()
+                .Property(e => e.PreCheckSellAMT)
+                .HasPrecision(12, 2);
+
+            modelBuilder.Entity<InventoryLossLog>()
+                .Property(e => e.LossAMT)
+                .HasPrecision(12, 2);
+
+            modelBuilder.Entity<InventoryLossLog>()
+                .Property(e => e.LossRate)
+                .HasPrecision(5, 2);
+
+            modelBuilder.Entity<InventoryLossLog>()
+                .Property(e => e.Remark)
                 .IsUnicode(false);
 
             modelBuilder.Entity<MainMenu>()
@@ -700,7 +767,7 @@ namespace EDMX
                 .HasPrecision(12, 2);
 
             modelBuilder.Entity<ProfitAndLoss>()
-                .Property(e => e.NonArrivalAMT)
+                .Property(e => e.ReturnedAMT)
                 .HasPrecision(12, 2);
 
             modelBuilder.Entity<ProfitAndLoss>()
@@ -708,7 +775,23 @@ namespace EDMX
                 .HasPrecision(12, 2);
 
             modelBuilder.Entity<ProfitAndLoss>()
-                .Property(e => e.SoldAMT)
+                .Property(e => e.NonArrivalAMT)
+                .HasPrecision(12, 2);
+
+            modelBuilder.Entity<ProfitAndLoss>()
+                .Property(e => e.ExtraPresellAMT)
+                .HasPrecision(12, 2);
+
+            modelBuilder.Entity<ProfitAndLoss>()
+                .Property(e => e.ExtraSoldAMT)
+                .HasPrecision(12, 2);
+
+            modelBuilder.Entity<ProfitAndLoss>()
+                .Property(e => e.IntraPresellAMT)
+                .HasPrecision(12, 2);
+
+            modelBuilder.Entity<ProfitAndLoss>()
+                .Property(e => e.IntraSoldAMT)
                 .HasPrecision(12, 2);
 
             modelBuilder.Entity<ProfitAndLoss>()
@@ -716,11 +799,15 @@ namespace EDMX
                 .HasPrecision(12, 2);
 
             modelBuilder.Entity<ProfitAndLoss>()
-                .Property(e => e.ReturnedAMT)
+                .Property(e => e.NonRecordedAMT)
                 .HasPrecision(12, 2);
 
             modelBuilder.Entity<ProfitAndLoss>()
                 .Property(e => e.GroupBuyingAMT)
+                .HasPrecision(12, 2);
+
+            modelBuilder.Entity<ProfitAndLoss>()
+                .Property(e => e.DisasterAMT)
                 .HasPrecision(12, 2);
 
             modelBuilder.Entity<ProfitAndLoss>()
@@ -732,7 +819,7 @@ namespace EDMX
                 .HasPrecision(12, 2);
 
             modelBuilder.Entity<ProfitAndLoss>()
-                .Property(e => e.Reason)
+                .Property(e => e.Remark)
                 .IsUnicode(false);
 
             modelBuilder.Entity<ProfitAndLossLog>()
@@ -776,7 +863,7 @@ namespace EDMX
                 .HasPrecision(12, 2);
 
             modelBuilder.Entity<ProfitAndLossLog>()
-                .Property(e => e.NonArrivalAMT)
+                .Property(e => e.ReturnedAMT)
                 .HasPrecision(12, 2);
 
             modelBuilder.Entity<ProfitAndLossLog>()
@@ -784,7 +871,23 @@ namespace EDMX
                 .HasPrecision(12, 2);
 
             modelBuilder.Entity<ProfitAndLossLog>()
-                .Property(e => e.SoldAMT)
+                .Property(e => e.NonArrivalAMT)
+                .HasPrecision(12, 2);
+
+            modelBuilder.Entity<ProfitAndLossLog>()
+                .Property(e => e.ExtraPresellAMT)
+                .HasPrecision(12, 2);
+
+            modelBuilder.Entity<ProfitAndLossLog>()
+                .Property(e => e.ExtraSoldAMT)
+                .HasPrecision(12, 2);
+
+            modelBuilder.Entity<ProfitAndLossLog>()
+                .Property(e => e.IntraPresellAMT)
+                .HasPrecision(12, 2);
+
+            modelBuilder.Entity<ProfitAndLossLog>()
+                .Property(e => e.IntraSoldAMT)
                 .HasPrecision(12, 2);
 
             modelBuilder.Entity<ProfitAndLossLog>()
@@ -792,11 +895,15 @@ namespace EDMX
                 .HasPrecision(12, 2);
 
             modelBuilder.Entity<ProfitAndLossLog>()
-                .Property(e => e.ReturnedAMT)
+                .Property(e => e.NonRecordedAMT)
                 .HasPrecision(12, 2);
 
             modelBuilder.Entity<ProfitAndLossLog>()
                 .Property(e => e.GroupBuyingAMT)
+                .HasPrecision(12, 2);
+
+            modelBuilder.Entity<ProfitAndLossLog>()
+                .Property(e => e.DisasterAMT)
                 .HasPrecision(12, 2);
 
             modelBuilder.Entity<ProfitAndLossLog>()
@@ -808,7 +915,7 @@ namespace EDMX
                 .HasPrecision(12, 2);
 
             modelBuilder.Entity<ProfitAndLossLog>()
-                .Property(e => e.Reason)
+                .Property(e => e.Remark)
                 .IsUnicode(false);
 
             modelBuilder.Entity<ReceiptBillDtl>()
@@ -1268,7 +1375,7 @@ namespace EDMX
                 .HasPrecision(12, 2);
 
             modelBuilder.Entity<UnlistedGoods>()
-                .Property(e => e.Reason)
+                .Property(e => e.Remark)
                 .IsUnicode(false);
 
             modelBuilder.Entity<UnlistedGoodsLog>()
@@ -1304,7 +1411,7 @@ namespace EDMX
                 .HasPrecision(12, 2);
 
             modelBuilder.Entity<UnlistedGoodsLog>()
-                .Property(e => e.Reason)
+                .Property(e => e.Remark)
                 .IsUnicode(false);
 
             modelBuilder.Entity<UsersInfo>()
@@ -1447,6 +1554,98 @@ namespace EDMX
                 .Property(e => e.AMT)
                 .HasPrecision(12, 2);
 
+            modelBuilder.Entity<VInventoryLog>()
+                .Property(e => e.BillNo)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<VInventoryLog>()
+                .Property(e => e.DeptCode)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<VInventoryLog>()
+                .Property(e => e.DeptName)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<VInventoryLog>()
+                .Property(e => e.GoodsCode)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<VInventoryLog>()
+                .Property(e => e.GoodsName)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<VInventoryLog>()
+                .Property(e => e.Barcode)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<VInventoryLog>()
+                .Property(e => e.SPEC)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<VInventoryLog>()
+                .Property(e => e.Unit)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<VInventoryLossLog>()
+                .Property(e => e.BillNo)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<VInventoryLossLog>()
+                .Property(e => e.DeptCode)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<VInventoryLossLog>()
+                .Property(e => e.DeptName)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<VInventoryLossLog>()
+                .Property(e => e.Category)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<VInventoryLossLog>()
+                .Property(e => e.GoodsCode)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<VInventoryLossLog>()
+                .Property(e => e.GoodsName)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<VInventoryLossLog>()
+                .Property(e => e.Price)
+                .HasPrecision(12, 2);
+
+            modelBuilder.Entity<VInventoryLossLog>()
+                .Property(e => e.StockAMT)
+                .HasPrecision(12, 2);
+
+            modelBuilder.Entity<VInventoryLossLog>()
+                .Property(e => e.CheckAMT)
+                .HasPrecision(12, 2);
+
+            modelBuilder.Entity<VInventoryLossLog>()
+                .Property(e => e.DiffAMT)
+                .HasPrecision(12, 2);
+
+            modelBuilder.Entity<VInventoryLossLog>()
+                .Property(e => e.DiffRate)
+                .HasPrecision(5, 2);
+
+            modelBuilder.Entity<VInventoryLossLog>()
+                .Property(e => e.PreCheckSellAMT)
+                .HasPrecision(12, 2);
+
+            modelBuilder.Entity<VInventoryLossLog>()
+                .Property(e => e.LossAMT)
+                .HasPrecision(12, 2);
+
+            modelBuilder.Entity<VInventoryLossLog>()
+                .Property(e => e.LossRate)
+                .HasPrecision(5, 2);
+
+            modelBuilder.Entity<VInventoryLossLog>()
+                .Property(e => e.Remark)
+                .IsUnicode(false);
+
             modelBuilder.Entity<VProfitAndLossLog>()
                 .Property(e => e.BillNo)
                 .IsUnicode(false);
@@ -1492,7 +1691,7 @@ namespace EDMX
                 .HasPrecision(12, 2);
 
             modelBuilder.Entity<VProfitAndLossLog>()
-                .Property(e => e.NonArrivalAMT)
+                .Property(e => e.ReturnedAMT)
                 .HasPrecision(12, 2);
 
             modelBuilder.Entity<VProfitAndLossLog>()
@@ -1500,7 +1699,23 @@ namespace EDMX
                 .HasPrecision(12, 2);
 
             modelBuilder.Entity<VProfitAndLossLog>()
-                .Property(e => e.SoldAMT)
+                .Property(e => e.NonArrivalAMT)
+                .HasPrecision(12, 2);
+
+            modelBuilder.Entity<VProfitAndLossLog>()
+                .Property(e => e.ExtraPresellAMT)
+                .HasPrecision(12, 2);
+
+            modelBuilder.Entity<VProfitAndLossLog>()
+                .Property(e => e.ExtraSoldAMT)
+                .HasPrecision(12, 2);
+
+            modelBuilder.Entity<VProfitAndLossLog>()
+                .Property(e => e.IntraPresellAMT)
+                .HasPrecision(12, 2);
+
+            modelBuilder.Entity<VProfitAndLossLog>()
+                .Property(e => e.IntraSoldAMT)
                 .HasPrecision(12, 2);
 
             modelBuilder.Entity<VProfitAndLossLog>()
@@ -1508,11 +1723,15 @@ namespace EDMX
                 .HasPrecision(12, 2);
 
             modelBuilder.Entity<VProfitAndLossLog>()
-                .Property(e => e.ReturnedAMT)
+                .Property(e => e.NonRecordedAMT)
                 .HasPrecision(12, 2);
 
             modelBuilder.Entity<VProfitAndLossLog>()
                 .Property(e => e.GroupBuyingAMT)
+                .HasPrecision(12, 2);
+
+            modelBuilder.Entity<VProfitAndLossLog>()
+                .Property(e => e.DisasterAMT)
                 .HasPrecision(12, 2);
 
             modelBuilder.Entity<VProfitAndLossLog>()
@@ -1524,7 +1743,7 @@ namespace EDMX
                 .HasPrecision(12, 2);
 
             modelBuilder.Entity<VProfitAndLossLog>()
-                .Property(e => e.Reason)
+                .Property(e => e.Remark)
                 .IsUnicode(false);
 
             modelBuilder.Entity<VStocktakingLog>()
@@ -1616,7 +1835,7 @@ namespace EDMX
                 .HasPrecision(12, 2);
 
             modelBuilder.Entity<VUnlistedGoodsLog>()
-                .Property(e => e.Reason)
+                .Property(e => e.Remark)
                 .IsUnicode(false);
         }
     }

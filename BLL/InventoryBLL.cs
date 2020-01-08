@@ -23,11 +23,11 @@ namespace BLL
             }
         }
 
-        public void FinishCheck(SystemStatus systemStatus, StocktakingLogHd hd, List<ProfitAndLossLog> dtlList, List<UnlistedGoods> uglList)
+        public void FinishCheck(SystemStatus systemStatus, StocktakingLogHd hd, List<ProfitAndLossLog> plLogList, List<InventoryLossLog> lossLogList, List<UnlistedGoodsLog> ugLogList, List<InventoryLog> stockLogList)
         {
             using (WmsContext db = EDMXFty.Dc)
             {
-                DALFty.Create<InventoryDAL>().FinishCheck(db, systemStatus, hd, dtlList, uglList);
+                DALFty.Create<InventoryDAL>().FinishCheck(db, systemStatus, hd, plLogList, lossLogList, ugLogList, stockLogList);
             }
         }
 

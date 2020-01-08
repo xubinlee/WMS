@@ -26,10 +26,10 @@ namespace USL
             InitializeComponent();
             types = MainForm.TypesList;
             //单据类型
-            if (MainForm.ISnowSoftVersion == ISnowSoftVersion.Procurement || MainForm.ISnowSoftVersion == ISnowSoftVersion.PurchaseSellStock)
-                typesListBindingSource.DataSource = types.FindAll(o => o.Type == TypesListConstants.SupplierType && o.No == 0);
-            else
-                typesListBindingSource.DataSource = types.FindAll(o => o.Type == TypesListConstants.SupplierType);
+            //if (MainForm.ISnowSoftVersion == ISnowSoftVersion.Procurement || MainForm.ISnowSoftVersion == ISnowSoftVersion.PurchaseSellStock)
+            //    typesListBindingSource.DataSource = types.FindAll(o => o.Type == TypesListConstants.SupplierType && o.No == 0);
+            //else
+            //    typesListBindingSource.DataSource = types.FindAll(o => o.Type == TypesListConstants.SupplierType);
             if (obj == null)
             {
                 supplierBindingSource.DataSource = new Supplier();

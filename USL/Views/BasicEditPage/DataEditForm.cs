@@ -80,53 +80,26 @@ namespace USL
         IDataEdit CreateEditPage(Object obj)
         {
             IDataEdit de = null;
-            switch (mainMenu.Name)
+            switch (Enum.Parse(typeof(MainMenuEnum),mainMenu.Name))
             {
-
-                case MainMenuConstants.Department:
+                case MainMenuEnum.Department:
                     de = new DeptEditPage(obj);
                     ((DeptEditPage)de).Dock = DockStyle.Fill;
                     panelControl.Controls.Add((DeptEditPage)de);
                     break;
-                //case MainMenuConstants.Company:
-                //    if (obj != null)
-                //        obj = clientFactory.GetData<Company>().FirstOrDefault(o => o.ID == ((VCompany)obj).ID);
-                //    de = new CompanyEditPage(obj);
-                //    ((CompanyEditPage)de).Dock = DockStyle.Fill;
-                //    panelControl.Controls.Add((CompanyEditPage)de);
-                //    break;
-                //case MainMenuConstants.Supplier:
-                //    if (obj != null)
-                //        obj = clientFactory.GetData<Supplier>().FirstOrDefault(o => o.ID == ((VSupplier)obj).ID);
-                //    de = new SupplierEditPage(obj);
-                //    ((SupplierEditPage)de).Dock = DockStyle.Fill;
-                //    panelControl.Controls.Add((SupplierEditPage)de);
-                //    break;
-                case MainMenuConstants.UsersInfo:
+                case MainMenuEnum.UsersInfo:
                     de = new UsersEditPage(obj);
                     ((UsersEditPage)de).Dock = DockStyle.Fill;
                     panelControl.Controls.Add((UsersEditPage)de);
                     break;
-                case MainMenuConstants.Goods:
-                case MainMenuConstants.Material:
+                case MainMenuEnum.Goods:
+                case MainMenuEnum.Material:
                     de = new GoodsEditPage(mainMenu, obj);
                     ((GoodsEditPage)de).Dock = DockStyle.Fill;
                     panelControl.Controls.Add((GoodsEditPage)de);
                     break;
-                //case MainMenuConstants.GoodsType:
-                //    if (obj != null)
-                //        obj = clientFactory.GetData<GoodsType>().FirstOrDefault(o => o.ID == ((VGoodsType)obj).ID);
-                //    de = new GoodsTypeEditPage(obj);
-                //    ((GoodsTypeEditPage)de).Dock = DockStyle.Fill;
-                //    panelControl.Controls.Add((GoodsTypeEditPage)de);
-                //    break;
-                //case MainMenuConstants.Packaging:
-                //    if (obj != null)
-                //        obj = clientFactory.GetData<Packaging>().FirstOrDefault(o => o.ID == ((VPackaging)obj).ID);
-                //    de = new PackagingEditPage(obj);
-                //    ((PackagingEditPage)de).Dock = DockStyle.Fill;
-                //    panelControl.Controls.Add((PackagingEditPage)de);
-                //    break;
+                default:
+                    break;
             }
             return de;
         }
@@ -175,20 +148,6 @@ namespace USL
                     this.Text = mainMenu.Caption;
                     if (dataEditPage.Save())
                     {
-                        //switch (mainMenu.Name)
-                        //{
-                        //    case MainMenuConstants.Department:
-                        //        MainForm.DataPageRefresh<Department>();
-                        //        break;
-                        //    case MainMenuConstants.UsersInfo:
-                        //        MainForm.DataPageRefresh<UsersInfo>();
-                        //        break;
-                        //    case MainMenuConstants.Goods:
-                        //        MainForm.DataPageRefresh<Goods>();
-                        //        break;
-                        //    default:
-                        //        break;
-                        //}
                         clientFactory.DataPageRefresh(mainMenu.Name, string.Empty);
                         CommonServices.ErrorTrace.SetSuccessfullyInfo(this.FindForm(), "保存成功");
                     }
